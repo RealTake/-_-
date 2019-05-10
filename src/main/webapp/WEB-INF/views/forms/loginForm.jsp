@@ -9,7 +9,7 @@
 </head>
 <body>
 	<h1>로그인 페이지입니다.</h1>
-	<form action="<c:url value="/logout"/>" method="POST">
+	<form action="<c:url value="/login"/>" method="POST">
 		<input name="id" type="text"/>
 		<input name="password" type="password"/>
 		<input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >

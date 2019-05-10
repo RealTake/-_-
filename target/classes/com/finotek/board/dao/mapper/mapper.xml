@@ -3,26 +3,30 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.finoteck.board.dao.IDAO">
+<mapper namespace="com.finotek.board.dao.IDAO">
 
-	<select id="getPostList_A" resultType="com.finoteck.board.dto.BaordDTO">
-		SELECT BID, TITLE, WDATE, WRITER FROM BOARD ORDER BY BID DESC
+	<select id="getPostList_A" resultType="com.finotek.board.dto.BoardDTO">
+		SELECT BID, TITLE, WDATE, WRITER FROM BOARDS ORDER BY BID DESC
 	</select>
 	
-	<select id="getPostList_U" resultType="com.finoteck.board.dto.BaordDTO">
-		SELECT BID, TITLE, WDATE, WRITER FROM BOARD WHERE BID =  #{param1} ORDER BY BID DESC
+	<select id="getPostList_U" resultType="com.finotek.board.dto.BoardDTO">
+		SELECT BID, TITLE, WDATE, WRITER FROM BOARDS WHERE WRITER =  #{param1} ORDER BY BID DESC
+	</select>
+	
+	<select id="getSearchPostList_A" resultType="com.finotek.board.dto.BoardDTO">
+		SELECT * FROM BOARDS WHERE UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%') 
+	</select>
+	
+	<select id="getSearchPostList_U" resultType="com.finotek.board.dto.BoardDTO">
+		SELECT * FROM BOARDS WHERE UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%') AND WRITER = #{ID}
 	</select>
 	
 	<insert id="writePost">
-		INSERT INTO BOARD (BID, WRITER, CONTENT, TITLE, WDATE) VALUES (BOARD_SEQ.NEXTVAL, #{param1}, #{param2}, #{param3}, #{param4})
+		INSERT INTO BOARDS (BID, WRITER, CONTENT, TITLE, WDATE) VALUES (BOARD_SEQ.NEXTVAL, #{param1}, #{param2}, #{param3}, #{param4})
 	</insert>
 	
-	<select id="viewPost" resultType="com.finoteck.board.dto.BaordDTO">
-		SELECT * FROM BOARD WHERE BID =  #{param1} 
-	</select>
-	
 	<delete id="deletePost">
-		DELETE FROM BOARD WHERE BID = #{param1}
+		DELETE FROM BOARDs WHERE BID = #{param1}
 	</delete>
 	
 	
