@@ -10,10 +10,7 @@
 		<security:intercept-url pattern="/board.json" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/searchPost.json" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/Login" access="isAnonymous()"/>
-		
-		<security:intercept-url pattern="/**/*.js" access="none"/>
-		<security:intercept-url pattern="/**/*.css" access="none"/>
-		
+	
 		<security:form-login
 			login-page="/Login"
 			login-processing-url="/login"

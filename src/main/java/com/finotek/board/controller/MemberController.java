@@ -11,4 +11,10 @@ public class MemberController {
 	public String login() {
 		return "forms/loginForm";
 	}
+	
+	@RequestMapping(value="/loginSucces")
+	public String loginSuccesPage() {
+		
+		return "member/loginSucces";
+	}
 }

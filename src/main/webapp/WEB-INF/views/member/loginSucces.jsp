@@ -11,10 +11,8 @@
 <body>
 
 <s:authorize access="isAuthenticated()">
-	<h1>로그인 성공</h1>${name}</h2>
+	<h1>로그인 성공</h1>
 	<c:url value="/logout" var="logout"/>
-	<P>  The time on the server is ${serverTime}. </P>
-	
     <form action="${logout }" method="POST">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <button type="submit">LOGOUT</button>
