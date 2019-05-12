@@ -10,7 +10,8 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+
+	<annotation-driven/>
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
@@ -23,6 +24,7 @@
 	
 	<context:component-scan base-package="com.finotek.board.**" />
 	
+	<!-- 데이터베이스 연결 설정 -->
 	<beans:bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
 		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<beans:property name="url" value="jdbc:oracle:thin:@//localhost:1521/orcl.48.12.154" />
@@ -30,6 +32,7 @@
 		<beans:property name="password" value="ckh220478" />
 	</beans:bean>
 	
+	<!-- 마이베티스 사용 설정 -->
 	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource"/>
 		<beans:property name="mapperLocations" value="classpath:com/finotek/board/dao/mapper/*.xml"/>

@@ -34,7 +34,7 @@ public class BoardController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/searchPost.json")
+	@RequestMapping(value="/searchPost.json", produces = "application/json; charset=utf8")
 	public String searchPost(@RequestParam String content, Authentication authenticatio) {// 작성글을 찾아줌
 		return service.getSearchPostList_S(content, authenticatio);
 	}

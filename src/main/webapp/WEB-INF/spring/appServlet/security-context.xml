@@ -6,10 +6,9 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 		
 	<security:http auto-config="true">
-		<security:intercept-url pattern="/board" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/board.json" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
-		<security:intercept-url pattern="/searchPost.json" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
 		<security:intercept-url pattern="/Login" access="isAnonymous()"/>
+		<security:intercept-url pattern="/*" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
+		
 	
 		<security:form-login
 			login-page="/Login"
