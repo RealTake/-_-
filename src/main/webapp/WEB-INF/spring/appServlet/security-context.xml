@@ -26,13 +26,14 @@
 		/>
 	</security:http>
 	
+	<security:jdbc-user-service 
+		data-source-ref="dataSource" id="userService"
+	    users-by-username-query="SELECT ID as userName, PASSWORD as password, enabled FROM USERS WHERE ID=?"
+	    authorities-by-username-query="SELECT ID as userName, AUTHORITY FROM USERS WHERE ID=?"
+	/>
+	
 	<security:authentication-manager>
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="test" password="123" authorities="ROLE_USER,ROLE_USER2	"/>
-				<security:user name="admin" password="123" authorities="ROLE_ADMIN"/>
-			</security:user-service>
-		</security:authentication-provider>
+		 <security:authentication-provider user-service-ref="userService"/>
 	</security:authentication-manager>
 
 </beans>

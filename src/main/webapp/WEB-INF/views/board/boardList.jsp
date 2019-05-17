@@ -69,7 +69,6 @@
 				  {
 				  	if(result)
 				  	{
-				  		alert(document.getElementById("CONTENT").value);
 				  		writeB(false);
 				  		getSearchedPost();
 				  	}
