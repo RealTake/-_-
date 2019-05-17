@@ -5,8 +5,11 @@
 
 		<head>
 			<title>게시판</title>
-			<meta charset="UTF-8">
-			<meat name="viewport" content="width-device-width, initial-scale=1">
+SD
+			<meta id="_csrf" name="_csrf" content="${_csrf.token}"/>
+			<!-- default header name is X-CSRF-TOKEN -->
+			<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
+			
 			<link rel="stylesheet" href="./resources/css/bootstrap.css">
 			<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 			<script src="./resources/js/bootstrap.js"></script>
@@ -14,12 +17,13 @@
 			<script type="text/javascript">
 			 var request = new XMLHttpRequest();
 			 var col = new Array("BID", "WDATE", "TITLE", "WRITER");
+			 
 			 function getSearchedPost() {
 				 request.open('GET', './searchPost.json?content=' + encodeURIComponent(document.getElementById("searchContent").value),true);
 				 request.onreadystatechange = searchProcess;
 				 request.send(null);
 			 }
-			 	
+			 
 			 function searchProcess() {
 				 var table = document.getElementById("postList");
 				 table.innerHTML="";
@@ -29,36 +33,94 @@
 					 var result = object.result;
 					 for(var i = 0; i < result.length; i++){
 						 var row = table.insertRow(0);
-						 for(var j = 0; j < 4; j++){
+						 for(var j = 0; j < 5; j++){
 							 var cell = row.insertCell(j);
-							 if(col[j] == "TITLE")
+							 
+							 if(col[j] == "TITLE" && j < 4)
 							 	cell.innerHTML = "<a href='viewPost/" + result[i].BID + "'>" + result[i][col[j]] + "</a>";
-							 else
-							 	cell.innerHTML =  result[i][col[j]];
+							 else if(j < 4)
+							 	cell.innerHTML = result[i][col[j]];
+							 else if(j >= 4)
+								cell.innerHTML = '<a class="btn btn-primary btn-sm" style="color: white;" href="#top" onclick="deletePost(' + result[i].BID + ');">삭제</a>';
 						 } 
 					 }
 				 }
 			 }
 			 
+			 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			 
+			 function writePost() {
+				 var title = document.getElementById("TITLE").value;
+				 var content = document.getElementById("CONTENT").value;
+				 var token = $("meta[name='_csrf']").attr("content");
+				 var header = $("meta[name='_csrf_header']").attr("content");
+				 
+				 request.open('POST', './writePost', true);
+				 request.setRequestHeader(header, token);
+				 request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				 request.onreadystatechange = writeProcess;
+				 request.send("TITLE=" + title + "&" + "CONTENT=" + content);
+			 }
+			 
+			  function writeProcess() {
+				  var result = request.responseText ;
+				  
+				  if(request.status == 200 && request.readyState == 4)
+				  {
+				  	if(result)
+				  	{
+				  		alert(document.getElementById("CONTENT").value);
+				  		writeB(false);
+				  		getSearchedPost();
+				  	}
+					else
+					{
+						alert('등록을 실패하였습니다.');
+					}
+				}
+			}
+			 
+			 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			  function deletePost(bid) {
+				 request.open('GET', './deletePost/' + bid, true);
+				 request.onreadystatechange = deleteProcess;
+				 request.send(null);
+			 }
+			 
+			  function deleteProcess() {
+				  var result = request.setRequestHeader
+				  
+				  if(request.status == 200 && request.readyState == 4)
+				  {
+				  	if(result)
+				  		getSearchedPost();
+					else
+					{
+						alert('삭제 실패하였습니다.');
+					}
+				}
+			}
+			 
+		    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////			  
+			  
+			 //작성글 화면에서 전송, 취소 버튼을 눌렀을때 작성화면을 비운다. 
 			 function writeB(mode) {
 				 if(mode)
 				 	document.getElementById("writeTable").style.display='block';
 				 else
-					 document.getElementById("writeTable").style.display='none';
+				 {
+					document.getElementById("TITLE").value = "";
+					document.getElementById("CONTENT").value = "";
+					document.getElementById("writeTable").style.display='none';
+				 }
 			}
-			 
-			 var currentPosition = parseInt($("#sidebox").css("top")); 
-			 $(window).scroll(function() { 
-				 
-				 var position = $(window).scrollTop(); 
-				 $("#sidebox").stop().animate({"top":position+currentPosition+"px"},1000); 
-				 
-				 });
 
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			 
 			 window.onload = function() {
 				 getSearchedPost();
 			 }
+			
 			</script>
 			
 			
@@ -120,16 +182,16 @@
 					</div>
 				</header>
 				
-				<form action='<c:url value="/write"/>' method='post' id="writeTable" style="display:none" class="container">
+				<div id="writeTable" style="display:none" class="container">
 					<p><h3>글을 작성해보세요</h3></p>
 					<p>제목:</p>
-					<p><input class="form-control" size="10%" width="100%" name="TITLE" >
-						<p>내용: <textarea rows="15" class="form-control" name="CONTENT"></textarea></p>
+					<p><input class="form-control" size="10%" width="100%" id="TITLE">
+						<p>내용: <textarea rows="15" class="form-control" id="CONTENT"></textarea></p>
 						<div class="text-center">
-							<p><input type="submit" id="send" class="btn btn-primary btn-md" style="color: white;" onclick="writeB(false)">&nbsp;&nbsp;&nbsp;
-							<a id="cancel" class="btn btn-primary btn-md" style="color: white;" onclick="writeB(false)">취소</a></p>
+							<p><a id="send" class="btn btn-primary btn-md" style="color: white;" onclick="writePost();">제출</a>&nbsp;&nbsp;&nbsp;
+							<a id="cancel" class="btn btn-primary btn-md" style="color: white;" onclick="writeB(false);">취소</a></p>
 						</div>
-				</form>			
+				</div>			
 				
 					<div class="row">
 					
@@ -154,23 +216,17 @@
 							<table id="ajaxTable" class="table table-hover">
 								<thead align="center">
 									<tr>
-										<td width="15%">번호</td>
-										<td width="15%">작성날짜</td>
-										<td width="50%">제목</td>
-										<td width="20%">작성자</td>
+										<td width="10%">번호</td>
+										<td width="10%">작성날짜</td>
+										<td width="40%">제목</td>
+										<td width="15%">작성자</td>
+										<td width="10%">기타</td>
 									</tr>
 								</thead>
 								
 					
 														
-								<tbody align="center" id="postList">
-									<tr>
-										<td>${dto.BID}</td>
-										<td>${dto.WDATE}</td>
-										<td><a href="<c:url value="/viewContent?BID=${dto.BID}"/>">${dto.TITLE}</a></td>
-										<td>${dto.WRITER}</td>
-									</tr>
-								</tbody>
+								<tbody align="center" id="postList"></tbody>
 							</table>
 					</div>
 				</div>

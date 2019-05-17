@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,17 +26,33 @@ public class BoardController {
 //		return "board";
 //	}
 	
-	// 작성글의 리스트를 보여줌
+	// 작성글의 내용을 보여준다
 	@GetMapping(value="/viewPost/{bid}")
 	public String boardList(@PathVariable(value = "bid") String bid, Authentication authentication, Model model) {
 		service.getPost_S(bid, model, authentication);
-		return "board/view";
 		
+		return "board/view";
 	}
 	
+	// 글을 작성한다
+	@ResponseBody
+	@RequestMapping(value="/writePost", method = RequestMethod.POST)
+	public String writePost(@RequestParam(value="TITLE") String TITLE, @RequestParam(value="CONTENT") String CONTENT, Authentication authentication) {
+		
+		return service.writePost_S(TITLE, CONTENT, authentication);
+	}
+	
+	// 작성글을 삭제한다
+	@ResponseBody
+	@GetMapping(value="/deletePost/{bid}")
+	public String deletePost(@PathVariable(value = "bid") String bid, Authentication authentication) {
+		return service.deletePost_S(bid, authentication);
+	}
+	
+	// 작성글을 검색해서 찾아준다
 	@ResponseBody
 	@RequestMapping(value="/searchPost.json", produces = "application/json; charset=utf8")
-	public String searchPost(@RequestParam String content, Authentication authenticatio) {// 작성글을 찾아줌
+	public String searchPost(@RequestParam String content, Authentication authenticatio) {
 		return service.getSearchPostList_S(content, authenticatio);
 	}
 	
@@ -47,7 +64,6 @@ public class BoardController {
 		
 		return "board/boardList";
 	}
-	
 	
 	
 	
