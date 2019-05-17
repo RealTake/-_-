@@ -25,8 +25,12 @@
 		INSERT INTO BOARDS (BID, WRITER, CONTENT, TITLE, WDATE) VALUES (BOARD_SEQ.NEXTVAL, #{param1}, #{param2}, #{param3}, #{param4})
 	</insert>
 	
-	<delete id="deletePost">
-		DELETE FROM BOARDs WHERE BID = #{param1}
+	<delete id="deletePost_A">
+		DELETE FROM BOARDS WHERE BID = #{param1}
+	</delete>
+	
+	<delete id="deletePost_U">
+		DELETE FROM BOARDS WHERE BID = #{param1} AND WRITER = #{param2}
 	</delete>
 	
 </mapper>

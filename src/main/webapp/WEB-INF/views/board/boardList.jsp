@@ -5,7 +5,7 @@
 
 		<head>
 			<title>게시판</title>
-SD
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 			<meta id="_csrf" name="_csrf" content="${_csrf.token}"/>
 			<!-- default header name is X-CSRF-TOKEN -->
 			<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>
@@ -57,7 +57,7 @@ SD
 				 
 				 request.open('POST', './writePost', true);
 				 request.setRequestHeader(header, token);
-				 request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				 request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');
 				 request.onreadystatechange = writeProcess;
 				 request.send("TITLE=" + title + "&" + "CONTENT=" + content);
 			 }

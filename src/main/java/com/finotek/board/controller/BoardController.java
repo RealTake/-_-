@@ -38,7 +38,7 @@ public class BoardController {
 	@ResponseBody
 	@RequestMapping(value="/writePost", method = RequestMethod.POST)
 	public String writePost(@RequestParam(value="TITLE") String TITLE, @RequestParam(value="CONTENT") String CONTENT, Authentication authentication) {
-		
+		System.out.println(TITLE);
 		return service.writePost_S(TITLE, CONTENT, authentication);
 	}
 	

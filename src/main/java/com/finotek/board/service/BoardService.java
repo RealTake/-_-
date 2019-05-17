@@ -182,13 +182,13 @@ public class BoardService {
 					
 					if(auth_S.equals("ROLE_USER")) {
 						System.out.println("사용자권한 : " + auth_S);
-						sqlSession.getMapper(IDAO.class).deletePost(bid);
+						sqlSession.getMapper(IDAO.class).deletePost_U(bid, authentication.getName());
 						return "1";
 						
 					}
 					else if(auth_S.equals("ROLE_ADMIN")) {
 						System.out.println("사용자권한 : " + auth_S);
-						sqlSession.getMapper(IDAO.class).deletePost(bid);
+						sqlSession.getMapper(IDAO.class).deletePost_A(bid);
 						return "1";
 		
 					}
