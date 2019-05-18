@@ -125,7 +125,7 @@
 			
 			<style>
 				table, th, td {
-				  border: 1px solid black;
+				  box-shadow: 0.1em 0.1em gray;
 				  padding: 5px;
 				  style="table-layout:fixed;"
 				}
