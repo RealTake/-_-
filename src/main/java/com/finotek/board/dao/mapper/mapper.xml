@@ -14,11 +14,11 @@
 	</select>
 	
 	<select id="getSearchPostList_A" resultType="com.finotek.board.dto.BoardDTO">
-		SELECT * FROM BOARDS WHERE (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) 
+		SELECT * FROM BOARDS WHERE (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) ORDER BY BID
 	</select>
 	
 	<select id="getSearchPostList_U" resultType="com.finotek.board.dto.BoardDTO">
-		SELECT * FROM BOARDS WHERE WRITER = #{ID} AND (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) 
+		SELECT * FROM BOARDS WHERE WRITER = #{ID} AND (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) ORDER BY BID
 	</select>
 	
 	<insert id="writePost">

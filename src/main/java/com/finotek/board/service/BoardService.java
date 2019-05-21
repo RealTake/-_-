@@ -96,13 +96,13 @@ public class BoardService {
 				if(auth_S.equals("ROLE_USER")) {
 					System.out.println("사용자권한 : " + auth_S);
 					IDAO dao = sqlSession.getMapper(IDAO.class);
-					BoardDTO dto = dao.getPost_U(bid, authentication.getName());
+					BoardDTO dto = dao.getPost_U(Integer.valueOf(bid), authentication.getName());
 					model.addAttribute("dto", dto);
 				}
 				else if(auth_S.equals("ROLE_ADMIN")) {
 					System.out.println("사용자권한 : " + auth_S);
 					IDAO dao = sqlSession.getMapper(IDAO.class);
-					BoardDTO dto = dao.getPost_A(bid);
+					BoardDTO dto = dao.getPost_A(Integer.valueOf(bid));
 					model.addAttribute("dto", dto);	
 				}
 			
@@ -182,13 +182,13 @@ public class BoardService {
 					
 					if(auth_S.equals("ROLE_USER")) {
 						System.out.println("사용자권한 : " + auth_S);
-						sqlSession.getMapper(IDAO.class).deletePost_U(bid, authentication.getName());
+						sqlSession.getMapper(IDAO.class).deletePost_U(Integer.valueOf(bid), authentication.getName());
 						return "1";
 						
 					}
 					else if(auth_S.equals("ROLE_ADMIN")) {
 						System.out.println("사용자권한 : " + auth_S);
-						sqlSession.getMapper(IDAO.class).deletePost_A(bid);
+						sqlSession.getMapper(IDAO.class).deletePost_A(Integer.valueOf(bid));
 						return "1";
 		
 					}
