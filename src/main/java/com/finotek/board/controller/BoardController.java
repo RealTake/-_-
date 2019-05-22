@@ -31,7 +31,7 @@ public class BoardController {
 	public String boardList(@PathVariable(value = "bid") String bid, Authentication authentication, Model model) {
 		service.getPost_S(bid, model, authentication);
 		
-		return "board/view";
+		return "board/postView";
 	}
 	
 	// 글을 작성한다

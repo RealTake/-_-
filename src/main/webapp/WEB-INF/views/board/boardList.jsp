@@ -8,8 +8,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
 <!-- default header name is X-CSRF-TOKEN -->
-<meta id="_csrf_header" name="_csrf_header"
-	content="${_csrf.headerName}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
+<meta name="viewport" content="width=device-width, user-scalable=no">
 
 <link rel="stylesheet" href="./resources/css/bootstrap.css">
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -128,23 +128,66 @@
 
 <style>
 
-@media ( max-width : 1070px) {
+@media screen and ( max-width: 1070px) {
 	#sidebar {
-		position: static;
 		width: 100%;
+		margin-left: 10px;
+		margin-right: 10px; 
 	}
-}
-
-@media ( min-width : 1070px) {
+	
+	# 
+	
+	.container-fluid {
+		padding-right: 0px;
+		padding-left: 0px;
+		overflow: hidden;
+	}
+	
+	.jumbotron {
+		background-image: url('./resources/image/memo-jumbotron-backgorund.jpg');
+		background-size: cover;
+		background-repeat: no-repeat;
+		margin-bottom: 0px;
+		text-shadow: 0.1em 0.1em 0.1em dimgray;
+		color: white;
+	}
+	
+	#logoutB {
+		color: white;
+		margin-top: 1%;
+		margin-right: 1%;
+	}
+	
 	#postTable {
-		margin-left: auto;
+		margin-top: 5px;
 	}
+	
+	#test {
+		width: 0px;
+	}
+	#searchContent {
+		width: 150px;
+		margin-left: auto;
+		
+	}
+	#searchB {
+		margin-right: 1%;
+	}
+		
 }
 
-table, th, td {
-	box-shadow: 0em 0.1em gray;
-	padding: 5px;
-	table-layout: fixed;
+@media screen and ( min-width: 1071px) {
+	
+	.container-fluid {
+		padding-right: 20%;
+		padding-left: 20%;
+	}
+	
+	#logoutB {
+		color: white;
+		margin: 1%;
+	}
+
 }
 
 #writeB {
@@ -166,16 +209,15 @@ table, th, td {
 	color: white;
 }
 
-.container-fluid {
-	padding-right: 20%;
-	padding-left: 20%;
-	margin-right: auto;
-	margin-left: auto;
+	table, th, td {
+	box-shadow: 0em 0.1em gray;
+	padding: 5px;
+	padding-right: 0px;
+	table-layout: fixed;
+	vertical-align: middlle;
 }
 
-#postTable {
-	margin-left: auto;
-}
+
 </style>
 </head>
 
@@ -183,38 +225,28 @@ table, th, td {
 
 	<div class="container-fluid">
 		<header>
+			<p><a id="logoutB" class="btn btn-warning btn-sm float-right" onclick="document.getElementById('logout').submit();">로그아웃</a></p>
 			<div id="id" class="jumbotron">
 				<div>
-					<h1 class="text-center">Choi's 게시판</h1>
+					<p><h1 class="text-center">Choi's 게시판</h1></p>
 					<p class="text-center">자유롭게 글을 작성해보세요!</p>
-					<p class="text-center">
-						<a class="btn btn-warning btn-md"
-							onclick="document.getElementById('logout').submit();">로그아웃</a>
-					</p>
 				</div>
-
 				<div class="row">
-					<input id="searchContent" class="form-control col-md-2" type="text"
-						onkeyup="getSearchedPost();"> &nbsp;&nbsp;&nbsp;
-					<button class="btn btn-primary btn-md" onclick="getSearchedPost();"
-						type="button">검색</button>
+						<input id="searchContent" class="col-md-3 form-control" type="text" onkeyup="getSearchedPost();"> &nbsp;&nbsp;&nbsp;
+						<button id="searchB" class="btn btn-primary btn-md" style="width:60px" onclick="getSearchedPost();" type="button">검색</button>
 				</div>
-
 			</div>
 		</header>
 
-		<div id="writeTable" style="display: none" class="container">
+		<div id="writeTable" style="display: none">
 			<p>
 			<h3>글을 작성해보세요</h3>
 			</p>
 
 			<p>제목:</p>
-			<p>
-				<input class="form-control" size="10%" width="100%" id="TITLE">
-			<p>
-				내용:
-				<textarea rows="15" class="form-control" id="CONTENT"></textarea>
-			</p>
+			<p><input class="form-control" size="10%" width="100%" id="TITLE"></p>
+			<p>내용:</p>
+			<p><textarea rows="15" class="form-control" id="CONTENT"></textarea></p>
 
 			<div class="text-center">
 				<p>
@@ -230,8 +262,8 @@ table, th, td {
 
 			<table id="sidebar" class="col-md-2">
 
-				<thead class="text-center">
-					<td>카테고리 목록</td>
+				<thead class="table table-hover">
+					<th>카테고리 목록</th>
 				</thead>
 
 				<tbody class="text-center">
@@ -253,12 +285,12 @@ table, th, td {
 				<table id="ajaxTable" class="table table-hover">
 
 					<thead align="center">
-						<tr>
+						<tr style = " font-size:0.8em;">		
 							<td width="10%">번호</td>
 							<td width="15%">작성날짜</td>
-							<td width="35%">제목</td>
+							<td width="30%">제목</td>
 							<td width="15%">작성자</td>
-							<td width="13%"></td>
+							<td id="test" ></td>
 						</tr>
 					</thead>
 

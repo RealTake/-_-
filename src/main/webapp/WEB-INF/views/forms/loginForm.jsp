@@ -5,6 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+
 <title>로그인 페이지</title>
 
 <link rel="stylesheet" href="./resources/css/bootstrap.css">
@@ -19,24 +21,46 @@
       background: url('./resources/image/pier-569314.jpg') no-repeat center fixed;
       background-size: cover;
     }
+
+    @media screen and (min-width: 1081px){
     
-   .tableL {
-      border: 1px solid #CED4DA;
-      border-radius: 15px 15px;
-      width: 500px;
-      height: 300px;  
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 100%;
-      margin-top: 15%;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 40px;
-      padding-bottom: 20px;
-      box-shadow: 0.1em 0.1em dimgray;
-      background-color: white;
-   }
+	   .tableL {
+	      border: 1px solid #CED4DA;
+	      border-radius: 15px 15px;
+	      width: 400px;
+	      height: 300px;  
+	      margin-left: auto;
+	      margin-right: auto;
+	      margin-bottom: 100%;
+	      margin-top: 15%;
+	      padding-left: 50px;
+	      padding-right: 50px;
+	      padding-top: 40px;
+	      box-shadow: 0.1em 0.1em dimgray;
+	      background-color: white;
+	   }
    
+   }
+    
+    @media screen and (max-width: 1080px){
+    
+	   .tableL {
+	      border: 1px solid #CED4DA;
+	      border-radius: 15px 15px;
+	      width: 300px;
+	      height: 300px;  
+	      margin-left: auto;
+	      margin-right: auto;
+	      margin-bottom: 100%;
+	      margin-top: 15%;
+	      padding-left: 50px;
+	      padding-right: 50px;
+	      padding-top: 40px;
+	      box-shadow: 0.1em 0.1em dimgray;
+	      background-color: white;
+	   }
+   
+   }
    .blur {
       -webkit-filter: blur(5px); 
       -moz-filter: blur(5px); 
