@@ -72,7 +72,7 @@ public class BoardController {
 		return "board/boardList";
 	}
 	
-	@GetMapping(value="/modifyPage/{bid}")
+	@GetMapping(value="/board/modifyPage/{bid}")
 	public String modifyPage(@ModelAttribute @PathVariable(value = "bid") String bid, Authentication authentication) {
 			
 		return "board/modifyPage";
@@ -81,7 +81,7 @@ public class BoardController {
 	@GetMapping(value="/modifyPost/{bid}")
 	public String modifyPost(@PathVariable(value = "bid") String bid, Authentication authentication) {
 			
-		return "board/viewPost/" + bid;
+		return "redirect:board/viewPost/" + bid;
 	}
 	
 	

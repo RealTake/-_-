@@ -43,6 +43,7 @@ function deletePost() {
 	
 	#tools {
 		padding-left: 80%;
+		margin-top: auto;
 	}
 	
 	
@@ -79,9 +80,10 @@ function deletePost() {
 
 #contentBody {
  	min-height: 40%;
+ 	margin-right: 0px;
 	resize: none;
 	border-color: white;
-	width: 100%;
+	width: 99%;
 }
 
 </style>
@@ -103,7 +105,9 @@ function deletePost() {
 		<div id="viewBody">
 			<h1 class="text-center">${dto.TITLE}</h1>
 			<p id="subTitle" class="text-center">작성자: ${dto.WRITER} 작성일: ${dto.WDATE}</p>
-			<textarea id="contentBody" readonly>${dto.CONTENT}</textarea>
+			<div id="contentBody">
+				${dto.CONTENT}
+			</div>
 		</div>
 		
 		<br>
@@ -115,6 +119,5 @@ function deletePost() {
 		</div>
 		
 	</div><!-- 최상위 container 태그 -->
-
 </body>
 </html>

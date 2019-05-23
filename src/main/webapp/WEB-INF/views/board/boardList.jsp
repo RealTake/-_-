@@ -15,8 +15,31 @@
 <link rel="stylesheet" href="./resources/css/bootstrap.css">
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="./resources/js/bootstrap.js"></script>
+<script src="./resources/ckeditor/ckeditor.js"></script>
+<script>
+	var editorConfig = {
+	        filebrowserUploadUrl : "/ckEditor/imgUpload", //이미지 업로드
+	    };
+	
+	    CKEDITOR.on('dialogDefinition', function( ev ){
+	        var dialogName = ev.data.name;
+	        var dialogDefinition = ev.data.definition;
+	
+	        switch (dialogName) {
+	            case 'image': //Image Properties dialog
+	            //dialogDefinition.removeContents('info');
+	            dialogDefinition.removeContents('Link');
+	            dialogDefinition.removeContents('advanced');
+	            break;
+	        }
+	 });
 
+    window.onload = function(){
+       ck = CKEDITOR.replace("editor1");
+    };
+</script>
 <script type="text/javascript">
+	var editor;
 	var request = new XMLHttpRequest();
 	var col = new Array("BID", "WDATE", "TITLE", "WRITER");
 
@@ -41,10 +64,9 @@
 				var row = table.insertRow(0);
 				for (var j = 0; j < 5; j++) {
 					var cell = row.insertCell(j);
-					var delB = '<a class="btn btn-danger btn-sm" " href="#top" onclick="deletePost('
+					var delB = '<a class="btn btn-danger btn-sm"  href="#top" onclick="deletePost('
 							+ result[i].BID + ');">삭제</a>';
-					var upB = '<a class="btn btn-outline-success btn-sm" " href="#top" onclick="deletePost('
-							+ result[i].BID + ');">수정</a>';
+					var upB = '<a class="btn btn-outline-success btn-sm"  href="./board/modifyPage/' + result[i].BID + '">수정</a>';
 
 					if (col[j] == "TITLE" && j < 4)
 						cell.innerHTML = "<a class='viewLink' href='viewPost/" + result[i].BID + "'>"
@@ -64,9 +86,10 @@
 
 	function writePost() {
 		var title = document.getElementById("TITLE").value;
-		var content = document.getElementById("CONTENT").value;
+		var content = CKEDITOR.instances.editor1.getData();
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
+		console.log(content);
 
 		request.open('POST', './writePost', true);
 		request.setRequestHeader(header, token);
@@ -116,7 +139,6 @@
 			document.getElementById("writeTable").style.display = 'block';
 		else {
 			document.getElementById("TITLE").value = "";
-			document.getElementById("CONTENT").value = "";
 			document.getElementById("writeTable").style.display = 'none';
 		}
 	}
@@ -253,7 +275,7 @@ table, th, td {
 					<p><h1 class="text-center">Choi's 게시판</h1></p>
 					<p class="text-center">자유롭게 글을 작성해보세요!</p>
 				</div>
-				<s:authorize access="hasRole('ROLE_ADMIN')"><p>관리자 모드</p></s:authorize>
+				<s:authorize access="hasRole('ROLE_ADMIN')"><p><h3>관리자 모드</h3></p></s:authorize>
 				
 				<div class="row">
 						<input id="searchContent" class="col-md-3 form-control" type="text" onkeyup="getSearchedPost();"> &nbsp;&nbsp;&nbsp;
@@ -266,18 +288,18 @@ table, th, td {
 			<p>
 			<h3>글을 작성해보세요</h3>
 			</p>
-
+			
 			<p>제목:</p>
 			<p><input class="form-control" size="10%" width="100%" id="TITLE"></p>
 			<p>내용:</p>
-			<p><textarea rows="15" class="form-control" id="CONTENT"></textarea></p>
-
+			<p><textarea  name="editor1" id="editor1" rows="10" cols="80"></textarea></p>
+				<script>
+					CKEDITOR.replace( 'editor1' );
+		    	</script>
 			<div class="text-center">
 				<p>
-					<a id="send" class="btn btn-primary btn-md" style="color: white;"
-						onclick="writePost();">제출</a> &nbsp;&nbsp;&nbsp; <a id="cancel"
-						class="btn btn-primary btn-md" style="color: white;"
-						onclick="writeB(false);">취소</a>
+					<a id="send" class="btn btn-primary btn-md" style="color: white;" onclick="writePost();">제출</a> &nbsp;&nbsp;&nbsp; 
+					<a id="cancel" class="btn btn-primary btn-md" style="color: white;" onclick="writeB(false);">취소</a>
 				</p>
 			</div>
 		</div>
@@ -285,8 +307,8 @@ table, th, td {
 		<div class="row">
 
 			<table id="sidebar" class="col-md-2">
-
 				<thead class="table table-hover">
+
 					<th>카테고리 목록</th>
 				</thead>
 
@@ -325,7 +347,7 @@ table, th, td {
 			</div>
 		</div>
 
-		<a id="writeB" class="float-right btn btn-primary" href="#top"
+		<a id="writeB" class="float-right btn btn-primary" href="#writeTable"
 			onclick="writeB(true);">글쓰기</a>
 
 	</div>
