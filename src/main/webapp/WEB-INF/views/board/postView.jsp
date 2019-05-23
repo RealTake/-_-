@@ -22,10 +22,6 @@ function deletePost() {
 <style>
 
 @media ( max-width : 1070px) {
-	#sidebar {
-		position: static;
-		width: 100%;
-	}
 	
 	#tools {
 	padding-left: 180px;
@@ -39,8 +35,8 @@ function deletePost() {
 	}
 	
 	.container-fluid {
-		padding-right: 20%;
-		padding-left: 20%;
+		padding-right: 10%;
+		padding-left: 10%;
 		margin-right: auto;
 		margin-left: auto;
     }

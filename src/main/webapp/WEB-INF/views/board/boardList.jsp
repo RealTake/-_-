@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <!DOCTYPE html>
 
 <head>
@@ -46,12 +47,14 @@
 							+ result[i].BID + ');">수정</a>';
 
 					if (col[j] == "TITLE" && j < 4)
-						cell.innerHTML = "<a href='viewPost/" + result[i].BID + "'>"
+						cell.innerHTML = "<a class='viewLink' href='viewPost/" + result[i].BID + "'>"
 								+ result[i][col[j]] + "</a>";
 					else if (j < 4)
 						cell.innerHTML = result[i][col[j]];
-					else if (j >= 4)
+					else if (j >= 4){
+						cell.className = "etc";
 						cell.innerHTML = upB + "&nbsp;" + delB;
+					}
 				}
 			}
 		}
@@ -128,14 +131,15 @@
 
 <style>
 
-@media screen and ( max-width: 1070px) {
+@media screen and ( max-width: 750px) {
 	#sidebar {
 		width: 100%;
 		margin-left: 10px;
 		margin-right: 10px; 
 	}
 	
-	# 
+	#sidebar a:link { color: black; text-decoration: none;}
+ 	#sidebar a:visited { color: black; text-decoration: none;}
 	
 	.container-fluid {
 		padding-right: 0px;
@@ -162,31 +166,37 @@
 		margin-top: 5px;
 	}
 	
-	#test {
-		width: 0px;
+	.etc {
+		display: none;
 	}
-	#searchContent {
-		width: 150px;
-		margin-left: auto;
-		
+	
+	#ajaxTable {
+		font-size:0.8em;
 	}
-	#searchB {
-		margin-right: 1%;
-	}
+	
 		
 }
 
-@media screen and ( min-width: 1071px) {
+@media screen and ( min-width: 751px) {
 	
 	.container-fluid {
-		padding-right: 20%;
-		padding-left: 20%;
+		padding-right: 10%;
+		padding-left: 10%;
 	}
 	
 	#logoutB {
 		color: white;
 		margin: 1%;
 	}
+	
+	#sidebar a:link { color: black; text-decoration: none;}
+ 	#sidebar a:visited { color: black; text-decoration: none;}
+	
+	.etc {
+		width: 150px;
+		padding: 0px;
+	}
+	
 
 }
 
@@ -209,7 +219,7 @@
 	color: white;
 }
 
-	table, th, td {
+table, th, td {
 	box-shadow: 0em 0.1em gray;
 	padding: 5px;
 	padding-right: 0px;
@@ -217,6 +227,18 @@
 	vertical-align: middlle;
 }
 
+#searchContent {
+		width: 150px;
+		margin-left: auto;
+		
+	}
+	
+#searchB {
+		margin-right: 1%;
+	}
+
+.viewLink:link { color: red; text-decoration: none;}
+.viewLink:visited { color: black; text-decoration: none;}
 
 </style>
 </head>
@@ -231,6 +253,8 @@
 					<p><h1 class="text-center">Choi's 게시판</h1></p>
 					<p class="text-center">자유롭게 글을 작성해보세요!</p>
 				</div>
+				<s:authorize access="hasRole('ROLE_ADMIN')"><p>관리자 모드</p></s:authorize>
+				
 				<div class="row">
 						<input id="searchContent" class="col-md-3 form-control" type="text" onkeyup="getSearchedPost();"> &nbsp;&nbsp;&nbsp;
 						<button id="searchB" class="btn btn-primary btn-md" style="width:60px" onclick="getSearchedPost();" type="button">검색</button>
@@ -285,12 +309,12 @@
 				<table id="ajaxTable" class="table table-hover">
 
 					<thead align="center">
-						<tr style = " font-size:0.8em;">		
+						<tr >		
 							<td width="10%">번호</td>
-							<td width="15%">작성날짜</td>
+							<td width="15%" style="min-width: 72px;">작성날짜</td>
 							<td width="30%">제목</td>
 							<td width="15%">작성자</td>
-							<td id="test" ></td>
+							<td class="etc" ></td>
 						</tr>
 					</thead>
 

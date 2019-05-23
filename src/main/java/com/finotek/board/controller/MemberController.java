@@ -9,7 +9,7 @@ public class MemberController {
 	
 	@RequestMapping(value="/Login")
 	public String login() {
-		return "forms/loginForm";
+		return "member/loginForm";
 	}
 	
 	@RequestMapping(value="/loginSucces")

@@ -8,7 +8,7 @@ import com.finotek.board.dto.BoardDTO;
 public interface IDAO {
 //	public ArrayList<Map<String, String>> getPostList_A();
 //	public ArrayList<Map<String, String>> getPostList_U(String id);
-	public void writePost(String P_writer, String P_content, String P_title, String P_date);
+	public void writePost(BoardDTO dto);
 	public void deletePost_A(int bid);													// 관리자, 작성자와 상관없이 게시글 삭제 가능
 	public void deletePost_U(int bid, String id);										// 일반유저용, 일반유저는 작성자와 접근주체가 맞아야함
 	public BoardDTO getPost_A(int bid);

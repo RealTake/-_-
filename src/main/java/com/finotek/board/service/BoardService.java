@@ -118,12 +118,15 @@ public class BoardService {
 		
 	}
 	
-	public String writePost_S(String title, String content, Authentication authentication) {// 작성글의 리스트를 보여주는 메서드
+	public String writePost_S(BoardDTO dto, Authentication authentication) {// 작성글의 리스트를 보여주는 메서드
 		
 		String auth_S = null;// 사용자의 권한이 저장될 변수
 		Method nowmethod = new Object(){}.getClass().getEnclosingMethod();
 		Date date = new Date();
-		SimpleDateFormat sDate = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sDate = new SimpleDateFormat("yyyy.MM.dd");
+		
+		dto.setWRITER(authentication.getName());
+		dto.setWDATE(sDate.format(date));
 		
 		System.out.println("정보: " + nowmethod.getName());
 		System.out.println("사용자이름 : " + authentication.getName());
@@ -139,13 +142,13 @@ public class BoardService {
 				
 				if(auth_S.equals("ROLE_USER")) {
 					System.out.println("사용자권한 : " + auth_S);
-					sqlSession.getMapper(IDAO.class).writePost(authentication.getName(), content, title, sDate.format(date));
+					sqlSession.getMapper(IDAO.class).writePost(dto);
 					return "1";
 					
 				}
 				else if(auth_S.equals("ROLE_ADMIN")) {
 					System.out.println("사용자권한 : " + auth_S);
-					sqlSession.getMapper(IDAO.class).writePost(authentication.getName(), content, title, sDate.format(date));
+					sqlSession.getMapper(IDAO.class).writePost(dto);
 					return "1";
 	
 				}

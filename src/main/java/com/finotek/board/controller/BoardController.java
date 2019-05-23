@@ -5,12 +5,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.finotek.board.dto.BoardDTO;
 import com.finotek.board.service.BoardService;
 
 @Controller
@@ -37,9 +39,8 @@ public class BoardController {
 	// 글을 작성한다
 	@ResponseBody
 	@RequestMapping(value="/writePost", method = RequestMethod.POST)
-	public String writePost(@RequestParam(value="TITLE") String TITLE, @RequestParam(value="CONTENT") String CONTENT, Authentication authentication) {
-		System.out.println(TITLE);
-		return service.writePost_S(TITLE, CONTENT, authentication);
+	public String writePost(BoardDTO dto, Authentication authentication) {
+		return service.writePost_S(dto, authentication);
 	}
 	
 	// 작성글을 삭제한다
@@ -61,9 +62,28 @@ public class BoardController {
 	// 메인화면이자 작성글의 목록을 보여줄 화면
 	@RequestMapping(value="/board")
 	public String boardPage() {
-		
 		return "board/boardList";
 	}
+	
+	// 메인화면이자 작성글의 목록을 보여줄 화면
+	@RequestMapping(value="/")
+	public String mainPage() {
+			
+		return "board/boardList";
+	}
+	
+	@GetMapping(value="/modifyPage/{bid}")
+	public String modifyPage(@ModelAttribute @PathVariable(value = "bid") String bid, Authentication authentication) {
+			
+		return "board/modifyPage";
+	}
+	
+	@GetMapping(value="/modifyPost/{bid}")
+	public String modifyPost(@PathVariable(value = "bid") String bid, Authentication authentication) {
+			
+		return "board/viewPost/" + bid;
+	}
+	
 	
 	
 	
