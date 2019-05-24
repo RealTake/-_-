@@ -16,28 +16,7 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="./resources/js/bootstrap.js"></script>
 <script src="./resources/ckeditor/ckeditor.js"></script>
-<script>
-	var editorConfig = {
-	        filebrowserUploadUrl : "/ckEditor/imgUpload", //이미지 업로드
-	    };
-	
-	    CKEDITOR.on('dialogDefinition', function( ev ){
-	        var dialogName = ev.data.name;
-	        var dialogDefinition = ev.data.definition;
-	
-	        switch (dialogName) {
-	            case 'image': //Image Properties dialog
-	            //dialogDefinition.removeContents('info');
-	            dialogDefinition.removeContents('Link');
-	            dialogDefinition.removeContents('advanced');
-	            break;
-	        }
-	 });
 
-    window.onload = function(){
-       ck = CKEDITOR.replace("editor1");
-    };
-</script>
 <script type="text/javascript">
 	var editor;
 	var request = new XMLHttpRequest();
@@ -149,7 +128,6 @@
 		getSearchedPost();
 	}
 </script>
-
 
 <style>
 
@@ -294,8 +272,8 @@ table, th, td {
 			<p>내용:</p>
 			<p><textarea  name="editor1" id="editor1" rows="10" cols="80"></textarea></p>
 				<script>
-					CKEDITOR.replace( 'editor1' );
-		    	</script>
+					CKEDITOR.replace("editor1",{filebrowserUploadUrl:'<c:url value="/fileUpload.do" />?${_csrf.parameterName}=${_csrf.token}'});		    	
+				</script>
 			<div class="text-center">
 				<p>
 					<a id="send" class="btn btn-primary btn-md" style="color: white;" onclick="writePost();">제출</a> &nbsp;&nbsp;&nbsp; 
