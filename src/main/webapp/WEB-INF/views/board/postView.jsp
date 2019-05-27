@@ -1,92 +1,99 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <head>
-<title>게시판</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-<!-- default header name is X-CSRF-TOKEN -->
-<meta id="_csrf_header" name="_csrf_header"
-	content="${_csrf.headerName}" />
-<meta name="viewport" content="width=device-width, user-scalable=no">
+	<title>게시판</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<link rel="stylesheet" href="../resources/css/bootstrap.css">
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="../resources/js/bootstrap.js"></script>
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
+	<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
 
-<script>
-function deletePost() {
-	location.href = '../deletePost/' + ${dto.BID}
-}
-</script>
+	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
 
-<style>
+	<script>
+		var request = new XMLHttpRequest();
+		function deletePost(bid) {
+			request.open('GET', '<c:url value='/deletePost/'/>' + bid, true);
+			request.onreadystatechange = deleteProcess;
+			request.send(null);
+		}
 
-@media ( max-width : 1070px) {
-	
-	#tools {
-	padding-left: 180px;
-	padding-bottom: 30px;
-}	
-}
+		function deleteProcess() {
+			var result = request.setRequestHeader
 
-@media ( min-width : 1070px) {
-	#postTable {
-		margin-left: auto;
-	}
-	
-	.container-fluid {
-		padding-right: 10%;
-		padding-left: 10%;
-		margin-right: auto;
-		margin-left: auto;
-    }
-	
-	#tools {
-		padding-left: 80%;
-		margin-top: auto;
-	}
-	
-	
-}
+			if (request.status == 200 && request.readyState == 4) {
+				if (result)
+					location.href='<c:url value='/' />';
+				else {
+					alert('삭제 실패하였습니다.');
+				}
+			}
+		}
+	</script>
 
+	<style>
+		@media ( max-width : 1070px) {
 
-.jumbotron {
-	background-image: url('../resources/image/memo-jumbotron-backgorund.jpg');
-	background-size: cover;
-	background-repeat: no-repeat;
-	text-shadow: 0.1em 0.1em 0.1em dimgray;
-	color: white;
-}
+			#tools {
+				padding-left: 180px;
+				padding-bottom: 30px;
+			}
+		}
 
-#logout {
-	color: white;
-	margin: 1%;
-}
+		@media ( min-width : 1070px) {
+			#postTable {
+				margin-left: auto;
+			}
 
-#viewBody {
-	 min-height: 50%;
-	 padding: 4px;
-	 border: 1px solid #CED4DA;
-     border-radius: 15px 15px;
-}
-     
-#subTitle {
-	 color: gray;
-	 border-bottom: 1px solid #CED4DA;
-	 margin-left: 1%;
-	 margin-right: 1%;
-	 padding-bottom: 3%;	
-}
+			.container-fluid {
+				width: 1000px;
+			}
 
-#contentBody {
- 	min-height: 40%;
- 	margin-right: 0px;
-	resize: none;
-	border-color: white;
-	width: 99%;
-}
+			#tools {
+				margin-top: auto;
+			}
+		}
+		.jumbotron {
+			background-image: url('<C:url value="/resources/image/memo-jumbotron-backgorund.jpg"/>');
+			background-size: cover;
+			background-repeat: no-repeat;
+			text-shadow: 0.1em 0.1em 0.1em dimgray;
+			color: white;
+		}
 
-</style>
+		#logout {
+			color: white;
+			margin: 1%;
+		}
+
+		#viewBody {
+			min-height: 50%;
+			padding: 4px;
+			padding-left: 20px;
+			padding-right: 20px;
+			border: 1px solid #CED4DA;
+			border-radius: 15px 15px;
+		}
+
+		#subTitle {
+			color: gray;
+			border-bottom: 1px solid #CED4DA;
+			margin-left: 1%;
+			margin-right: 1%;
+			padding-bottom: 3%;
+		}
+
+		#contentBody {
+			min-height: 40%;
+			border-color: white;
+			width: 100%;
+			word-break:break-all;
+		}
+	</style>
+
 </head>
 
 <body>
@@ -112,10 +119,10 @@ function deletePost() {
 		
 		<br>
 		
-		<div id="tools">
-			<a class="btn btn-danger btn-sm" style="color: white" onclick="deletePost();">삭제</a>
-			<a class="btn btn-outline-success btn-sm" onclick="updatePost();">수정</a>
-			<a class="btn btn-primary active btn-sm" href="../board">목록</a>
+		<div id="tools" class="float-right">
+			<a class="btn btn-danger btn-sm" style="color: white" onclick="deletePost('${dto.BID}');">삭제</a>
+			<a class="btn btn-outline-success btn-sm" href="/modifyPage/${dto.BID}">수정</a>
+			<a class="btn btn-primary active btn-sm" href='<c:url value="/" />'>목록</a>
 		</div>
 		
 	</div><!-- 최상위 container 태그 -->

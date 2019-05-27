@@ -17,116 +17,46 @@ import com.finotek.board.service.BoardService;
 
 @Controller
 public class BoardController {
-	
+
 	@Autowired
-	BoardService service; 	// ·ÎÁ÷À» ¼öÇàÇÒ °´Ã¼
+	public BoardService service; 	// BoardService ê°ì²´ ë°”ì¸ë”©
 	
-	
-//	@RequestMapping(value="/board.test")
-//	public String write(Principal pri, Model model) {// ÀÛ¼º±ÛÀÇ ¸®½ºÆ®¸¦ º¸¿©ÁÖ´Â ¸Ş¼­µµ Å×½ºÆ®°úÁ¤¿¡ ÇÊ¿äÇÑ±â´É
-//		service.getBoardListTest(pri, model);
-//		return "board";
-//	}
-	
-	// ÀÛ¼º±ÛÀÇ ³»¿ëÀ» º¸¿©ÁØ´Ù
+	//  í¬ìŠ¤íŒ…ëœ ê¸€ì„ ë¶ˆëŸ¬ì˜¬ ë©”ì†Œë“œ
 	@GetMapping(value="/viewPost/{bid}")
-	public String boardList(@PathVariable(value = "bid") String bid, Authentication authentication, Model model) {
-		service.getPost_S(bid, model, authentication);
-		
-		return "board/postView";
-	}
+	public String boardList(@PathVariable(value = "bid") String bid, Authentication authentication, Model model)
+	{ service.getPost_S(bid, model, authentication);	return "board/postView"; }
 	
-	// ±ÛÀ» ÀÛ¼ºÇÑ´Ù
+	// ì‘ì„±ëœ ê¸€ì„ ì €ì¥í•˜ëŠ” ë©”ì†Œë“œ
 	@ResponseBody
 	@RequestMapping(value="/writePost", method = RequestMethod.POST)
-	public String writePost(BoardDTO dto, Authentication authentication) {
-		return service.writePost_S(dto, authentication);
-	}
+	public String writePost(BoardDTO dto, Authentication authentication)
+	{ return service.writePost_S(dto, authentication); }
 	
-	// ÀÛ¼º±ÛÀ» »èÁ¦ÇÑ´Ù
+	// ì‘ì„±ê¸€ì„ ì‚­ì œí•˜ëŠ” ë©”ì†Œë“œ
 	@ResponseBody
 	@GetMapping(value="/deletePost/{bid}")
-	public String deletePost(@PathVariable(value = "bid") String bid, Authentication authentication) {
-		return service.deletePost_S(bid, authentication);
-	}
+	public String deletePost(@PathVariable(value = "bid") String bid, Authentication authentication)
+	{ return service.deletePost_S(bid, authentication); }
 	
-	// ÀÛ¼º±ÛÀ» °Ë»öÇØ¼­ Ã£¾ÆÁØ´Ù
+	// ì‘ì„±ê¸€ë“¤ì„ ì°¾ì•„ì£¼ëŠ” ë©”ì†Œë“œ
 	@ResponseBody
 	@RequestMapping(value="/searchPost.json", produces = "application/json; charset=utf8")
-	public String searchPost(@RequestParam String content, Authentication authenticatio) {
-		return service.getSearchPostList_S(content, authenticatio);
-	}
-	
-	
-	
-	// ¸ŞÀÎÈ­¸éÀÌÀÚ ÀÛ¼º±ÛÀÇ ¸ñ·ÏÀ» º¸¿©ÁÙ È­¸é
+	public String searchPost(@RequestParam String content, Authentication authenticatio)
+	{ return service.getSearchPostList_S(content, authenticatio); }
+
+	// ë§¤ì¸í˜ì´ì§€ë¥¼ ë¶ˆëŸ¬ì˜¤ëŠ” ë©”ì†Œë“œ
 	@RequestMapping(value="/board")
-	public String boardPage() {
-		return "board/boardList";
-	}
+	public String boardPage() { return "board/boardList"; }
 	
-	// ¸ŞÀÎÈ­¸éÀÌÀÚ ÀÛ¼º±ÛÀÇ ¸ñ·ÏÀ» º¸¿©ÁÙ È­¸é
+	// ìœ„ì™€ ê°™ì€ ê¸°ëŠ¥ì„ í•˜ì§€ë§Œ ë£¨íŠ¸ ì£¼ì†Œë¡œ ë©”ì¸ í˜ì´ì§€ë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
 	@RequestMapping(value="/")
-	public String mainPage() {
-			
-		return "board/boardList";
-	}
+	public String mainPage() { return "board/boardList"; }
 	
-	@GetMapping(value="/board/modifyPage/{bid}")
-	public String modifyPage(@ModelAttribute @PathVariable(value = "bid") String bid, Authentication authentication) {
-			
-		return "board/modifyPage";
-	}
+	@GetMapping(value="/modifyPage/{bid}")
+	public String modifyPage(@ModelAttribute @PathVariable(value = "bid") String bid, Authentication authentication)
+	{ return "board/modifyPage"; }
 	
 	@GetMapping(value="/modifyPost/{bid}")
-	public String modifyPost(@PathVariable(value = "bid") String bid, Authentication authentication) {
-			
-		return "redirect:board/viewPost/" + bid;
-	}
-	
-	
-	
-	
-	
-	
-	
-//	@RequestMapping(value="/board")
-//	public String write(Principal pri, Model model) {// ÀÛ¼º±ÛÀÇ ¸®½ºÆ®¸¦ º¸¿©ÁÖ´Â ¸Ş¼­µµ Å×½ºÆ®°úÁ¤¿¡ ÇÊ¿äÇÑ±â´É
-//		IDAO dao = sqlSession.getMapper(IDAO.class);	
-//		model.addAttribute("name", pri.getName());
-//		model.addAttribute("list", dao.getPostList_A());
-//		
-//		return "board/board";
-//	}
-//	
-//	@ResponseBody
-//	@RequestMapping(value="/boardAjax")
-//	public String boardList(Authentication authentication, Model model) {// ÀÛ¼º±ÛÀÇ ¸®½ºÆ®¸¦ º¸¿©ÁÖ´Â ¸Ş¼­µµ
-//		
-//		String auth_S = null;
-//		try {
-//			Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();
-//			
-//			while(auth.hasNext()) 
-//			{
-//				auth_S = auth.next().getAuthority();
-//				
-//				System.out.println("»ç¿ëÀÚÀÌ¸§ : " + authentication.getName());
-//				System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + authentication.getName());
-//				
-//				if(auth_S.equals("ROLE_USER"))
-//					return gson.toJson(sqlSession.selectList("com.finotek.board.dao.IDAO.getPostList_U", authentication.getName()));
-//				else if(auth_S.equals("ROLE_ADMIN"))
-//					return gson.toJson(sqlSession.selectList("com.finotek.board.dao.IDAO.getPostList_A"));
-//			}
-//			
-//		} catch (Exception e) {
-//			return "{\"error\":\"noAuthority}";
-//		}
-//		
-//		return "null";
-//		
-//	}
-	
-
+	public String modifyPost(@PathVariable(value = "bid") String bid, Authentication authentication)
+	{ return "redirect:board/viewPost/" + bid; }
 }

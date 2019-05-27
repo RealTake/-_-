@@ -16,7 +16,7 @@
 	<!-- 마이베티스 사용 설정 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
-		<property name="mapperLocations" value="classpath:com/finotek/board/dao/mapper/*.xml"/>
+		<property name="mapperLocations" value="classpath*:com/finotek/board/dao/mapper/*.xml"/>
 	</bean>
 	
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">

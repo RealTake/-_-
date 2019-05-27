@@ -22,35 +22,35 @@ import com.google.gson.Gson;
 public class BoardService {
 	
 	@Autowired
-	SqlSession sqlSession;	// ¸¶ÀÌº£Æ¼½º¸¦ »ç¿ëÇÏ±âÀ§ÇÑ °´Ã¼
-	private Gson gson = new Gson(); // ListÇü½ÄÀÇ ¹İÈ¯µÈ °Ô½Ã±ÛµéÀ» jsonÀ¸·Î º¯È¯ ½ÃÅ´
+	SqlSession sqlSession;	// ë§ˆì´ë² í‹°ìŠ¤ë¥¼ ì‚¬ìš©í•˜ê¸°ìœ„í•œ ê°ì²´
+	private Gson gson = new Gson(); // Listí˜•ì‹ì˜ ë°˜í™˜ëœ ê²Œì‹œê¸€ë“¤ì„ jsonìœ¼ë¡œ ë³€í™˜ ì‹œí‚´
 	
 	
 	public String getSearchPostList_S(String content, Authentication authentication) {
 		try 
 		{
-			String auth_S = null;// »ç¿ëÀÚÀÇ ±ÇÇÑÀÌ ÀúÀåµÉ º¯¼ö
+			String auth_S = null;// ì‚¬ìš©ìì˜ ê¶Œí•œì´ ì €ì¥ë  ë³€ìˆ˜
 			Method nowmethod = new Object(){}.getClass().getEnclosingMethod();
-			Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator(); // ·Î±×ÀÎµÈ »ç¿ëÀÚÀÇ ±ÇÇÑ¸ñ·ÏµéÀ» Á÷·ÄÈ­ÇÔ
+			Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator(); // ë¡œê·¸ì¸ëœ ì‚¬ìš©ìì˜ ê¶Œí•œëª©ë¡ë“¤ì„ ì§ë ¬í™”í•¨
 			Map<String, String> param = new HashMap<String, String>();
 			
 			param.put("ID",authentication.getName());
 			param.put("CONTENT", content);
 			
-			System.out.println("Á¤º¸: " + nowmethod.getName());
-			System.out.println("»ç¿ëÀÚÀÌ¸§ : " + authentication.getName());
+			System.out.println("ì •ë³´: " + nowmethod.getName());
+			System.out.println("ì‚¬ìš©ìì´ë¦„ : " + authentication.getName());
 			
 			while(auth.hasNext()) 
 			{
 				auth_S = auth.next().getAuthority();
 				
 				if(auth_S.equals("ROLE_USER")) {
-					System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + auth_S);
-					return "{\"result\":" + gson.toJson(sqlSession.selectList("com.finotek.board.dao.IDAO.getSearchPostList_U", param)) + "}";						// À¯Àúid¿Í ÀÛ¼ºÀÚ¸¦ ºñ±³ÇÑ´Ù.
+					System.out.println("ì‚¬ìš©ìê¶Œí•œ : " + auth_S);
+					return "{\"result\":" + gson.toJson(sqlSession.selectList("com.finotek.board.dao.IDAO.getSearchPostList_U", param)) + "}";						// ìœ ì €idì™€ ì‘ì„±ìë¥¼ ë¹„êµí•œë‹¤.
 				}
 				else if(auth_S.equals("ROLE_ADMIN")) {
-					System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + auth_S);
-					return "{\"result\":" + gson.toJson(sqlSession.selectList("com.finotek.board.dao.IDAO.getSearchPostList_A", content)) + "}";					// ¾îµå¹Î °èÁ¤ÀÏ½Ã ºñ±³ÇÏÁö ¾Ê°í ¸ğµç °Ô½Ã¹°À» Ã£´Â´Ù.
+					System.out.println("ì‚¬ìš©ì ê¶Œí•œ : " + auth_S);
+					return "{\"result\":" + gson.toJson(sqlSession.selectList("com.finotek.board.dao.IDAO.getSearchPostList_A", content)) + "}";					// ì–´ë“œë¯¼ ê³„ì •ì¼ì‹œ ë¹„êµí•˜ì§€ ì•Šê³  ëª¨ë“  ê²Œì‹œë¬¼ì„ ì°¾ëŠ”ë‹¤.
 				}
 				
 			}
@@ -65,11 +65,11 @@ public class BoardService {
 		
 		
 		
-		return "{\"error\":\"noAuthority}";// ±ÇÇÑ¾øÀÌ Á¢±ÙÇÒ°æ¿ì ¿À·ù ¸Ş¼¼Áö Àü´Ş
+		return "{\"error\":\"noAuthority}";// ê¶Œí•œì—†ì´ ì ‘ê·¼í• ê²½ìš° ì˜¤ë¥˜ ë©”ì„¸ì§€ ì „ë‹¬
 		
 	}
 	
-//	public void getBoardListTest(Principal pri, Model model) {// ÀÛ¼º±ÛÀÇ ¸®½ºÆ®¸¦ º¸¿©ÁÖ´Â ¸Ş¼­µµ Å×½ºÆ®°úÁ¤¿¡ ÇÊ¿äÇÑ±â´É
+//	public void getBoardListTest(Principal pri, Model model) {// ì‘ì„±ê¸€ì˜ ë¦¬ìŠ¤íŠ¸ë¥¼ ë³´ì—¬ì£¼ëŠ” ë©”ì„œë„ í…ŒìŠ¤íŠ¸ê³¼ì •ì— í•„ìš”í•œê¸°ëŠ¥
 //		IDAO dao = sqlSession.getMapper(IDAO.class);	
 //		model.addAttribute("name", pri.getName());
 //		model.addAttribute("list", dao.getPostList_A());
@@ -77,16 +77,16 @@ public class BoardService {
 //	}
 	
 
-	public void getPost_S(String bid, Model model, Authentication authentication) {// ÀÛ¼º±ÛÀÇ ¸®½ºÆ®¸¦ º¸¿©ÁÖ´Â ¸Ş¼­µå
+	public void getPost_S(String bid, Model model, Authentication authentication) {// ì‘ì„±ê¸€ì˜ ë¦¬ìŠ¤íŠ¸ë¥¼ ë³´ì—¬ì£¼ëŠ” ë©”ì„œë“œ
 		
-		String auth_S = null;// »ç¿ëÀÚÀÇ ±ÇÇÑÀÌ ÀúÀåµÉ º¯¼ö
+		String auth_S = null;// ì‚¬ìš©ìì˜ ê¶Œí•œì´ ì €ì¥ë  ë³€ìˆ˜
 		Method nowmethod = new Object(){}.getClass().getEnclosingMethod();
 		
-		System.out.println("Á¤º¸: " + nowmethod.getName());
-		System.out.println("»ç¿ëÀÚÀÌ¸§ : " + authentication.getName());
+		System.out.println("ì •ë³´: " + nowmethod.getName());
+		System.out.println("ì‚¬ìš©ìì´ë¦„ : " + authentication.getName());
 		try 
 		{
-			Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// ·Î±×ÀÎµÈ »ç¿ëÀÚÀÇ ±ÇÇÑ¸ñ·ÏµéÀ» Á÷·ÄÈ­ÇÔ
+			Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// ë¡œê·¸ì¸ëœ ì‚¬ìš©ìì˜ ê¶Œí•œëª©ë¡ë“¤ì„ ì§ë ¬í™”í•¨
 			
 			while(auth.hasNext()) 
 			{
@@ -94,13 +94,13 @@ public class BoardService {
 		
 				
 				if(auth_S.equals("ROLE_USER")) {
-					System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + auth_S);
+					System.out.println("ì‚¬ìš©ìê¶Œí•œ : " + auth_S);
 					IDAO dao = sqlSession.getMapper(IDAO.class);
 					BoardDTO dto = dao.getPost_U(Integer.valueOf(bid), authentication.getName());
 					model.addAttribute("dto", dto);
 				}
 				else if(auth_S.equals("ROLE_ADMIN")) {
-					System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + auth_S);
+					System.out.println("ì‚¬ìš©ìê¶Œí•œ : " + auth_S);
 					IDAO dao = sqlSession.getMapper(IDAO.class);
 					BoardDTO dto = dao.getPost_A(Integer.valueOf(bid));
 					model.addAttribute("dto", dto);	
@@ -118,9 +118,9 @@ public class BoardService {
 		
 	}
 	
-	public String writePost_S(BoardDTO dto, Authentication authentication) {// ÀÛ¼º±ÛÀÇ ¸®½ºÆ®¸¦ º¸¿©ÁÖ´Â ¸Ş¼­µå
+	public String writePost_S(BoardDTO dto, Authentication authentication) {// ì‘ì„±ê¸€ì˜ ë¦¬ìŠ¤íŠ¸ë¥¼ ë³´ì—¬ì£¼ëŠ” ë©”ì„œë“œ
 		
-		String auth_S = null;// »ç¿ëÀÚÀÇ ±ÇÇÑÀÌ ÀúÀåµÉ º¯¼ö
+		String auth_S = null;// ì‚¬ìš©ìì˜ ê¶Œí•œì´ ì €ì¥ë  ë³€ìˆ˜
 		Method nowmethod = new Object(){}.getClass().getEnclosingMethod();
 		Date date = new Date();
 		SimpleDateFormat sDate = new SimpleDateFormat("yyyy.MM.dd");
@@ -128,12 +128,12 @@ public class BoardService {
 		dto.setWRITER(authentication.getName());
 		dto.setWDATE(sDate.format(date));
 		
-		System.out.println("Á¤º¸: " + nowmethod.getName());
-		System.out.println("»ç¿ëÀÚÀÌ¸§ : " + authentication.getName());
+		System.out.println("ì •ë³´: " + nowmethod.getName());
+		System.out.println("ì‚¬ìš©ìì´ë¦„ : " + authentication.getName());
 		
 		try 
 		{
-			Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// ·Î±×ÀÎµÈ »ç¿ëÀÚÀÇ ±ÇÇÑ¸ñ·ÏµéÀ» Á÷·ÄÈ­ÇÔ
+			Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// ë¡œê·¸ì¸ëœ ì‚¬ìš©ìì˜ ê¶Œí•œëª©ë¡ë“¤ì„ ì§ë ¬í™”í•¨
 			
 			while(auth.hasNext()) 
 			{
@@ -141,13 +141,13 @@ public class BoardService {
 		
 				
 				if(auth_S.equals("ROLE_USER")) {
-					System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + auth_S);
+					System.out.println("ì‚¬ìš©ìê¶Œí•œ : " + auth_S);
 					sqlSession.getMapper(IDAO.class).writePost(dto);
 					return "1";
 					
 				}
 				else if(auth_S.equals("ROLE_ADMIN")) {
-					System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + auth_S);
+					System.out.println("ì‚¬ìš©ìê¶Œí•œ : " + auth_S);
 					sqlSession.getMapper(IDAO.class).writePost(dto);
 					return "1";
 	
@@ -163,20 +163,20 @@ public class BoardService {
 			e.printStackTrace();
 		}
 		
-		return "0"; //»èÁ¦ ½ÇÆĞ½Ã 0 ¸®ÅÏ
+		return "0"; //ì‚­ì œ ì‹¤íŒ¨ì‹œ 0 ë¦¬í„´
 	}
 	
-	public String deletePost_S(String bid, Authentication authentication) {// ÀÛ¼º±ÛÀÇ ¸®½ºÆ®¸¦ º¸¿©ÁÖ´Â ¸Ş¼­µå
+	public String deletePost_S(String bid, Authentication authentication) {// ì‘ì„±ê¸€ì˜ ë¦¬ìŠ¤íŠ¸ë¥¼ ë³´ì—¬ì£¼ëŠ” ë©”ì„œë“œ
 			
-			String auth_S = null;// »ç¿ëÀÚÀÇ ±ÇÇÑÀÌ ÀúÀåµÉ º¯¼ö
+			String auth_S = null;// ì‚¬ìš©ìì˜ ê¶Œí•œì´ ì €ì¥ë  ë³€ìˆ˜
 			Method nowmethod = new Object(){}.getClass().getEnclosingMethod();
 			
-			System.out.println("Á¤º¸: " + nowmethod.getName());
-			System.out.println("»ç¿ëÀÚÀÌ¸§ : " + authentication.getName());
+			System.out.println("ì •ë³´: " + nowmethod.getName());
+			System.out.println("ì‚¬ìš©ìì´ë¦„ : " + authentication.getName());
 			
 			try 
 			{
-				Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// ·Î±×ÀÎµÈ »ç¿ëÀÚÀÇ ±ÇÇÑ¸ñ·ÏµéÀ» Á÷·ÄÈ­ÇÔ
+				Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// ë¡œê·¸ì¸ëœ ì‚¬ìš©ìì˜ ê¶Œí•œëª©ë¡ë“¤ì„ ì§ë ¬í™”í•¨
 				
 				while(auth.hasNext()) 
 				{
@@ -184,13 +184,13 @@ public class BoardService {
 			
 					
 					if(auth_S.equals("ROLE_USER")) {
-						System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + auth_S);
+						System.out.println("ì‚¬ìš©ìê¶Œí•œ : " + auth_S);
 						sqlSession.getMapper(IDAO.class).deletePost_U(Integer.valueOf(bid), authentication.getName());
 						return "1";
 						
 					}
 					else if(auth_S.equals("ROLE_ADMIN")) {
-						System.out.println("»ç¿ëÀÚ±ÇÇÑ : " + auth_S);
+						System.out.println("ì‚¬ìš©ìê¶Œí•œ : " + auth_S);
 						sqlSession.getMapper(IDAO.class).deletePost_A(Integer.valueOf(bid));
 						return "1";
 		
@@ -206,6 +206,6 @@ public class BoardService {
 				e.printStackTrace();
 			}
 			
-			return "0"; //»èÁ¦ ½ÇÆĞ½Ã 0 ¸®ÅÏ
+			return "0"; //ì‚­ì œ ì‹¤íŒ¨ì‹œ 0 ë¦¬í„´
 		}
 }
