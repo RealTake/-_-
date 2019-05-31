@@ -57,14 +57,14 @@
 			}
 		}
 		.jumbotron {
-			background-image: url('<C:url value="/resources/image/memo-jumbotron-backgorund.jpg"/>');
+			background-image: url('<c:url value="/resources/image/memo-jumbotron-backgorund.jpg"/>');
 			background-size: cover;
 			background-repeat: no-repeat;
 			text-shadow: 0.1em 0.1em 0.1em dimgray;
 			color: white;
 		}
 
-		#logout {
+		#logoutB {
 			color: white;
 			margin: 1%;
 		}
@@ -100,7 +100,7 @@
 
 	<div class="container-fluid">
 		<header>
-			<p><a id="logout" class="btn btn-warning btn-sm float-right" onclick="document.getElementById('logout').submit();">로그아웃</a></p>
+			<p><a id="logoutB" class="btn btn-warning btn-sm float-right" onclick="document.getElementById('logout').submit();">로그아웃</a></p>
 			<div id="id" class="jumbotron">
 				<div>
 					<p><h1 class="text-center">Choi's 게시판</h1></p>
@@ -126,5 +126,13 @@
 		</div>
 		
 	</div><!-- 최상위 container 태그 -->
+    <div style="display: none">
+        <c:url value="/logout" var="logout" />
+        <form action="${logout}" method="POST" id="logout">
+            <input type="hidden" name="${_csrf.parameterName}"
+                   value="${_csrf.token}" />
+            <button type="submit">로그아웃</button>
+        </form>
+    </div>
 </body>
 </html>

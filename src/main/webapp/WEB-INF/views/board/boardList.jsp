@@ -45,13 +45,14 @@
 	</script>
 
 	<script type="text/javascript">
-		var editor;
+		var pageNum = 1;
 		var request = new XMLHttpRequest();
 		var col = ["BID", "WDATE", "TITLE", "WRITER"];
 
 		function getSearchedPost() {
+			pageNum = 1;
 			request.open('GET',
-					'<c:url value="/searchPost.json?content="/>'
+					'<c:url value="/searchPost.json/1?content="/>'
 							+ encodeURIComponent(document
 									.getElementById("searchContent").value), true);
 			request.onreadystatechange = searchProcess;
@@ -60,30 +61,35 @@
 
 		function searchProcess() {
 			var table = document.getElementById("postList");
-			table.innerHTML = "";
 
 			if (request.status === 200 && request.readyState === 4) {
 				var object = eval('(' + request.responseText + ')');
 				var result = object.result;
+				if (result.length > 0) {
+					table.innerHTML = "";
+                    document.getElementById('pageN').innerText = pageNum;
 
-				for (var i = 0; i < result.length; i++) {
-					var row = table.insertRow(0);
-					for (var j = 0; j < 5; j++) {
-						var cell = row.insertCell(j);
-						var delB = '<a class="btn btn-danger btn-sm"  href="#top" onclick="deletePost('
-								+ result[i].BID + ');">삭제</a>';
-						var upB = '<a class="btn btn-outline-success btn-sm"  href="<c:url value="/modifyPage/"/>' + result[i].BID + '">수정</a>';
+					for (var i = result.length - 1; i >= 0; i--) {
+						var row = table.insertRow(0);
+						for (var j = 0; j < 5; j++) {
+							var cell = row.insertCell(j);
+							var delB = '<a class="btn btn-danger btn-sm" style="color: white" onclick="deletePost(' + result[i].BID + ');">삭제</a>';
+							var upB = '<a class="btn btn-outline-success btn-sm"  href="<c:url value="/modifyPage/"/>' + result[i].BID + '">수정</a>';
 
-						if (col[j] == "TITLE" && j < 4)
-							cell.innerHTML = "<a class='viewLink' href='viewPost/" + result[i].BID + "'>"
-									+ result[i][col[j]] + "</a>";
-						else if (j < 4)
-							cell.innerHTML = result[i][col[j]];
-						else if (j >= 4){
-							cell.className = "etc";
-							cell.innerHTML = upB + "&nbsp;" + delB;
+							if (col[j] == "TITLE" && j < 4)
+								cell.innerHTML = "<a class='viewLink' href='viewPost/" + result[i].BID + "'>"
+										+ result[i][col[j]] + "</a>";
+							else if (j < 4)
+								cell.innerHTML = result[i][col[j]];
+							else if (j >= 4) {
+								cell.className = "etc";
+								cell.innerHTML = upB + "&nbsp;" + delB;
+							}
 						}
 					}
+				}
+				else {
+					movePage('prev');
 				}
 			}
 		}
@@ -124,7 +130,7 @@
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		function deletePost(bid) {
-			request.open('GET', '<c:url value="/deletePost/"/> ' + bid, true);
+			request.open('GET', '<c:url value="/deletePost/"/>' + bid, true);
 			request.onreadystatechange = deleteProcess;
 			request.send(null);
 		}
@@ -142,6 +148,20 @@
 		}
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		function movePage(mode) {
+			if(mode == 'next')
+				pageNum++;
+			else if(mode == 'prev' && pageNum > 1)
+				pageNum--;
+			request.open('GET',
+					'<c:url value="/searchPost.json/"/>' + pageNum + '?' +'content='
+					+ encodeURIComponent(document
+							.getElementById("searchContent").value), true);
+			request.onreadystatechange = searchProcess;
+			request.send(null);
+		}
+
 
 		//작성글 화면에서 전송, 취소 버튼을 눌렀을때 작성화면을 비운다.
 		function writeB(mode) {
@@ -212,6 +232,9 @@
 
 		@media screen and ( min-width: 751px) {
 			.container-fluid {
+				border-radius: 15px 15px;
+				background-color: #5e91f8;
+				background: white;
 				width: 1000px;
 			}
 
@@ -241,6 +264,7 @@
 		}
 
 		.jumbotron {
+			margin-top: 10px;
 			background-image: url('<c:url value="/resources/image/strawberry-backgroundImage.jpg"/>');
 			background-size: cover;
 			background-position: center;
@@ -267,6 +291,18 @@
 
 		.viewLink:link { color: red; text-decoration: none;}
 		.viewLink:visited { color: black; text-decoration: none;}
+
+		#pageB {
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		body {
+			height: 100%;
+			margin-top: 0px;
+			padding: 0px;
+			/*background-color: #5e91f8;*/
+		}
 	</style>
 
 </head>
@@ -315,27 +351,27 @@
 
 		<div class="row">
 
-			<table id="sidebar" class="col-md-2">
-				<thead class="table table-hover">
+<%--			<table id="sidebar" class="col-md-2">--%>
+<%--				<thead class="table table-hover">--%>
 
-					<th class="text-center">카테고리 목록</th>
-				</thead>
+<%--					<th class="text-center">카테고리 목록</th>--%>
+<%--				</thead>--%>
 
-				<tbody class="text-center">
-					<tr>
-						<td style="background-color: gray;"><a href="">카테고리1</a></td>
-					</tr>
-					<tr>
-						<td><a href="">카테고리2</a></td>
-					</tr>
-					<tr>
-						<td><a href="">카테고리3</a></td>
-					</tr>
-				</tbody>
+<%--				<tbody class="text-center">--%>
+<%--					<tr>--%>
+<%--						<td style="background-color: gray;"><a href="">카테고리1</a></td>--%>
+<%--					</tr>--%>
+<%--					<tr>--%>
+<%--						<td><a href="">카테고리2</a></td>--%>
+<%--					</tr>--%>
+<%--					<tr>--%>
+<%--						<td><a href="">카테고리3</a></td>--%>
+<%--					</tr>--%>
+<%--				</tbody>--%>
 
-			</table>
+<%--			</table>--%>
 
-			<div id="postTable" class="col-md-10">
+			<div id="postTable">
 
 				<table id="ajaxTable" class="table table-hover">
 
@@ -354,6 +390,13 @@
 				</table>
 
 			</div>
+
+			<div id="pageB">
+				<button class="btn btn-outline-info" onclick="movePage('prev')">이전</button>
+                <button class="btn btn-outline-info" id="pageN"></button>
+				<button class="btn btn-outline-info" onclick="movePage('next')">다음</button>
+			</div>
+
 		</div>
 
 		<a id="writeB" class="float-right btn btn-primary" href="#writeTable" onclick="writeB(true);">글쓰기</a>

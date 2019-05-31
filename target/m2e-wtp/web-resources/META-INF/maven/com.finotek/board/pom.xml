@@ -188,22 +188,15 @@
 	</dependencies>
 	
     <build>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
         <plugins>
-        
-            <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <additionalProjectnatures>
-                        <projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-                    </additionalProjectnatures>
-                    <additionalBuildcommands>
-                        <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
-                    </additionalBuildcommands>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

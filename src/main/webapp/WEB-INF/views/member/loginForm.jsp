@@ -15,53 +15,27 @@
 <script src="./resources/js/bootstrap.js"></script>
 
 <style>
- 
+
     body{
-      overflow-x: hidden;
-      overflow-y: hidden;
-      background: url('./resources/image/pier-569314.jpg') no-repeat center fixed;
-      background-size: cover;
+		font-family: "맑은 고딕";
+		background-color: #5e91f8;
     }
 
-    @media screen and (min-width: 1081px){
-    
-	   .tableL {
-	      border: 1px solid #CED4DA;
-	      border-radius: 15px 15px;
-	      width: 400px;
-	      height: 300px;  
-	      margin-left: auto;
-	      margin-right: auto;
-	      margin-bottom: 100%;
-	      margin-top: 15%;
-	      padding-left: 50px;
-	      padding-right: 50px;
-	      padding-top: 40px;
-	      box-shadow: 0.1em 0.1em dimgray;
-	      background-color: white;
-	   }
-   
-   }
-    
-    @media screen and (max-width: 1080px){
-    
-	   .tableL {
-	      border: 1px solid #CED4DA;
-	      border-radius: 15px 15px;
-	      width: 300px;
-	      height: 300px;  
-	      margin-left: auto;
-	      margin-right: auto;
-	      margin-bottom: 100%;
-	      margin-top: 15%;
-	      padding-left: 50px;
-	      padding-right: 50px;
-	      padding-top: 40px;
-	      box-shadow: 0.1em 0.1em dimgray;
-	      background-color: white;
-	   }
-   
-   }
+	.loginBody {
+		border: 1px solid #CED4DA;
+		border-radius: 10px 10px;
+		width: 700px;
+		height: 400px;
+		margin: auto;
+		margin-top: 2%;
+		padding-left: 80px;
+		padding-right: 80px;
+		padding-top: 80px;
+		padding-bottom: 40px;
+		box-shadow: 0px 1px 10px #434e9a;
+		background-color: white;
+	}
+
    .blur {
       -webkit-filter: blur(5px); 
       -moz-filter: blur(5px); 
@@ -76,7 +50,32 @@
        height: 100%;   
        background-color: yellow;
    }
-  
+
+   .form-signin {
+	   margin-top: auto;
+	   margin-bottom: auto;
+   }
+
+   .form-control {
+	   font-size: 20px;
+	   margin-bottom: 20px;
+	   padding-top: 30px;
+	   padding-bottom: 30px;
+   }
+
+	.form-heading {
+		margin-top: 7%;
+		color: white;
+		text-align: center;
+	}
+
+	#login {
+
+		margin-top: 30px;
+		border: none;
+		height: 59px;
+		background-color: #5e91f8;
+	}
 
 </style>
 
@@ -86,19 +85,23 @@
 
 </head>
 <body>
-			<div class="tableL">
-				<form action="<c:url value="/login"/>" method="POST" class="form-signin" >
-					<h2 class="form-signin-heading">Please Login</h2><br>
-					<p><label for="id" class="sr-only">아이디</label>
-					<input name="id" class="form-control" type="text" placeholder="Email address" required autofocus/>
-					
-					<label for="password" class="sr-only">패스워드</label>
-					<input name="password" class="form-control" type="password" placeholder="Password" required/></p>
-					
-					<input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
-					<input type="submit" class="btn btn-lg btn-primary btn-block" value="로그인"/>
-				</form>
-			</div>
-			
+
+	<div class="form-heading">
+		<h1>Welcome back!</h1>
+	</div>
+
+	<div class="loginBody">
+		<form action="<c:url value="/login"/>" method="POST" class="form-signin" >
+			<p>
+				<label for="id" class="sr-only">Id</label>
+				<input name="id" class="form-control" type="text" placeholder="Email address" required autofocus/>
+				<label for="password" class="sr-only">Password</label>
+				<input name="password" class="form-control" type="password" placeholder="Password" required/>
+			</p>
+
+			<input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+			<input type="submit" id="login" class="btn btn-lg btn-primary btn-block" value="Login"/>
+		</form>
+	</div>
 </body>
 </html>

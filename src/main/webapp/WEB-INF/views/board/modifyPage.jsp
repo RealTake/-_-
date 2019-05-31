@@ -16,7 +16,6 @@
 			<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 			<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
 			<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
-
 			<script type="text/javascript"> //바이트 크기를 구해주는 함수
 				String.prototype.getBytes = function() {
 					var contents = this;
@@ -44,90 +43,79 @@
 					}
 				}
 			</script>
-
 			<script type="text/javascript">
-				//작성글 화면에서 전송, 취소 버튼을 눌렀을때 작성화면을 비운다.
-				function writeB(mode) {
-					if (mode)
-					{
-						document.getElementById("writeB").style.display = 'none';
-						document.getElementById("writeTable").style.display = 'block';
+				var request = new XMLHttpRequest();
+
+				function modifyPost(bid) {
+					var title = document.getElementById("TITLE").value;
+					var content = CKEDITOR.instances.editor1.getData();
+					var token = $("meta[name='_csrf']").attr("content");
+					var header = $("meta[name='_csrf_header']").attr("content");
+
+					if(content.getBytes() > 4000){
+						alert('제한된 크기에 내용을 작성해주세요');
 					}
-					else {
-						CKEDITOR.instances.editor1.setData('');
-						document.getElementById("editor1").value = "";
-						document.getElementById("TITLE").value = "";
-						document.getElementById("writeTable").style.display = 'none';
-						document.getElementById("writeB").style.display = 'block';
+					else{
+						request.open('POST', '<c:url value="/modifyPost/"/>' + bid, true);
+						request.setRequestHeader(header, token);
+						request.setRequestHeader('Content-type',
+								'application/x-www-form-urlencoded; charset=utf-8');
+						request.onreadystatechange = modifyProcess;
+						request.send("TITLE=" + title + "&" + "CONTENT=" + content);
 					}
 				}
 
-				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-				window.onload = function() {
-					getSearchedPost();
+				function modifyProcess() {
+					var result = request.responseText;
+						alert(result);
+					if (request.status == 200 && request.readyState == 4) {
+						if (result == 1)
+							location.href = '<c:url value="/viewPost/${dto.BID}"/>'
+					}
 				}
 			</script>
 
 			<style>
 
 			@media ( max-width : 1070px) {
+				.container-fluid {
+					padding-right: 0px;
+					padding-left: 0px;
+					overflow: hidden;
+				}
+				.jumbotron {
+					background-image: url('<c:url value="/resources/image/strawberry-backgroundImage.jpg"/>');
+					background-size: cover;
+					background-repeat: no-repeat;
+					margin-bottom: 0px;
+					text-shadow: 0.1em 0.1em 0.1em dimgray;
+					color: white;
+				}
 
+				#logoutB {
+					color: white;
+					margin-top: 1%;
+					margin-right: 1%;
+				}
 			}
 
 			@media ( min-width : 1070px) {
-				#postTable {
-					margin-left: auto;
-				}
-
 				.container-fluid {
 					width: 1000px;
 				}
 
-				#tools {
-					padding-left: 80%;
-					margin-top: auto;
+				.jumbotron {
+					background-image: url('<c:url value="/resources/image/memo-jumbotron-backgorund.jpg"/>');
+					background-size: cover;
+					background-repeat: no-repeat;
+					text-shadow: 0.1em 0.1em 0.1em dimgray;
+					color: white;
 				}
 
-
-			}
-
-
-			.jumbotron {
-				background-image: url('<C:url value="/resources/image/memo-jumbotron-backgorund.jpg"/>');
-				background-size: cover;
-				background-repeat: no-repeat;
-				text-shadow: 0.1em 0.1em 0.1em dimgray;
-				color: white;
-			}
-
-			#logout {
-				color: white;
-				margin: 1%;
-			}
-
-			#viewBody {
-				 min-height: 50%;
-				 padding: 4px;
-				 padding-left: 30px;
-				 padding-right: 30px;
-				 border: 1px solid #CED4DA;
-				 border-radius: 15px 15px;
-			}
-
-			#subTitle {
-				 color: gray;
-				 border-bottom: 1px solid #CED4DA;
-				 margin-left: 1%;
-				 margin-right: 1%;
-				 padding-bottom: 3%;
-			}
-
-			#contentBody {
-				min-height: 40%;
-				border-color: white;
-				width: 100%;
-				word-break:break-all;
+				#logoutB {
+					color: white;
+					margin: 1%;
+				}
 			}
 
 			</style>
@@ -146,15 +134,14 @@
 						</div>
 					</div>
 				</header>
-
 					<div id="writeTable">
 						<p><h3>수정하기</h3></p>
 
 						<p>제목:</p>
-						<p><input class="form-control" size="10%" width="100%" id="TITLE" onkeyup="checkByte('TITLE');" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
+						<p><input class="form-control" size="10%" width="100%" id="TITLE" value="${dto.TITLE}" onkeyup="checkByte('TITLE');" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
 
 						<p>내용:</p>
-						<p><textarea  name="editor1" id="editor1" rows="10" cols="80" onkeyup="checkEditorByte();" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required></textarea></p>
+						<p><textarea  name="editor1" id="editor1" rows="10" cols="80" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required>${dto.CONTENT}</textarea></p>
 
 						<script>
 							CKEDITOR.replace("editor1",{

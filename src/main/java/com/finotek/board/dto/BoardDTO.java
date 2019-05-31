@@ -1,51 +1,64 @@
 package com.finotek.board.dto;
 
 public class BoardDTO {
-	String WDATE;	// °Ô½Ã±Û ÀÛ¼ºÀÏ º¯¼ö
-	String TITLE;	// °Ô½Ã±ÛÁ¦¸ñ º¯¼ö
-	String CONTENT; // °Ô½Ã±Û ³»¿ë º¯¼ö
-	String TYPE;	// °Ô½Ã±Û Ä«Å×°í¸® º¯¼ö
-	String BID;		// °Ô½Ã±Û °íÀ¯¹øÈ£
+	String WDATE;	// ï¿½Ô½Ã±ï¿½ ï¿½Û¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	String TITLE;	// ï¿½Ô½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	String CONTENT; // ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	String TYPE;	// ï¿½Ô½Ã±ï¿½ Ä«ï¿½×°ï¿½ ï¿½ï¿½ï¿½ï¿½
+	String BID;		// ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£
 	String WRITER;
+
 	public String getWDATE() {
 		return WDATE;
 	}
-	public void setWDATE(String wDATE) {
-		WDATE = wDATE;
+
+	public BoardDTO setWDATE(String WDATE) {
+		this.WDATE = WDATE;
+		return this;
 	}
+
 	public String getTITLE() {
 		return TITLE;
 	}
-	public void setTITLE(String tITLE) {
-		TITLE = tITLE;
+
+	public BoardDTO setTITLE(String TITLE) {
+		this.TITLE = TITLE;
+		return this;
 	}
+
 	public String getCONTENT() {
 		return CONTENT;
 	}
-	public void setCONTENT(String cONTENT) {
-		CONTENT = cONTENT;
+
+	public BoardDTO setCONTENT(String CONTENT) {
+		this.CONTENT = CONTENT;
+		return this;
 	}
+
 	public String getTYPE() {
 		return TYPE;
 	}
-	public void setTYPE(String tYPE) {
-		TYPE = tYPE;
+
+	public BoardDTO setTYPE(String TYPE) {
+		this.TYPE = TYPE;
+		return this;
 	}
+
 	public String getBID() {
 		return BID;
 	}
-	public void setBID(String bID) {
-		BID = bID;
+
+	public BoardDTO setBID(String BID) {
+		this.BID = BID;
+		return this;
 	}
+
 	public String getWRITER() {
 		return WRITER;
 	}
-	public void setWRITER(String wRITER) {
-		WRITER = wRITER;
+
+	public BoardDTO setWRITER(String WRITER) {
+		this.WRITER = WRITER;
+		return this;
 	}
-	
-	
-	
-	
-	
 }
