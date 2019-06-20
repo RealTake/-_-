@@ -6,32 +6,40 @@
 <mapper namespace="com.finotek.board.dao.IDAO">
 
     <update id="modifyPost_A" parameterType="com.finotek.board.dto.BoardDTO">
-		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT} WHERE BID = #{BID}
+		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST} WHERE BID = #{BID}
 	</update>
 
     <update id="modifyPost_U" parameterType="com.finotek.board.dto.BoardDTO">
-		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT} WHERE BID = #{BID} AND WRITER = #{WRITER}
+		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST} WHERE BID = #{BID} AND WRITER = #{WRITER}
 	</update>
 
     <select id="getPost_A" resultType="com.finotek.board.dto.BoardDTO">
-		SELECT BID, TITLE, WRITER, WDATE, CONTENT FROM BOARDS WHERE BID = #{param1}
+		SELECT * FROM BOARDS WHERE BID = #{param1}
 	</select>
 
     <select id="getPost_U" resultType="com.finotek.board.dto.BoardDTO">
-		SELECT BID, TITLE, WRITER, WDATE, CONTENT FROM BOARDS WHERE BID =  #{param1} AND WRITER = #{param2}
+		SELECT * FROM BOARDS WHERE BID =  #{param1} AND WRITER = #{param2}
 	</select>
 
     <select id="getSearchPostList_A" resultType="com.finotek.board.dto.BoardDTO" parameterType="map">
-		SELECT * FROM (SELECT rownum as rownumber, b.* FROM (SELECT * FROM BOARDS  WHERE (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) ORDER BY BID DESC) b)  WHERE rownumber >= #{start} AND rownumber &lt;= #{end}
+		SELECT * FROM (SELECT rownum as rownumber, BID, TITLE, WRITER, WDATE FROM (SELECT * FROM BOARDS  WHERE (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) ORDER BY BID DESC))  WHERE rownumber >= #{start} AND rownumber &lt;= #{end}
 	</select>
 
     <select id="getSearchPostList_U" resultType="com.finotek.board.dto.BoardDTO" parameterType="map">
-		SELECT * FROM (SELECT rownum as rownumber, b.* FROM (SELECT * FROM BOARDS  WHERE WRITER = #{ID} AND (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) ORDER BY BID DESC) b)  WHERE rownumber >= #{start} AND rownumber &lt;= #{end}
+		SELECT * FROM (SELECT rownum as rownumber, BID, TITLE, WRITER, WDATE FROM (SELECT * FROM BOARDS  WHERE WRITER = #{ID} AND (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) ORDER BY BID DESC))  WHERE rownumber >= #{start} AND rownumber &lt;= #{end}
 	</select>
 
     <insert id="writePost" parameterType="com.finotek.board.dto.BoardDTO">
-		INSERT INTO BOARDS (BID, WRITER, CONTENT, TITLE, WDATE) VALUES (BOARD_SEQ.NEXTVAL, #{WRITER}, #{CONTENT}, #{TITLE}, #{WDATE})
+		INSERT INTO BOARDS (BID, WRITER, CONTENT, TITLE, WDATE, FILE_LIST) VALUES (BOARD_SEQ.NEXTVAL, #{WRITER}, #{CONTENT}, #{TITLE}, #{WDATE}, #{FILE_LIST})
 	</insert>
+
+    <insert id="joinMember" parameterType="com.finotek.board.dto.MemberDTO">
+		INSERT INTO USERS (ID, PASSWORD, ENABLED, AUTHORITY, EMAIL, JOINDATE, SEX) VALUES (#{ID}, #{PASSWORD}, #{ENABLED}, #{USER_AUTHORITY}, #{EMAIL}, #{JOINDATE}, #{SEX})
+	</insert>
+
+    <select id="checkOverlap" resultType="String">
+		SELECT ID FROM USERS WHERE ID = #{param1}
+	</select>
 
     <delete id="deletePost_A">
 		DELETE FROM BOARDS WHERE BID = #{param1}

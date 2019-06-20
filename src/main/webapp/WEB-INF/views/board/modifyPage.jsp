@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 		<head>
 			<title>수정 페이지</title>
+			<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 			<meta name="viewport" content="width=device-width, user-scalable=no">
 
@@ -14,6 +15,7 @@
 
 			<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
 			<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+			<script src="http://malsup.github.io/min/jquery.form.min.js"></script>
 			<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
 			<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
 			<script type="text/javascript"> //바이트 크기를 구해주는 함수
@@ -51,6 +53,7 @@
 					var content = CKEDITOR.instances.editor1.getData();
 					var token = $("meta[name='_csrf']").attr("content");
 					var header = $("meta[name='_csrf_header']").attr("content");
+					var fileList = $("#returnFileList").val();
 
 					if(content.getBytes() > 4000){
 						alert('제한된 크기에 내용을 작성해주세요');
@@ -61,22 +64,59 @@
 						request.setRequestHeader('Content-type',
 								'application/x-www-form-urlencoded; charset=utf-8');
 						request.onreadystatechange = modifyProcess;
-						request.send("TITLE=" + title + "&" + "CONTENT=" + content);
+						request.send("TITLE=" + title + "&" + "CONTENT=" + content + "&" + "FILE_LIST=" + fileList);
 					}
 				}
 
 				function modifyProcess() {
 					var result = request.responseText;
-						alert(result);
 					if (request.status == 200 && request.readyState == 4) {
 						if (result == 1)
 							location.href = '<c:url value="/viewPost/${dto.BID}"/>'
 					}
 				}
+
+				$().ready( function() {
+					$('#sendFile').click(
+							function uploadFile(){
+								$("form[name=fileForm]").ajaxForm({
+									url : "<c:url value='/fileUpload.do?'/>${_csrf.parameterName}=${_csrf.token}",
+									enctype : "multipart/form-data",
+									dataType : "text",
+									error : function(){
+										alert("에러") ;
+									},
+									success : function(responseText){
+										$("#returnFileList").val(responseText);
+										alert( $("#returnFileList").val());
+									}
+								});
+
+								$("form[name=fileForm]").submit() ;
+							}
+					);
+				});
+
+				function showName(){
+					var files = document.getElementsByName('fileList')[0].files;
+					var filelist = '';
+
+
+					for(var i =0; i < files.length; i++){
+						if((files.length - 1) == i) {
+							filelist += files[i].name
+						} else {
+							filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+						}
+					}
+
+					console.log(filelist);
+
+					document.getElementsByClassName('custom-file-label')[0].innerHTML = filelist
+				}
 			</script>
 
 			<style>
-
 			@media ( max-width : 1070px) {
 				.container-fluid {
 					padding-right: 0px;
@@ -116,8 +156,12 @@
 					color: white;
 					margin: 1%;
 				}
-			}
 
+				img {
+					max-width: 100%;
+					height: auto !important;
+				}
+			}
 			</style>
 
 		</head>
@@ -146,10 +190,23 @@
 						<script>
 							CKEDITOR.replace("editor1",{
 								extraPlugins : 'confighelper',
-								filebrowserUploadUrl:'<c:url value="/fileUpload.do" />?${_csrf.parameterName}=${_csrf.token}'
+								filebrowserUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
 							});
 						</script>
-
+						<br>
+						<input type="hidden" id="returnFileList" value="${dto.FILE_LIST}"/>
+						<form name="fileForm" method="post" enctype="multipart/form-data">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<button type="button" class="input-group-text" id="sendFile">Upload</button>
+								</div>
+								<div class="custom-file">
+									<input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList" onchange="showName();">
+									<label class="custom-file-label" id="showFiles" for="fileList">${dto.FILE_LIST}</label>
+								</div>
+							</div>
+						</form>
+						<br>
 						<div class="text-center">
 							<p>
 								<a id="send" class="btn btn-primary btn-md" style="color: white;" onclick="modifyPost('${dto.BID}');">수정</a>

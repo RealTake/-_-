@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.finotek.board.dto.BoardDTO;
+import com.finotek.board.dto.MemberDTO;
 
 public interface IDAO {
+	public String checkOverlap(String value);
+	public void joinMember(MemberDTO dto);
 	public void writePost(BoardDTO dto);
 	public void modifyPost_A(BoardDTO dto);
 	public void modifyPost_U(BoardDTO dto);

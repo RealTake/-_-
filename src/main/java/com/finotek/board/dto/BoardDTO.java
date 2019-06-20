@@ -1,64 +1,18 @@
 package com.finotek.board.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter @Setter
 public class BoardDTO {
-	String WDATE;	// �Խñ� �ۼ��� ����
-	String TITLE;	// �Խñ����� ����
-	String CONTENT; // �Խñ� ���� ����
-	String TYPE;	// �Խñ� ī�װ� ����
-	String BID;		// �Խñ� ������ȣ
-	String WRITER;
-
-	public String getWDATE() {
-		return WDATE;
-	}
-
-	public BoardDTO setWDATE(String WDATE) {
-		this.WDATE = WDATE;
-		return this;
-	}
-
-	public String getTITLE() {
-		return TITLE;
-	}
-
-	public BoardDTO setTITLE(String TITLE) {
-		this.TITLE = TITLE;
-		return this;
-	}
-
-	public String getCONTENT() {
-		return CONTENT;
-	}
-
-	public BoardDTO setCONTENT(String CONTENT) {
-		this.CONTENT = CONTENT;
-		return this;
-	}
-
-	public String getTYPE() {
-		return TYPE;
-	}
-
-	public BoardDTO setTYPE(String TYPE) {
-		this.TYPE = TYPE;
-		return this;
-	}
-
-	public String getBID() {
-		return BID;
-	}
-
-	public BoardDTO setBID(String BID) {
-		this.BID = BID;
-		return this;
-	}
-
-	public String getWRITER() {
-		return WRITER;
-	}
-
-	public BoardDTO setWRITER(String WRITER) {
-		this.WRITER = WRITER;
-		return this;
-	}
+	String WDATE;	        // 작성날
+	String TITLE;	        // 제목
+	String CONTENT;         // 내용
+	String TYPE;	        // 카테고리
+	String BID;		        // 게시판 고유 번호
+	String WRITER;	        // 작성자
+	String FILE_LIST;           // 파일리스트 String 형
+    String[] FILE_ARRAY; // 파일리스트 List 형
 }

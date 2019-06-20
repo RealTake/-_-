@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <head>
 	<title>게시판</title>
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 
@@ -13,7 +15,8 @@
 
 	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
+    <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
+	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 	<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
 
 	<script type="text/javascript">
@@ -59,17 +62,34 @@
 			request.send(null);
 		}
 
-		function searchProcess() {
+		function searchProcess(mode) {
 			var table = document.getElementById("postList");
 
 			if (request.status === 200 && request.readyState === 4) {
 				var object = eval('(' + request.responseText + ')');
 				var result = object.result;
+				var limit;
+
 				if (result.length > 0) {
 					table.innerHTML = "";
                     document.getElementById('pageN').innerText = pageNum;
+                    document.getElementById('pageB').style.display = 'block';
 
-					for (var i = result.length - 1; i >= 0; i--) {
+                    if(result.length <= 10)
+                        document.getElementById('next').style.visibility = 'hidden';
+                    else
+                        document.getElementById('next').style.visibility = 'visible';
+
+                    if(pageNum <= 1)
+                        document.getElementById('prev').style.visibility = 'hidden';
+                    else
+                        document.getElementById('prev').style.visibility = 'visible';
+
+                    if(result.length >= 10)
+                    	limit = 10 - 1;
+                    else
+                    	limit = result.length - 1;
+					for (var i = limit; i >= 0; i--) {
 						var row = table.insertRow(0);
 						for (var j = 0; j < 5; j++) {
 							var cell = row.insertCell(j);
@@ -101,7 +121,7 @@
 			var content = CKEDITOR.instances.editor1.getData();
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-
+            var fileList = $("#returnFileList").val();
 			if(content.getBytes() > 4000){
 				alert('제한된 크기에 내용을 작성해주세요');
 			}
@@ -111,7 +131,7 @@
 				request.setRequestHeader('Content-type',
 						'application/x-www-form-urlencoded; charset=utf-8');
 				request.onreadystatechange = writeProcess;
-				request.send("TITLE=" + title + "&" + "CONTENT=" + content);
+				request.send("TITLE=" + title + "&" + "CONTENT=" + content + "&" + "FILE_LIST=" + fileList);
 			}
 		}
 
@@ -139,27 +159,31 @@
 			var result = request.setRequestHeader;
 
 			if (request.status == 200 && request.readyState == 4) {
-				if (result)
+				if (result) {
+					document.getElementById("postList").innerHTML = "";
 					getSearchedPost();
-				else {
-					alert('삭제 실패하였습니다.');
 				}
+				else
+					alert('삭제 실패하였습니다.');
 			}
 		}
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		function movePage(mode) {
-			if(mode == 'next')
-				pageNum++;
-			else if(mode == 'prev' && pageNum > 1)
-				pageNum--;
-			request.open('GET',
-					'<c:url value="/searchPost.json/"/>' + pageNum + '?' +'content='
-					+ encodeURIComponent(document
-							.getElementById("searchContent").value), true);
-			request.onreadystatechange = searchProcess;
-			request.send(null);
+		    if(pageNum >= 1) {
+                if (mode == 'next')
+                    pageNum++;
+                else if (mode == 'prev')
+                    pageNum--;
+
+                request.open('GET',
+                    '<c:url value="/searchPost.json/"/>' + pageNum + '?' + 'content='
+                    + encodeURIComponent(document
+                        .getElementById("searchContent").value), true);
+                request.onreadystatechange = searchProcess;
+                request.send(null);
+            }
 		}
 
 
@@ -172,6 +196,9 @@
 			}
 			else {
 				CKEDITOR.instances.editor1.setData('');
+                document.getElementById("fileList").value="";
+                document.getElementById("showFiles").innerText="";
+				document.getElementById("returnFileList").value="";
 				document.getElementById("editor1").value = "";
 				document.getElementById("TITLE").value = "";
 				document.getElementById("writeTable").style.display = 'none';
@@ -179,7 +206,46 @@
 			}
 		}
 
+        $().ready( function() {
+            $('#sendFile').click(
+                function uploadFile(){
+                    $("form[name=fileForm]").ajaxForm({
+                        url : "<c:url value='/fileUpload.do?'/>${_csrf.parameterName}=${_csrf.token}",
+                        enctype : "multipart/form-data",
+                        dataType : "text",
+                        error : function(){
+                            alert("에러") ;
+                        },
+                        success : function(responseText){
+                            $("#returnFileList").val(responseText);
+                            alert( $("#returnFileList").val());
+                        }
+                    });
+
+                    $("form[name=fileForm]").submit() ;
+                }
+            );
+        });
+
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        function showName(){
+		    var files = document.getElementsByName('fileList')[0].files;
+		    var filelist = '';
+
+
+		    for(var i =0; i < files.length; i++){
+		        if((files.length - 1) == i) {
+		            filelist += files[i].name
+                } else {
+		            filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+                }
+            }
+
+		    console.log(filelist);
+
+		    document.getElementsByClassName('custom-file-label')[0].innerHTML = filelist
+        }
 
 		window.onload = function() {
 			getSearchedPost();
@@ -247,7 +313,7 @@
 			#sidebar a:visited { color: black; text-decoration: none;}
 
 			.etc {
-				width: 150px;
+				width: 100px;
 				padding: 0px;
 			}
 		}
@@ -295,7 +361,13 @@
 		#pageB {
 			margin-left: auto;
 			margin-right: auto;
+            display: flex;
 		}
+
+        #prev, #next, #pageN {
+            margin-left: 3px;
+            margin-right: 3px;
+        }
 
 		body {
 			height: 100%;
@@ -307,8 +379,7 @@
 
 </head>
 
-<body>
-
+<body>&nbsp;&nbsp;&nbsp;
 	<div class="container-fluid">
 		<header>
 			<p><a id="logoutB" class="btn btn-warning btn-sm float-right" onclick="document.getElementById('logout').submit();">로그아웃</a></p>
@@ -319,10 +390,10 @@
 				</div>
 				<s:authorize access="hasRole('ROLE_ADMIN')"><p><h3>관리자 모드</h3></p></s:authorize>
 
-				<div class="row">
-						<input id="searchContent" class="col-md-3 form-control" type="text" onkeyup="getSearchedPost();" placeholder="내용+제목"> &nbsp;&nbsp;&nbsp;
-						<button id="searchB" class="btn btn-primary btn-md" style="width:60px" onclick="getSearchedPost();" type="button">검색</button>
-				</div>
+<%--				<div class="row">--%>
+<%--					<input id="searchContent" class="col-md-3 form-control" type="text" onkeyup="getSearchedPost();" placeholder="내용+제목"> &nbsp;&nbsp;&nbsp;--%>
+<%--					<button id="searchB" class="btn btn-primary btn-md" style="width:60px" onclick="getSearchedPost();" type="button">검색</button>--%>
+<%--				</div>--%>
 			</div>
 		</header>
 
@@ -335,12 +406,27 @@
 			<p><input class="form-control" size="10%" width="100%" id="TITLE" onkeyup="checkByte('TITLE');" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
 			<p>내용:</p>
 			<p><textarea name="editor1" id="editor1" rows="10" cols="80" onkeyup="checkEditorByte();" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required></textarea></p>
-				<script>
+
+            <script>
 					CKEDITOR.replace("editor1",{
 						extraPlugins : 'confighelper',
-						filebrowserUploadUrl:'<c:url value="/fileUpload.do" />?${_csrf.parameterName}=${_csrf.token}'
+						filebrowserUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
 					});
-				</script>
+                    CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
+            </script>
+            <input type="hidden" id="returnFileList" value=""/>
+            <form name="fileForm" method="post" enctype="multipart/form-data">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" class="input-group-text" id="sendFile">Upload</button>
+                    </div>
+                    <div class="custom-file">
+                        <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList" onchange="showName();">
+                        <label class="custom-file-label" id="showFiles" for="fileList">Choose file</label>
+                    </div>
+                </div>
+            </form>
+            <br>
 			<div class="text-center">
 				<p>
 					<a id="send" class="btn btn-primary btn-md" style="color: white;" onclick="writePost();">제출</a> &nbsp;&nbsp;&nbsp;
@@ -348,7 +434,11 @@
 				</p>
 			</div>
 		</div>
-
+		<div style="display: flex">
+			<input id="searchContent" class="form-control" type="text" style="width: 100%" onkeyup="getSearchedPost();" placeholder="내용+제목"> &nbsp;&nbsp;&nbsp;
+			<button id="searchB" class="btn btn-primary btn-md" style="min-width: 60px" onclick="getSearchedPost();" type="button">검색</button>
+		</div>
+		<br>
 		<div class="row">
 
 <%--			<table id="sidebar" class="col-md-2">--%>
@@ -391,10 +481,10 @@
 
 			</div>
 
-			<div id="pageB">
-				<button class="btn btn-outline-info" onclick="movePage('prev')">이전</button>
+			<div id="pageB" style="display: none;">
+				<button class="btn btn-outline-info" id="prev" onclick="movePage('prev')">이전</button>
                 <button class="btn btn-outline-info" id="pageN"></button>
-				<button class="btn btn-outline-info" onclick="movePage('next')">다음</button>
+				<button class="btn btn-outline-info" id="next" onclick="movePage('next')">다음</button>
 			</div>
 
 		</div>

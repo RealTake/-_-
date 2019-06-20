@@ -183,7 +183,14 @@
 		    <artifactId>json</artifactId>
 		    <version>20180813</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.16</version>
+			<scope>provided</scope>
+		</dependency>
+
 	
 	</dependencies>
 	
@@ -202,8 +209,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>

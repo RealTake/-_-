@@ -1,50 +1,17 @@
 package com.finotek.board.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class MemberDTO {
-	String name;			// ÀÌ¸§
-	String id;				// ¾ÆÀÌµğ
-	String password;		// ºñ¹Ğ¹øÈ£
-	String sex;				// ¼ºº°
-	String user_authority;	// »ç¿ëÀÚÀÇ ±ÇÇÑ
-	String joinDate;		// È¸¿ø°¡ÀÔÀÏ
-	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getSex() {
-		return sex;
-	}
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
-	public String getUser_authority() {
-		return user_authority;
-	}
-	public void setUser_authority(String user_authority) {
-		this.user_authority = user_authority;
-	}
-	public String getJoinDate() {
-		return joinDate;
-	}
-	public void setJoinDate(String joinDate) {
-		this.joinDate = joinDate;
-	}
-	
-	
-	
+	String NAME;			// ì‚¬ìš©ì ì´ë¦„
+	String ID;				// ì•„ì´ë””
+	String EMAIL;			// ì´ë©”ì¼
+	String PASSWORD;		// ë¹„ë°€ë²ˆí˜¸
+	char SEX;				// ì„±ë³„
+	String USER_AUTHORITY;	// ê°€ì§€ê³ ìˆëŠ” ê¶Œí•œ
+	String JOINDATE;		// ê°€ì…ë‚ ì§œ
+	int ENABLED;			// ê³„ì • í™œì„±í™” ì—¬ë¶€ 1: í™œì„±í™”, 0: ë¹„í™œì„±í™”
+
 }
