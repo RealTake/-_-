@@ -5,14 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>로그인 페이지</title>
     <meta charset="UTF-8">
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
     <meta name="viewport" content="width=device-width, user-scalable=no">
 
-    <title>로그인 페이지</title>
-
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
     <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
+
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
 
@@ -44,7 +44,7 @@
             padding-left: 80px;
             padding-right: 80px;
             padding-bottom: 40px;
-            box-shadow: 0px 1px 10px #434e9a;
+            box-shadow: 0px 1px 10px black;
             background-color: white;
         }
     }
@@ -157,11 +157,11 @@
     </div>
     <c:if test="${null != param.error}">
         <script>
-            var msg = document.getElementById('msg');
-            msg.innerHTML = '<strong>Login failed. Please try again</strong>';
-            msg.style.color = 'red';
-            msg.style.marginTop = '30px';
-            msg.style.marginBottom = '20px';
+            var msg = $('#msg');
+            msg[0].innerHTML = '<strong>Login failed. Please try again</strong>';
+            msg.css('color', 'red');
+            msg.css('marginTop', '30px');
+            msg.css('marginBottom', '20px');
         </script>
     </c:if>
 </body>

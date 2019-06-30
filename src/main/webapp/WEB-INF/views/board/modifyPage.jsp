@@ -5,102 +5,47 @@
 <!DOCTYPE html>
 		<head>
 			<title>수정 페이지</title>
-			<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 			<meta name="viewport" content="width=device-width, user-scalable=no">
 
-			<!-- default header name is X-CSRF-TOKEN -->
-			<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
-			<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-
+			<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 			<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
+
 			<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 			<script src="http://malsup.github.io/min/jquery.form.min.js"></script>
 			<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
 			<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
-			<script type="text/javascript"> //바이트 크기를 구해주는 함수
-				String.prototype.getBytes = function() {
-					var contents = this;
-					var str_character;
-					var int_char_count;
-					var int_contents_length;
-
-					int_char_count = 0;
-					int_contents_length = contents.length;
-
-					for (k = 0; k < int_contents_length; k++) {
-						str_character = contents.charAt(k);
-						if (escape(str_character).length > 4)
-							int_char_count += 2;
-						else
-							int_char_count++;
-					}
-					return int_char_count;
-				}
-
-				function checkByte(caller) {
-					var check = document.getElementById(caller).value;
-					if(check.getBytes() > 30){
-						alert('제한된 크기에 제목을 작성해주세요');
-					}
-				}
-			</script>
+			<script src="<c:url value='/resources/js/checkByte.js'/>"></script>//바이트 크기를 구해주는 함수
 			<script type="text/javascript">
-				var request = new XMLHttpRequest();
-
 				function modifyPost(bid) {
-					var title = document.getElementById("TITLE").value;
+					var title = $("#TITLE").val();
 					var content = CKEDITOR.instances.editor1.getData();
-					var token = $("meta[name='_csrf']").attr("content");
-					var header = $("meta[name='_csrf_header']").attr("content");
 					var fileList = $("#returnFileList").val();
-
 					if(content.getBytes() > 4000){
 						alert('제한된 크기에 내용을 작성해주세요');
 					}
 					else{
-						request.open('POST', '<c:url value="/modifyPost/"/>' + bid, true);
-						request.setRequestHeader(header, token);
-						request.setRequestHeader('Content-type',
-								'application/x-www-form-urlencoded; charset=utf-8');
-						request.onreadystatechange = modifyProcess;
-						request.send("TITLE=" + title + "&" + "CONTENT=" + content + "&" + "FILE_LIST=" + fileList);
+						$.ajax({
+							url: '<c:url value="/modifyPost/"/>' + bid,
+							type: 'post',
+							contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+							headers: {'${_csrf.headerName}' : '${_csrf.token}'},
+							data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + fileList,
+							dataType: 'text',
+							success: function () {
+								location.href = '<c:url value="/viewPost/${dto.BID}"/>'
+							},
+							error: function () {
+								alert('등록을 실패하였습니다.');
+							},
+						});
 					}
 				}
 
-				function modifyProcess() {
-					var result = request.responseText;
-					if (request.status == 200 && request.readyState == 4) {
-						if (result == 1)
-							location.href = '<c:url value="/viewPost/${dto.BID}"/>'
-					}
-				}
-
-				$().ready( function() {
-					$('#sendFile').click(
-							function uploadFile(){
-								$("form[name=fileForm]").ajaxForm({
-									url : "<c:url value='/fileUpload.do?'/>${_csrf.parameterName}=${_csrf.token}",
-									enctype : "multipart/form-data",
-									dataType : "text",
-									error : function(){
-										alert("에러") ;
-									},
-									success : function(responseText){
-										$("#returnFileList").val(responseText);
-										alert( $("#returnFileList").val());
-									}
-								});
-
-								$("form[name=fileForm]").submit() ;
-							}
-					);
-				});
-
+				//파일 등록후 등록한 파일의 이름을 보여준다.
 				function showName(){
-					var files = document.getElementsByName('fileList')[0].files;
+					var files = $('input[name=fileList]')[0].files;
 					var filelist = '';
-
 
 					for(var i =0; i < files.length; i++){
 						if((files.length - 1) == i) {
@@ -109,11 +54,58 @@
 							filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
 						}
 					}
-
 					console.log(filelist);
-
-					document.getElementsByClassName('custom-file-label')[0].innerHTML = filelist
+					$('.custom-file-label')[0].innerHTML = filelist;
 				}
+
+				$().ready( function() {
+					//제목 바이트 확인
+					$("#TITLE").keyup( function() {
+						checkByte("TITLE");
+					});
+
+					//게시글 전송
+					$("#send").click( function() {
+						var bid = $(this).attr("bid");
+						modifyPost(bid);
+					});
+
+					//글 작성 취소시 에디터 초기화 및 숨김
+					$("#cancel").click( function() {
+						location.href = '<c:url value="/viewPost/${dto.BID}"/>'
+					});
+
+					//파일 업로드시 업로드 파일 이름을 알려줌
+					$("#fileList").change(function () {
+						showName();
+					});
+
+					//로그아웃 버튼
+					$("#logoutB").click(function () {
+						$("#logout").submit();
+					});
+
+					//파일업로드 하기
+					$('#sendFile').click(
+							function uploadFile(){
+								$("form[name=fileForm]").ajaxForm({
+									url : "<c:url value='/fileUpload.do?'/>${_csrf.parameterName}=${_csrf.token}",
+									enctype : "multipart/form-data",
+									dataType : "text",
+									error : function(){
+										alert("업로드 실패") ;
+									},
+									success : function(responseText){
+										$("#returnFileList").val(responseText);
+										alert('업로드 성공');
+									}
+								});
+
+								$("form[name=fileForm]").submit() ;
+							}
+					);
+				});
+
 			</script>
 
 			<style>
@@ -156,11 +148,6 @@
 					color: white;
 					margin: 1%;
 				}
-
-				img {
-					max-width: 100%;
-					height: auto !important;
-				}
 			}
 			</style>
 
@@ -170,7 +157,7 @@
 			<div class="container-fluid">
 
 				<header>
-					<p><a id="logoutB" class="btn btn-warning btn-sm float-right" onclick="document.getElementById('logout').submit();">로그아웃</a></p>
+					<p><a id="logoutB" class="btn btn-warning btn-sm float-right">로그아웃</a></p>
 					<div id="id" class="jumbotron">
 						<div>
 							<p><h1 class="text-center">Choi's 게시판</h1></p>
@@ -182,7 +169,7 @@
 						<p><h3>수정하기</h3></p>
 
 						<p>제목:</p>
-						<p><input class="form-control" size="10%" width="100%" id="TITLE" value="${dto.TITLE}" onkeyup="checkByte('TITLE');" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
+						<p><input class="form-control" size="10%" width="100%" id="TITLE" value="${dto.TITLE}" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
 
 						<p>내용:</p>
 						<p><textarea  name="editor1" id="editor1" rows="10" cols="80" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required>${dto.CONTENT}</textarea></p>
@@ -190,8 +177,9 @@
 						<script>
 							CKEDITOR.replace("editor1",{
 								extraPlugins : 'confighelper',
-								filebrowserUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
+                                filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
 							});
+                            CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
 						</script>
 						<br>
 						<input type="hidden" id="returnFileList" value="${dto.FILE_LIST}"/>
@@ -201,7 +189,7 @@
 									<button type="button" class="input-group-text" id="sendFile">Upload</button>
 								</div>
 								<div class="custom-file">
-									<input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList" onchange="showName();">
+									<input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
 									<label class="custom-file-label" id="showFiles" for="fileList">${dto.FILE_LIST}</label>
 								</div>
 							</div>
@@ -209,7 +197,7 @@
 						<br>
 						<div class="text-center">
 							<p>
-								<a id="send" class="btn btn-primary btn-md" style="color: white;" onclick="modifyPost('${dto.BID}');">수정</a>
+								<a id="send" class="btn btn-primary btn-md" style="color: white;" bid="${dto.BID}">수정</a>
 								&nbsp;&nbsp;&nbsp;
 								<a id="cancel" class="btn btn-primary btn-md" style="color: white;" href="<c:url value="/viewPost/"/>${dto.BID}">취소</a>
 							</p>

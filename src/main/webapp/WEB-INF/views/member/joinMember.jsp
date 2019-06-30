@@ -5,94 +5,105 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>로그인 페이지</title>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
     <meta name="viewport" content="width=device-width, user-scalable=no">
 
-    <title>로그인 페이지</title>
-
+    <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
     <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.css"/>">
+
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.js"/>"></script>
     <script>
-        var request = new XMLHttpRequest();
-        var result;
         var validateId = 0;
         var validatePwd = 0;
         var validateName = 0;
         var validatePwdv = 0;
+        var validateEmail = 0;
 
         function checkID() {
-            request.open('GET', '<c:url value="/checkOverlap/"/>' + encodeURIComponent(document.getElementById('ID').value, true));
-            request.onreadystatechange = checkProcess;
-            request.send(null);
+            var id = encodeURIComponent($("#ID").val(), true);
+            $.ajax({
+                url: '<c:url value="/checkOverlap/"/>' + id,
+                type: 'get',
+                dataType: 'text',
+                success: function (response) {
+                    checkProcess(response);
+                },
+                error: function () {
+                },
+            });
         }
 
-        function checkProcess() {
-            result = request.responseText;
-            var node = document.getElementById('ID');
-            var length = node.value.length;
+        function checkProcess(result) {
+            var node = $("#ID");
+            var tip = $("#IDTip");
+            var length = node.val().length;
 
-            if (request.status == 200 && request.readyState == 4) {
-                if(length < 5 || length > 16){
-                    validateId = 0;
-                    node.style.borderColor = 'red';
-                    document.getElementById("IDTip").style.color = 'red';
-                    document.getElementById("IDTip").innerText = "Id: 5-16";
-                }
-                else if (result == 0) {
-                    validateId = 0;
-                    node.style.borderColor = 'red';
-                    document.getElementById("IDTip").style.color = 'red';
-                    document.getElementById("IDTip").innerText = "Already exist.";
-
-                }
-                else if((result == 1) && (length >= 5 && length <= 16)){
-                    validateId = 1;
-                    node.style.borderColor = '#CED4DA';
-                    document.getElementById("IDTip").innerText = "You can use";
-                    document.getElementById("IDTip").style.color = 'blue';
-                }
+            if (length < 5 || length > 16) {
+                validateId = 0;
+                node.css("borderColor", "red");
+                tip.css("color","red");
+                tip[0].innerText = "Id: 5-16";
+            }
+            else if (result == 0) {
+                validateId = 0;
+                node.css("borderColor", "red");
+                tip.css("color","red");
+                tip[0].innerText = "Already exist.";
+            }
+            else if ((result == 1) && (length >= 5 && length <= 16)) {
+                validateId = 1;
+                node.css("borderColor", "#CED4DA");
+                tip.css("color","blue");
+                tip[0].innerText = "You can use.";
             }
         }
 
         function checkPwd() {
-            var pwd = document.getElementById('PASSWORD');
-            var pwdv = document.getElementById('PASSWORDV');
+            var pwd = $("#PASSWORD").val();
+            var pwdv = $("#PASSWORDV").val();
+            var pwdvNode = $("#PASSWORDV");
+            var tip = $("#PWDTip");
 
-            if(pwd.value != pwdv.value) {
+            if(pwd != pwdv) {
                 validatePwdv = 0;
-                pwdv.style.borderColor = 'red';
-                document.getElementById('PWDTip').style.color = 'red';
-                document.getElementById('PWDTip').innerText = 'Not same';
+                pwdvNode.css("borderColor", "red");
+                tip.css("color", "red");
+                tip[0].innerText = 'Not same';
             }
             else {
                 validatePwdv = 1;
-                pwdv.style.borderColor = '#CED4DA';
-                document.getElementById('PWDTip').style.color = 'blue';
-                document.getElementById('PWDTip').innerText = "It's match";
+                pwdvNode.css("borderColor", "#CED4DA");
+                tip.css("color", "blue");
+                tip[0].innerText = "It's match";
             }
 
         }
 
+        //유효성 검사 함수로 ID는 전용함수가 있다.
         function checkValidate(s, m, check){
-            var node = document.getElementById(check);
-            if(node.value.length < s || node.value.length > m){
-               finalValidate(check, 0);
-                node.style.borderColor = 'red';
-                document.getElementById(check + 'Tip').style.color = 'red';
+            var node = $('#' + check);
+            var tip = $('#' + check + "Tip");
+            var length = node.val().length;
+
+            if(length < s || length > m){
+                validates(check, 0);
+                node.css("borderColor", "red");
+                tip.css("color", "red");
             }
             else {
-                finalValidate(check, 1);
-                node.style.borderColor = '#CED4DA';
-                document.getElementById(check + 'Tip').style.color = 'grey';
+                validates(check, 1);
+                node.css("borderColor", "#CED4DA");
+                tip.css("color", "grey");
             }
 
             if(check == "PASSWORD")
                 checkPwd();
         }
 
-        function finalValidate(check, value) {
+        //checkValidate()를 이용할 경우 유효성 검사 대상의 유효성을 설정할수 있도록함
+        function validates(check, value) {
             switch (check) {
                 case 'PASSWORD' :
                     validatePwd = value;
@@ -100,15 +111,47 @@
                 case 'NAME' :
                     validateName = value;
                     break;
+                case 'EMAIL' :
+                    validateEmail = value;
+                    break;
             }
 
         }
 
+        //회원가입 버튼 클릭시 최종 검사
         function submitForm(value) {
-            if( (validatePwd == 1) && (validateId == 1) && (validatePwdv == 1) && (validateName == 1) ) {
-                document.getElementById(value).submit();
+            if( (validatePwd == 1) && (validateId == 1) && (validatePwdv == 1) && (validateName == 1) && (validateEmail ==1))
+                value.submit();
+            else {
+                alert("입력칸을 확인해주세요");
             }
         }
+
+        $().ready(function () {
+            $("#NAME").keyup(function () {
+                checkValidate(1, 10, $(this).attr("id"));
+            });
+
+            $("#EMAIL").keyup(function () {
+                checkValidate(6, 40, $(this).attr("id"));
+            });
+
+            $("#ID").keyup(function () {
+                checkID();
+            });
+
+            $("#PASSWORD").keyup(function () {
+                checkValidate(8, 16, $(this).attr("id"));
+            });
+
+            $("#PASSWORDV").keyup(function () {
+                checkPwd();
+            });
+
+            $("#joinB").click(function () {
+                submitForm(this.form);
+            });
+        })
     </script>
     <style>
         @media screen and ( max-width: 750px) {
@@ -203,9 +246,9 @@
 <body>
 <div class="floor">
     <div class="loginBody">
-        <form action="<c:url value="/join"/>" method="POST" class="form-signin" id="form">
+        <form action="<c:url value="/join"/>" method="POST">
             <label for="NAME" class="sr-only">Name</label>
-            <input name="NAME" id="NAME" class="form-control" type="text" onkeyup="checkValidate(1, 10, 'NAME');" placeholder="Name" required autofocus/>
+            <input name="NAME" id="NAME" class="form-control" type="text" placeholder="Name" required autofocus/>
             <tip id="NAMETip">Name: 1-10</tip>
 
             <label for="EMAIL" class="sr-only">Email</label>
@@ -213,20 +256,20 @@
             <tip>Email: 일부 이메일은 지원이 안될수도있습니다.</tip>
 
             <label for="ID" class="sr-only">Id</label>
-            <input name="ID" id="ID" class="form-control" type="text" onkeyup="checkID();" placeholder="Id" required autofocus/>
+            <input name="ID" id="ID" class="form-control" type="text" placeholder="Id" required autofocus/>
             <tip id="IDTip">Id: 5-16</tip>
 
             <label for="PASSWORD" class="sr-only">Password</label>
-            <input name="PASSWORD" id="PASSWORD" class="form-control" type="password" onkeyup="checkValidate(8, 16, 'PASSWORD')" placeholder="Password" required autofocus/>
+            <input name="PASSWORD" id="PASSWORD" class="form-control" type="password" placeholder="Password" required autofocus/>
             <tip id="PASSWORDTip">Password: 8-16</tip>
 
             <label for="PASSWORDV" class="sr-only">Password Valid</label>
-            <input name="PASSWORDV" id="PASSWORDV" class="form-control" type="password" onkeyup="checkPwd()" placeholder="Password Valid" required autofocus/>
+            <input name="PASSWORDV" id="PASSWORDV" class="form-control" type="password" placeholder="Password Valid" required autofocus/>
             <tip id="PWDTip">팁: 비밀번호를 다시 써주세요.</tip>
 
             <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+            <input type="button" id="joinB" class="btn btn-lg btn-primary btn-block" value="Join"/>
         </form>
-        <input type="submit" id="joinB" class="btn btn-lg btn-primary btn-block" value="Join" onclick="submitForm('form');"/>
     </div>
 </div>
 

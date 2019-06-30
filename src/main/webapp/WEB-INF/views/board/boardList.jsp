@@ -4,100 +4,70 @@
 <!DOCTYPE html>
 <head>
 	<title>게시판</title>
-	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
-	<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 
-	<!-- default header name is X-CSRF-TOKEN -->
-	<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
-	<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
-
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
+
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
 	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 	<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
-
-	<script type="text/javascript">
-		String.prototype.getBytes = function() {
-			var contents = this;
-			var str_character;
-			var int_char_count;
-			var int_contents_length;
-
-			int_char_count = 0;
-			int_contents_length = contents.length;
-
-			for (k = 0; k < int_contents_length; k++) {
-				str_character = contents.charAt(k);
-				if (escape(str_character).length > 4)
-					int_char_count += 2;
-				else
-					int_char_count++;
-			}
-			return int_char_count;
-		};
-
-		function checkByte(caller) {
-			var check = document.getElementById(caller).value;
-			if(check.getBytes() > 30){
-				alert('제한된 크기에 제목을 작성해주세요');
-			}
-		}
-	</script>
-
+    <script src="<c:url value='/resources/js/checkByte.js'/>"></script>//바이트 크기를 구해주는 함수
 	<script type="text/javascript">
 		var pageNum = 1;
-		var request = new XMLHttpRequest();
 		var col = ["BID", "WDATE", "TITLE", "WRITER"];
 
 		function getSearchedPost() {
-			pageNum = 1;
-			request.open('GET',
-					'<c:url value="/searchPost.json/1?content="/>'
-							+ encodeURIComponent(document
-									.getElementById("searchContent").value), true);
-			request.onreadystatechange = searchProcess;
-			request.send(null);
+			$.ajax({
+				url: '<c:url value="/searchPost.json/1?content="/>' + encodeURIComponent(document.getElementById("searchContent").value),
+				type: 'get',
+				dataType: 'json',
+				success: function (response) {
+					searchProcess(response);
+				},
+				fail: function (error) {
+					alert('로드 실패');
+				},
+			});
 		}
 
-		function searchProcess(mode) {
-			var table = document.getElementById("postList");
-
-			if (request.status === 200 && request.readyState === 4) {
-				var object = eval('(' + request.responseText + ')');
-				var result = object.result;
+		function searchProcess(response) {
+			var table = $("#postList")[0];
+				var result = response.result;
 				var limit;
 
 				if (result.length > 0) {
 					table.innerHTML = "";
-                    document.getElementById('pageN').innerText = pageNum;
-                    document.getElementById('pageB').style.display = 'block';
+					$("#pageN").text(pageNum);
+					$("#pageB").css("display", "block");
 
                     if(result.length <= 10)
-                        document.getElementById('next').style.visibility = 'hidden';
+                    	$("#next").css("visibility", "hidden");
                     else
-                        document.getElementById('next').style.visibility = 'visible';
+						$("#next").css("visibility", "visible");
 
                     if(pageNum <= 1)
-                        document.getElementById('prev').style.visibility = 'hidden';
+						$("#prev").css("visibility", "hidden");
                     else
-                        document.getElementById('prev').style.visibility = 'visible';
+						$("#prev").css("visibility", "visible");
 
                     if(result.length >= 10)
                     	limit = 10 - 1;
                     else
                     	limit = result.length - 1;
+
 					for (var i = limit; i >= 0; i--) {
 						var row = table.insertRow(0);
 						for (var j = 0; j < 5; j++) {
 							var cell = row.insertCell(j);
-							var delB = '<a class="btn btn-danger btn-sm" style="color: white" onclick="deletePost(' + result[i].BID + ');">삭제</a>';
-							var upB = '<a class="btn btn-outline-success btn-sm"  href="<c:url value="/modifyPage/"/>' + result[i].BID + '">수정</a>';
+							var delB = '<button class="btn btn-danger btn-sm" name="delB" bid="' + result[i].BID + '">삭제</button>';
+							var upB = '<a class="btn btn-success btn-sm"  href="<c:url value="/modifyPage/"/>' + result[i].BID + '">수정</a>';
 
 							if (col[j] == "TITLE" && j < 4)
-								cell.innerHTML = "<a class='viewLink' href='viewPost/" + result[i].BID + "'>"
+								cell.innerHTML = "<a class='viewLink' href='./viewPost/" + result[i].BID + "'>"
 										+ result[i][col[j]] + "</a>";
 							else if (j < 4)
 								cell.innerHTML = result[i][col[j]];
@@ -111,64 +81,47 @@
 				else {
 					movePage('prev');
 				}
-			}
 		}
 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 		function writePost() {
-			var title = document.getElementById("TITLE").value;
+			var title = $("#TITLE").val();
 			var content = CKEDITOR.instances.editor1.getData();
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
             var fileList = $("#returnFileList").val();
 			if(content.getBytes() > 4000){
 				alert('제한된 크기에 내용을 작성해주세요');
 			}
 			else{
-				request.open('POST', '<c:url value="/writePost"/> ', true);
-				request.setRequestHeader(header, token);
-				request.setRequestHeader('Content-type',
-						'application/x-www-form-urlencoded; charset=utf-8');
-				request.onreadystatechange = writeProcess;
-				request.send("TITLE=" + title + "&" + "CONTENT=" + content + "&" + "FILE_LIST=" + fileList);
+				$.ajax({
+					url: '<c:url value="/writePost"/>',
+					type: 'post',
+					contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+					headers: {'${_csrf.headerName}' : '${_csrf.token}'},
+					data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + fileList,
+					dataType: 'text',
+					success: function () {
+						writeB(false);
+						getSearchedPost();
+					},
+					error: function () {
+						alert('등록을 실패하였습니다.');
+					},
+				});
 			}
 		}
 
-		function writeProcess() {
-			var result = request.responseText;
-
-			if (request.status == 200 && request.readyState == 4) {
-				if (result) {
-					writeB(false);
-					getSearchedPost();
-				} else {
-					alert('등록을 실패하였습니다.');
-				}
-			}
-		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		function deletePost(bid) {
-			request.open('GET', '<c:url value="/deletePost/"/>' + bid, true);
-			request.onreadystatechange = deleteProcess;
-			request.send(null);
-		}
-
-		function deleteProcess() {
-			var result = request.setRequestHeader;
-
-			if (request.status == 200 && request.readyState == 4) {
-				if (result) {
-					document.getElementById("postList").innerHTML = "";
+			$.ajax({
+				url: '<c:url value="/deletePost/"/>' + bid,
+				type: 'get',
+				dataType: 'json',
+				success: function () {
 					getSearchedPost();
-				}
-				else
+				},
+				fail: function () {
 					alert('삭제 실패하였습니다.');
-			}
+				},
+			});
 		}
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		function movePage(mode) {
 		    if(pageNum >= 1) {
@@ -177,62 +130,42 @@
                 else if (mode == 'prev')
                     pageNum--;
 
-                request.open('GET',
-                    '<c:url value="/searchPost.json/"/>' + pageNum + '?' + 'content='
-                    + encodeURIComponent(document
-                        .getElementById("searchContent").value), true);
-                request.onreadystatechange = searchProcess;
-                request.send(null);
+				$.ajax({
+					url: '<c:url value="/searchPost.json/"/>' + pageNum + '?' + 'content=' + encodeURIComponent($("#searchContent").val(), true),
+					type: 'get',
+					dataType: 'json',
+					success: function (response) {
+						searchProcess(response);
+					},
+					error: function () {
+					},
+				});
             }
 		}
 
 
-		//작성글 화면에서 전송, 취소 버튼을 눌렀을때 작성화면을 비운다.
+		//작성글 화면에서 글쓰기, 취소 버튼을 눌렀을때 작성화면을 비운다.
 		function writeB(mode) {
 			if (mode)
 			{
-				document.getElementById("writeB").style.display = 'none';
-				document.getElementById("writeTable").style.display = 'block';
+				$('#writeB').css('display', 'none');
+				$('#writeTable').css('display', 'block');
 			}
 			else {
 				CKEDITOR.instances.editor1.setData('');
-                document.getElementById("fileList").value="";
-                document.getElementById("showFiles").innerText="";
-				document.getElementById("returnFileList").value="";
-				document.getElementById("editor1").value = "";
-				document.getElementById("TITLE").value = "";
-				document.getElementById("writeTable").style.display = 'none';
-				document.getElementById("writeB").style.display = 'block';
+				$('#fileList').val("");
+				$('#returnFileList').val("");
+				$('#TITLE').val("");
+				$('#writeB').css('display', 'block');
+				$('#writeTable').css('display', 'none');
+				$('#showFiles')[0].innerHTML = "";
 			}
 		}
 
-        $().ready( function() {
-            $('#sendFile').click(
-                function uploadFile(){
-                    $("form[name=fileForm]").ajaxForm({
-                        url : "<c:url value='/fileUpload.do?'/>${_csrf.parameterName}=${_csrf.token}",
-                        enctype : "multipart/form-data",
-                        dataType : "text",
-                        error : function(){
-                            alert("에러") ;
-                        },
-                        success : function(responseText){
-                            $("#returnFileList").val(responseText);
-                            alert( $("#returnFileList").val());
-                        }
-                    });
-
-                    $("form[name=fileForm]").submit() ;
-                }
-            );
-        });
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		//파일 등록후 등록한 파일의 이름을 보여준다.
         function showName(){
-		    var files = document.getElementsByName('fileList')[0].files;
+		    var files = $('input[name=fileList]')[0].files;
 		    var filelist = '';
-
 
 		    for(var i =0; i < files.length; i++){
 		        if((files.length - 1) == i) {
@@ -241,15 +174,92 @@
 		            filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
                 }
             }
-
 		    console.log(filelist);
-
-		    document.getElementsByClassName('custom-file-label')[0].innerHTML = filelist
+		    $('.custom-file-label')[0].innerHTML = filelist;
         }
 
-		window.onload = function() {
+        //Dom로드후 만들어진 삭제 버튼 요소에대한 클릭 이벤트를 가능하게한다.
+		$(document).on("click","button[name=delB]",function() {
+			var bid	= $(this).attr("bid");
+			deletePost(bid);
+		});
+
+		$().ready( function() {
+            //파일 업로드시 업로드 파일 이름을 알려줌
+            $("#fileList").change(function () {
+                showName();
+            });
+
+			//페이지 로드후 리스트를 출력하기 위함.
 			getSearchedPost();
-		}
+
+			//검색공간에 키보드 입력시 즉각 검색한다.
+			$("#searchContent").keyup(function () {
+				var content = $("#searchContent").val();
+				getSearchedPost(content);
+			});
+
+			//검색버튼 클릭시 검색한다.
+			$("#searchB").click(function () {
+				var content = $("#searchContent").val();
+				getSearchedPost(content);
+			});
+
+			//클릭시 파일을 서버에 업로드한다.
+			$('#sendFile').click(
+					function uploadFile(){
+						$("form[name=fileForm]").ajaxForm({
+							url : "<c:url value='/fileUpload.do?'/>${_csrf.parameterName}=${_csrf.token}",
+							enctype : "multipart/form-data",
+							dataType : "text",
+							error : function(){
+								alert("업로드 실패") ;
+							},
+							success : function(responseText){
+								$("#returnFileList").val(responseText);
+								alert('업로드 성공');
+							}
+						});
+						$("form[name=fileForm]").submit() ;
+					}
+			);
+
+			//제목 바이트 확인
+			$("#TITLE").keyup( function() {
+				checkByte("TITLE");
+			});
+
+			//게시글 전송시 작성화면 숨김
+			$("#send").click( function() {
+				writePost();
+			});
+
+			//글 작성 취소시 에디터 초기화 및 숨김
+			$("#cancel").click( function() {
+				writeB(false);
+			});
+
+			//글쓰기 창을 활성화
+			$("#writeB").click( function() {
+				writeB(true);
+			});
+
+			//페이지 이전으로 전환
+			$("#prev").click( function() {
+				movePage($(this).attr("id"));
+			});
+
+			//다음 페이지로 전환
+			$("#next").click( function() {
+				movePage($(this).attr("id"));
+			});
+
+			//로그아웃 버튼
+            $("#logoutB").click( function (){
+                $("#logout").submit();
+            });
+
+		});
 	</script>
 
 	<style>
@@ -375,6 +385,7 @@
 			padding: 0px;
 			/*background-color: #5e91f8;*/
 		}
+
 	</style>
 
 </head>
@@ -382,7 +393,7 @@
 <body>&nbsp;&nbsp;&nbsp;
 	<div class="container-fluid">
 		<header>
-			<p><a id="logoutB" class="btn btn-warning btn-sm float-right" onclick="document.getElementById('logout').submit();">로그아웃</a></p>
+			<p><button id="logoutB" class="btn btn-warning btn-sm float-right">로그아웃</button></p>
 			<div id="id" class="jumbotron">
 				<div>
 					<p><h1 class="text-center">Choi's 게시판</h1></p>
@@ -403,14 +414,14 @@
 			</p>
 
 			<p>제목:</p>
-			<p><input class="form-control" size="10%" width="100%" id="TITLE" onkeyup="checkByte('TITLE');" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
+			<p><input class="form-control" size="10%" width="100%" id="TITLE" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
 			<p>내용:</p>
-			<p><textarea name="editor1" id="editor1" rows="10" cols="80" onkeyup="checkEditorByte();" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required></textarea></p>
+			<p><textarea name="editor1" rows="10" cols="80" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required></textarea></p>
 
             <script>
 					CKEDITOR.replace("editor1",{
 						extraPlugins : 'confighelper',
-						filebrowserUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
+                        filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
 					});
                     CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
             </script>
@@ -421,7 +432,7 @@
                         <button type="button" class="input-group-text" id="sendFile">Upload</button>
                     </div>
                     <div class="custom-file">
-                        <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList" onchange="showName();">
+                        <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
                         <label class="custom-file-label" id="showFiles" for="fileList">Choose file</label>
                     </div>
                 </div>
@@ -429,14 +440,14 @@
             <br>
 			<div class="text-center">
 				<p>
-					<a id="send" class="btn btn-primary btn-md" style="color: white;" onclick="writePost();">제출</a> &nbsp;&nbsp;&nbsp;
-					<a id="cancel" class="btn btn-primary btn-md" style="color: white;" onclick="writeB(false);">취소</a>
+					<a id="send" class="btn btn-primary btn-md" style="color: white;">제출</a> &nbsp;&nbsp;&nbsp;
+					<a id="cancel" class="btn btn-primary btn-md" style="color: white;">취소</a>
 				</p>
 			</div>
 		</div>
 		<div style="display: flex">
-			<input id="searchContent" class="form-control" type="text" style="width: 100%" onkeyup="getSearchedPost();" placeholder="내용+제목"> &nbsp;&nbsp;&nbsp;
-			<button id="searchB" class="btn btn-primary btn-md" style="min-width: 60px" onclick="getSearchedPost();" type="button">검색</button>
+			<input id="searchContent" class="form-control" type="text" style="width: 100%" placeholder="내용+제목"> &nbsp;&nbsp;&nbsp;
+			<button id="searchB" class="btn btn-primary btn-md" style="min-width: 60px" type="button">검색</button>
 		</div>
 		<br>
 		<div class="row">
@@ -482,14 +493,14 @@
 			</div>
 
 			<div id="pageB" style="display: none;">
-				<button class="btn btn-outline-info" id="prev" onclick="movePage('prev')">이전</button>
+				<button class="btn btn-outline-info" id="prev">이전</button>
                 <button class="btn btn-outline-info" id="pageN"></button>
-				<button class="btn btn-outline-info" id="next" onclick="movePage('next')">다음</button>
+				<button class="btn btn-outline-info" id="next">다음</button>
 			</div>
 
 		</div>
 
-		<a id="writeB" class="float-right btn btn-primary" href="#writeTable" onclick="writeB(true);">글쓰기</a>
+		<a id="writeB" class="float-right btn btn-primary" href="#writeTable">글쓰기</a>
 
 	</div>
 	<!-- 최상위 container 태그 -->

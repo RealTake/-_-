@@ -2,39 +2,42 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <head>
 	<title>게시판</title>
-    <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<!-- default header name is X-CSRF-TOKEN -->
-	<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
-	<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
+	<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
-	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 	<script>
-		var request = new XMLHttpRequest();
-		function deletePost(bid) {
-			request.open('GET', '<c:url value='/deletePost/'/>' + bid, true);
-			request.onreadystatechange = deleteProcess;
-			request.send(null);
-		}
+        function deletePost(bid) {
+            $.ajax({
+                url: '<c:url value="/deletePost/"/>' + bid,
+                type: 'get',
+                dataType: 'json',
+                success: function () {
+                    location.href = "<c:url value='/'/>"
+                },
+                fail: function () {
+                    alert('삭제 실패하였습니다.');
+                },
+            });
+        }
 
-		function deleteProcess() {
-			var result = request.setRequestHeader
+        $().ready( function() {
+            $("button[name=delB]").click(function () {
+                var bid = $(this).attr("bid");
+                deletePost(bid);
+            });
 
-			if (request.status == 200 && request.readyState == 4) {
-				if (result)
-					location.href='<c:url value='/' />';
-				else {
-					alert('삭제 실패하였습니다.');
-				}
-			}
-		}
+            //로그아웃 버튼
+            $("#logoutB").click(function () {
+                $("#logout").submit();
+            });
+        });
 	</script>
+
 	<style>
 		@media ( max-width : 1070px) {
 
@@ -85,6 +88,7 @@
 			padding-top: 20px;
 			padding-left: 20px;
 			padding-right: 20px;
+			margin-bottom: 20px;
             float: left;
             border: 1px solid #CED4DA;
             border-radius: 15px 15px;
@@ -112,7 +116,7 @@
 
 	<c:if test="${!possibility}">
 		<script>
-			location.href='/';
+			location.href="<c:url value='/'/>";
 		</script>
 	</c:if>
 </head>
@@ -121,7 +125,7 @@
 
 	<div class="container-fluid">
 		<header>
-			<p><a id="logoutB" class="btn btn-warning btn-sm float-right" onclick="document.getElementById('logout').submit();">로그아웃</a></p>
+			<p><button id="logoutB" class="btn btn-warning btn-sm float-right">로그아웃</button></p>
 			<div id="id" class="jumbotron">
 				<div>
 					<p><h1 class="text-center">Choi's 게시판</h1></p>
@@ -135,9 +139,9 @@
 			<p id="subTitle" class="text-center">작성자: ${dto.WRITER} 작성일: ${dto.WDATE}</p>
 			<div id="contentBody">
 				${dto.CONTENT}
-			</div>
-		</div>
 
+            </div>
+		</div>
 		<br>
 		<c:if test="${!empty dto.FILE_ARRAY}">
 			<div id="fileBody">
@@ -145,13 +149,11 @@
 					<p><a class="fa fa-download" href="<c:url value="/fileDownload/${dto}"/>"> ${dto}</a></p>
 				</c:forEach>
 			</div>
-			<br><br><br>
 		</c:if>
-		
 		<div id="tools" class="float-right">
-			<a class="btn btn-danger btn-sm" style="color: white" onclick="deletePost('${dto.BID}');">삭제</a>
-			<a class="btn btn-outline-success btn-sm" href="<c:url value="/modifyPage/"/>/${dto.BID}">수정</a>
-			<a class="btn btn-primary active btn-sm" href='<c:url value="/" />'>목록</a>
+			<button class="btn btn-danger btn-sm" style="color: white" name="delB" bid="${dto.BID}">삭제</button>
+			<a class="btn btn-success btn-sm" href="<c:url value="/modifyPage/"/>${dto.BID}">수정</a>
+			<a class="btn btn-primary btn-sm" href='<c:url value="/" />'>목록</a>
 		</div>
 
 	</div><!-- 최상위 container 태그 -->

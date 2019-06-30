@@ -47,9 +47,9 @@ public class MemberService {
     public String checkOverlap_S(String value){
         String result = sqlSession.getMapper(IDAO.class).checkOverlap(value);
 
-        if(result == null || result.isEmpty())
+        if(result == null || result.isEmpty())//사용한 가능한아이디, 중복된 아이디없음
             return "1";
-        else
+        else                                  //사용불가능한 아이디, 사용중인 아이디
             return  "0";
     }
 }
