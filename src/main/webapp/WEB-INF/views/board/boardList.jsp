@@ -15,12 +15,13 @@
     <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
 	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 	<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
-    <script src="<c:url value='/resources/js/checkByte.js'/>"></script>//바이트 크기를 구해주는 함수
+    <script src="<c:url value='/resources/js/checkByte.js'/>"></script>
 	<script type="text/javascript">
 		var pageNum = 1;
 		var col = ["BID", "WDATE", "TITLE", "WRITER"];
 
 		function getSearchedPost() {
+		    pageNum = 1;
 			$.ajax({
 				url: '<c:url value="/searchPost.json/1?content="/>' + encodeURIComponent(document.getElementById("searchContent").value),
 				type: 'get',
@@ -40,7 +41,7 @@
 				var limit;
 
 				if (result.length > 0) {
-					table.innerHTML = "";
+                    table.innerHTML = "";
 					$("#pageN").text(pageNum);
 					$("#pageB").css("display", "block");
 
@@ -79,6 +80,7 @@
 					}
 				}
 				else {
+                    $("#pageB").css("display", "none");
 					movePage('prev');
 				}
 		}
@@ -115,6 +117,7 @@
 				type: 'get',
 				dataType: 'json',
 				success: function () {
+				    $("#postList")[0].innerHTML = "";
 					getSearchedPost();
 				},
 				fail: function () {
@@ -124,12 +127,17 @@
 		}
 
 		function movePage(mode) {
-		    if(pageNum >= 1) {
-                if (mode == 'next')
+		    var flag = 0;
+                if (mode == 'next' && pageNum >= 1) {
                     pageNum++;
-                else if (mode == 'prev')
+                    flag = 1;
+                }
+                else if (mode == 'prev' && pageNum > 1) {
                     pageNum--;
+                    flag = 1;
+                }
 
+            if(flag == 1){
 				$.ajax({
 					url: '<c:url value="/searchPost.json/"/>' + pageNum + '?' + 'content=' + encodeURIComponent($("#searchContent").val(), true),
 					type: 'get',
