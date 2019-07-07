@@ -15,7 +15,7 @@
 			<script src="http://malsup.github.io/min/jquery.form.min.js"></script>
 			<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
 			<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
-			<script src="<c:url value='/resources/js/checkByte.js'/>"></script>//바이트 크기를 구해주는 함수
+			<script src="<c:url value='/resources/js/checkByte.js'/>"></script>
 			<script type="text/javascript">
 				function modifyPost(bid) {
 					var title = $("#TITLE").val();
@@ -149,6 +149,10 @@
 					margin: 1%;
 				}
 			}
+
+                #showFiles {
+                    overflow: hidden;
+                }
 			</style>
 
 		</head>

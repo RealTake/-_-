@@ -103,33 +103,34 @@ public class BoardService {
 
     // 글을 작성하는 메서드
 	public String writePost_S(BoardDTO dto, Authentication authentication) {
-		String auth_S = null;// 사용자의 권한이 저장될 변수
-        String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
+	    if(!dto.getCONTENT().isEmpty() && !dto.getTITLE().isEmpty()){   //제목이나 내용이 비어있는 경우 글을 저장 하지 않는다.
+            String auth_S = null;// 사용자의 권한이 저장될 변수
+            String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수
 
-		Date date = new Date();// 글이 작성된 시점을 기록한다
-		SimpleDateFormat sDate = new SimpleDateFormat("yyyy.MM.dd");
-        Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
+            Date date = new Date();// 글이 작성된 시점을 기록한다
+            SimpleDateFormat sDate = new SimpleDateFormat("yyyy.MM.dd");
+            Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
 
-		dto.setWRITER(authentication.getName());
-		dto.setWDATE(sDate.format(date));
+            dto.setWRITER(authentication.getName());
+            dto.setWDATE(sDate.format(date));
 
-        try {
-            while (auth.hasNext()) {
-                auth_S = auth.next().getAuthority();
+            try {
+                while (auth.hasNext()) {
+                    auth_S = auth.next().getAuthority();
 
-                if (auth_S.equals("ROLE_USER")) {
-                    sqlSession.getMapper(IDAO.class).writePost(dto);
-                    return "1";
+                    if (auth_S.equals("ROLE_USER")) {
+                        sqlSession.getMapper(IDAO.class).writePost(dto);
+                        return "1";
 
-                } else if (auth_S.equals("ROLE_ADMIN")) {
-                    sqlSession.getMapper(IDAO.class).writePost(dto);
-                    return "1";
+                    } else if (auth_S.equals("ROLE_ADMIN")) {
+                        sqlSession.getMapper(IDAO.class).writePost(dto);
+                        return "1";
+                    }
                 }
             }
-        }
-        catch (Exception e) { e.printStackTrace(); }
-        finally { printInfo(new Object(){}.getClass().getEnclosingMethod(), approach, auth_S); }// 실행중인 메소드 정보 호출
-
+            catch (Exception e) { e.printStackTrace(); }
+            finally { printInfo(new Object(){}.getClass().getEnclosingMethod(), approach, auth_S); }// 실행중인 메소드 정보 호출
+	    }
         return "0"; //삭제 실패시 0 리턴
 	}
 

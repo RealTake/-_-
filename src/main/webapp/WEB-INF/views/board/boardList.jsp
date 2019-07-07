@@ -10,12 +10,14 @@
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
+	<link rel="stylesheet" href="<c:url value='/resources/css/mainTest.css'/>">
 
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
 	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 	<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
     <script src="<c:url value='/resources/js/checkByte.js'/>"></script>
+
 	<script type="text/javascript">
 		var pageNum = 1;
 		var col = ["BID", "WDATE", "TITLE", "WRITER"];
@@ -81,9 +83,53 @@
 				}
 				else {
                     $("#pageB").css("display", "none");
+                    $("#postList")[0].innerHTML = "";
 					movePage('prev');
 				}
 		}
+
+		<%--function searchProcess2(response) {--%>
+		<%--	var table = $("#postTable2")[0];--%>
+		<%--	var result = response.result;--%>
+		<%--	var limit;--%>
+
+		<%--	if (result.length > 0) {--%>
+		<%--		table.innerHTML = "";--%>
+		<%--		$("#pageN").text(pageNum);--%>
+		<%--		$("#pageB").css("display", "block");--%>
+
+		<%--		if(result.length <= 10)--%>
+		<%--			$("#next").css("visibility", "hidden");--%>
+		<%--		else--%>
+		<%--			$("#next").css("visibility", "visible");--%>
+
+		<%--		if(pageNum <= 1)--%>
+		<%--			$("#prev").css("visibility", "hidden");--%>
+		<%--		else--%>
+		<%--			$("#prev").css("visibility", "visible");--%>
+
+		<%--		if(result.length >= 10)--%>
+		<%--			limit = 10 - 1;--%>
+		<%--		else--%>
+		<%--			limit = result.length - 1;--%>
+
+		<%--		for (var i = limit; i >= 0; i--) {--%>
+		<%--				var upB = '<a class="btn btn-success btn-sm"  href="<c:url value="/modifyPage/"/>' + result[i].BID + '">수정</a>';--%>
+		<%--				var title = "<p>" + result[i].TITLE + "</p>";--%>
+		<%--				var bid = result[i].BID;--%>
+		<%--				var date = "<p>" + result[i].WDATE + "</p>";--%>
+		<%--				var writer = "<p>" + result[i].WRITER + "</p>";--%>
+		<%--				var div = $("<div class='contentBox' bid=" + bid + ">" + title + date + writer + "</div>");--%>
+		<%--				$("#postTable2").append(div);--%>
+		<%--		}--%>
+		<%--	}--%>
+		<%--	else {--%>
+		<%--		$("#pageB").css("display", "none");--%>
+		<%--		$("#postTable2")[0].innerHTML = "";--%>
+		<%--		movePage('prev');--%>
+		<%--	}--%>
+		<%--}--%>
+
 
 		function writePost() {
 			var title = $("#TITLE").val();
@@ -117,7 +163,6 @@
 				type: 'get',
 				dataType: 'json',
 				success: function () {
-				    $("#postList")[0].innerHTML = "";
 					getSearchedPost();
 				},
 				fail: function () {
@@ -190,6 +235,11 @@
 		$(document).on("click","button[name=delB]",function() {
 			var bid	= $(this).attr("bid");
 			deletePost(bid);
+		});
+
+		$(document).on("click",".contentBox",function() {
+			var bid	= $(this).attr("bid");
+			location.href = "./viewPost/" + bid;
 		});
 
 		$().ready( function() {
@@ -394,6 +444,10 @@
 			/*background-color: #5e91f8;*/
 		}
 
+        #showFiles {
+            overflow: hidden;
+        }
+
 	</style>
 
 </head>
@@ -510,9 +564,10 @@
 
 		<a id="writeB" class="float-right btn btn-primary" href="#writeTable">글쓰기</a>
 
+<%--		<div class="contentBody" id="postTable2"></div>--%>
+
 	</div>
 	<!-- 최상위 container 태그 -->
-
 
 	<div style="display: none">
 		<c:url value="/logout" var="logout" />

@@ -11,6 +11,7 @@
 
     <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
     <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.css"/>">
+    <link rel="stylesheet" type="text/css" href="./resources/css/joinMember.css">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.js"/>"></script>
@@ -54,7 +55,7 @@
             }
             else if ((result == 1) && (length >= 5 && length <= 16)) {
                 validateId = 1;
-                node.css("borderColor", "#CED4DA");
+                node.css("borderColor", "#B8B8B8");
                 tip.css("color","blue");
                 tip[0].innerText = "You can use.";
             }
@@ -74,7 +75,7 @@
             }
             else {
                 validatePwdv = 1;
-                pwdvNode.css("borderColor", "#CED4DA");
+                pwdvNode.css("borderColor", "grey");
                 tip.css("color", "blue");
                 tip[0].innerText = "It's match";
             }
@@ -94,7 +95,7 @@
             }
             else {
                 validates(check, 1);
-                node.css("borderColor", "#CED4DA");
+                node.css("borderColor", "grey");
                 tip.css("color", "grey");
             }
 
@@ -153,125 +154,32 @@
             });
         })
     </script>
-    <style>
-        @media screen and ( max-width: 750px) {
-            .loginBody {
-                border: 1px solid #CED4DA;
-                border-radius: 10px 10px;
-                width: 90%;
-                height: auto;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 10%;
-                padding: 10px;
-                box-shadow: 0px 1px 10px #434e9a;
-                background-color: white;
-            }
-        }
-
-        @media screen and ( min-width: 751px) {
-            .loginBody {
-                border: 1px solid #CED4DA;
-                border-radius: 10px 10px;
-                width: 700px;
-                height: auto;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 10%;
-                padding: 70px;
-                box-shadow: 0px 1px 10px #434e9a;
-                background-color: white;
-            }
-        }
-        tip {
-            margin-left: 1px;
-            font-size: 0.9em;
-            color: grey;
-        }
-
-        body{
-            font-family: "맑은 고딕";
-            background-color: #5e91f8;
-        }
-
-        .floor {
-            height: 700px;
-            overflow: visible;
-            background-color: yellow;
-            padding-top: 5px;
-            box-shadow: 0px 1px 10px #434e9a inset;
-        }
-
-        .form-control {
-            font-size: 20px;
-            margin-top: 15px;
-            padding-top: 20px;
-            padding-bottom: 20px;
-        }
-
-        @media all and (-ms-high-contrast:none)
-        {
-            *::-ms-backdrop, .form-control {
-                font-size: 20px;
-                margin-bottom: 20px;
-                padding-top: 0;
-                padding-bottom: 0;
-            }
-            *::-ms-backdrop, .loginBody {
-                border: 1px solid #CED4DA;
-                border-radius: 10px 10px;
-                width: 700px;
-                height: auto;
-                margin: auto;
-                margin-top: 5%;
-                padding: 70px;
-                box-shadow: 0px 1px 10px #434e9a;
-                background-color: white;
-            }
-        }
-        #joinB {
-            margin-top: 30px;
-            border: none;
-            height: 59px;
-            background-color: #5e91f8;
-        }
-
-    </style>
-
     <s:authorize access="isAuthenticated()">
         <c:redirect url="/"/>
     </s:authorize>
 
 </head>
 <body>
-<div class="floor">
-    <div class="loginBody">
-        <form action="<c:url value="/join"/>" method="POST">
-            <label for="NAME" class="sr-only">Name</label>
-            <input name="NAME" id="NAME" class="form-control" type="text" placeholder="Name" required autofocus/>
-            <tip id="NAMETip">Name: 1-10</tip>
+<div class = "body">
+    <form action="<c:url value="/join"/>" method="POST" class="center">
+        <input name="NAME" id="NAME" class="underline" type="text" placeholder="NAME" required autofocus/>
+        <tip id="NAMETip">Name: 1-10</tip>
 
-            <label for="EMAIL" class="sr-only">Email</label>
-            <input name="EMAIL" id="EMAIL" class="form-control" type="email" placeholder="Email address" required autofocus/>
-            <tip>Email: 일부 이메일은 지원이 안될수도있습니다.</tip>
+        <input name="EMAIL" id="EMAIL" class="underline" type="email" placeholder="EMAIL" required autofocus/>
+        <tip id="EMAILTip">Email: 일부 이메일은 지원이 안될수도있습니다.</tip>
 
-            <label for="ID" class="sr-only">Id</label>
-            <input name="ID" id="ID" class="form-control" type="text" placeholder="Id" required autofocus/>
-            <tip id="IDTip">Id: 5-16</tip>
+        <input name="ID" id="ID" class="underline" type="text" placeholder="ID" required autofocus/>
+        <tip id="IDTip">Id: 5-16</tip>
 
-            <label for="PASSWORD" class="sr-only">Password</label>
-            <input name="PASSWORD" id="PASSWORD" class="form-control" type="password" placeholder="Password" required autofocus/>
-            <tip id="PASSWORDTip">Password: 8-16</tip>
+        <input name="PASSWORD" id="PASSWORD" class="underline" type="password" placeholder="PASSWORD" required autofocus/>
+        <tip id="PASSWORDTip">Password: 8-16</tip>
 
-            <label for="PASSWORDV" class="sr-only">Password Valid</label>
-            <input name="PASSWORDV" id="PASSWORDV" class="form-control" type="password" placeholder="Password Valid" required autofocus/>
-            <tip id="PWDTip">팁: 비밀번호를 다시 써주세요.</tip>
+        <input name="PASSWORDV" id="PASSWORDV" class="underline" type="password" placeholder="PASSWORD VALID" required autofocus/>
+        <tip id="PWDTip">팁: 비밀번호를 다시 써주세요.</tip>
 
-            <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
-            <input type="button" id="joinB" class="btn btn-lg btn-primary btn-block" value="Join"/>
-        </form>
-    </div>
+        <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+        <button type="button" id="joinB">Join</button>
+    </form>
 </div>
-
 </body>
 </html>
