@@ -10,7 +10,6 @@
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/mainTest.css'/>">
 
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
@@ -87,49 +86,6 @@
 					movePage('prev');
 				}
 		}
-
-		<%--function searchProcess2(response) {--%>
-		<%--	var table = $("#postTable2")[0];--%>
-		<%--	var result = response.result;--%>
-		<%--	var limit;--%>
-
-		<%--	if (result.length > 0) {--%>
-		<%--		table.innerHTML = "";--%>
-		<%--		$("#pageN").text(pageNum);--%>
-		<%--		$("#pageB").css("display", "block");--%>
-
-		<%--		if(result.length <= 10)--%>
-		<%--			$("#next").css("visibility", "hidden");--%>
-		<%--		else--%>
-		<%--			$("#next").css("visibility", "visible");--%>
-
-		<%--		if(pageNum <= 1)--%>
-		<%--			$("#prev").css("visibility", "hidden");--%>
-		<%--		else--%>
-		<%--			$("#prev").css("visibility", "visible");--%>
-
-		<%--		if(result.length >= 10)--%>
-		<%--			limit = 10 - 1;--%>
-		<%--		else--%>
-		<%--			limit = result.length - 1;--%>
-
-		<%--		for (var i = limit; i >= 0; i--) {--%>
-		<%--				var upB = '<a class="btn btn-success btn-sm"  href="<c:url value="/modifyPage/"/>' + result[i].BID + '">수정</a>';--%>
-		<%--				var title = "<p>" + result[i].TITLE + "</p>";--%>
-		<%--				var bid = result[i].BID;--%>
-		<%--				var date = "<p>" + result[i].WDATE + "</p>";--%>
-		<%--				var writer = "<p>" + result[i].WRITER + "</p>";--%>
-		<%--				var div = $("<div class='contentBox' bid=" + bid + ">" + title + date + writer + "</div>");--%>
-		<%--				$("#postTable2").append(div);--%>
-		<%--		}--%>
-		<%--	}--%>
-		<%--	else {--%>
-		<%--		$("#pageB").css("display", "none");--%>
-		<%--		$("#postTable2")[0].innerHTML = "";--%>
-		<%--		movePage('prev');--%>
-		<%--	}--%>
-		<%--}--%>
-
 
 		function writePost() {
 			var title = $("#TITLE").val();
@@ -322,15 +278,6 @@
 
 	<style>
 		@media screen and ( max-width: 750px) {
-			#sidebar {
-				width: 100%;
-				margin-left: 10px;
-				margin-right: 10px;
-			}
-
-			#sidebar a:link { color: black; text-decoration: none;}
-			#sidebar a:visited { color: black; text-decoration: none;}
-
 			.container-fluid {
 				padding-right: 0px;
 				padding-left: 0px;
@@ -372,13 +319,10 @@
 				width: 1000px;
 			}
 
-			#logoutB {
+			.btn-jumbo {
 				color: white;
 				margin: 1%;
 			}
-
-			#sidebar a:link { color: black; text-decoration: none;}
-			#sidebar a:visited { color: black; text-decoration: none;}
 
 			.etc {
 				width: 100px;
@@ -452,10 +396,11 @@
 
 </head>
 
-<body>&nbsp;&nbsp;&nbsp;
+<body>
 	<div class="container-fluid">
 		<header>
-			<p><button id="logoutB" class="btn btn-warning btn-sm float-right">로그아웃</button></p>
+			<p><a href="/board2" class="btn btn-info btn-sm float-left btn-jumbo">새로운 페이지</a></p>
+			<p><button id="logoutB" class="btn btn-warning btn-sm float-right btn-jumbo">로그아웃</button></p>
 			<div id="id" class="jumbotron">
 				<div>
 					<p><h1 class="text-center">Choi's 게시판</h1></p>
@@ -570,11 +515,8 @@
 	<!-- 최상위 container 태그 -->
 
 	<div style="display: none">
-		<c:url value="/logout" var="logout" />
-		<form action="${logout}" method="POST" id="logout">
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" />
-			<button type="submit">로그아웃</button>
+		<form action="<c:url value="/logout"/>" method="POST" id="logout">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
 </body>

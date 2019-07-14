@@ -8,6 +8,9 @@ import com.finotek.board.dto.MemberDTO;
 
 public interface IDAO {
 	public String checkOverlap(String value);
+	public MemberDTO getAccountInfo(String value);
+	public void deleteAccount(String value);
+
 	public void joinMember(MemberDTO dto);
 	public void writePost(BoardDTO dto);
 	public void modifyPost_A(BoardDTO dto);

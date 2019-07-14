@@ -19,6 +19,13 @@ public class BoardController {
     @RequestMapping(value="/board")
     public String boardPage() { return "board/boardList"; }
 
+	// 매인페이지를 불러오는 메소드
+	@RequestMapping(value="/board2")
+	public String boardPage2(Model model, Authentication authentication) {
+    	model.addAttribute("AccountInfo", service.getAccountInfo_S(authentication));
+    	return "board/boardList2";
+    }
+
     // 위와 같은 기능을 하지만 루트 주소로 메인 페이지를 불러온다.
     @RequestMapping(value="/")
     public String mainPage() { return "board/boardList"; }
@@ -27,6 +34,15 @@ public class BoardController {
 	@GetMapping(value="/viewPost/{bid}")
 	public String boardList(@PathVariable(value = "bid") String bid, Authentication authentication, Model model)
 	{ service.getPost_S(bid, model, authentication);	return "board/postView"; }
+
+	//  포스팅된 글을 불러올 메소드
+	@GetMapping(value="/viewPost2/{bid}")
+	public String boardList2(@PathVariable(value = "bid") String bid, Authentication authentication, Model model)
+	{
+		model.addAttribute("AccountInfo", service.getAccountInfo_S(authentication));
+		service.getPost_S(bid, model, authentication);
+		return "board/postView2";
+	}
 
 	// 작성된 글을 저장하는 메소드
 	@ResponseBody
@@ -56,9 +72,6 @@ public class BoardController {
 	@PostMapping(value="/modifyPost/{bid}")
 	public String modifyPost(@PathVariable(value = "bid") String bid, BoardDTO dto, Authentication authentication)
 	{
-//        System.out.println(dto.getTITLE());
-//	    System.out.println(dto.getCONTENT());
-//	    System.out.println(bid);
 	    return service.modifyPost_S(bid, dto, authentication);
     }
 

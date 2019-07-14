@@ -13,6 +13,7 @@ public class BoardDTO {
 	String TYPE;	        // 카테고리
 	String BID;		        // 게시판 고유 번호
 	String WRITER;	        // 작성자
-	String FILE_LIST;           // 파일리스트 String 형
+	String FILE_LIST;       // 파일리스트 String 형
+	String HEADER_IMG;		// 헤더 이미지
     String[] FILE_ARRAY; // 파일리스트 List 형
 }

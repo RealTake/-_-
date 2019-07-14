@@ -7,6 +7,7 @@
 
 	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
 	<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
@@ -112,6 +113,10 @@
 			max-width: 100%;
 			height: auto !important;
 		}
+
+		a:link {
+			color: black;
+		}
 	</style>
 
 	<c:if test="${!possibility}">
@@ -146,7 +151,7 @@
 		<c:if test="${!empty dto.FILE_ARRAY}">
 			<div id="fileBody">
 				<c:forEach var="dto" items="${dto.FILE_ARRAY}" varStatus="status">
-					<p><a class="fa fa-download" href="<c:url value="/fileDownload/${dto}"/>"> ${dto}</a></p>
+					<p><i class="fa fa-download"></i><a href="<c:url value="/fileDownload/${dto}"/>"> ${dto}</a></p>
 				</c:forEach>
 			</div>
 		</c:if>

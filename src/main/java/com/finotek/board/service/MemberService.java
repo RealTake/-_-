@@ -5,6 +5,7 @@ import com.finotek.board.dto.MemberDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -52,4 +53,17 @@ public class MemberService {
         else                                  //사용불가능한 아이디, 사용중인 아이디
             return  "0";
     }
+
+    public String deleteAccount_S(Authentication authentication){
+        try{
+            sqlSession.getMapper(IDAO.class).deleteAccount(authentication.getName());
+            return "1";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return "0";
+        }
+
+    }
+
 }

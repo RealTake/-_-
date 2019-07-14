@@ -191,6 +191,10 @@ public class BoardService {
         return "0"; //삭제 실패시 0 리턴
     }
 
+    public MemberDTO getAccountInfo_S(Authentication authentication){
+	    return sqlSession.getMapper(IDAO.class).getAccountInfo(authentication.getName());
+    }
+
     // 서비스 메소드 정보 호출
     public void printInfo(Method nowmethod, String name, String auth)
     {

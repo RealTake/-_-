@@ -53,7 +53,7 @@ public class fileUploadController {
 	}
 
 	@ResponseBody
-	@PostMapping(value = "/fileUpload.do", produces = "text/html; charset=utf-8")
+	@PostMapping(value = "/fileUpload.do", produces = "application/json; charset=utf-8")
 	public String fileUpload(FileUploadDTO dto, HttpSession session, Authentication authentication) {
 		List<MultipartFile> fileList = dto.getFileList();// 클라이언트로 부터 받은 파일리스트
 		List<String> fileListDB = new ArrayList<String>();// DB에 저장될 파일들의 이름을 리스트로 관리하기 위한 변수
