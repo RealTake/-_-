@@ -33,7 +33,7 @@
     <div class="container-fluid">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="./board2">Home</a>
+            <a class="navbar-brand" href="<c:url value='/board2'/>">Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -55,7 +55,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Old Page</a>
+                        <a class="nav-link" href="<c:url value='/board'/>">Old Page</a>
                     </li>
 
                     <li class="nav-item">
@@ -78,66 +78,7 @@
 
         <div id="pageN" class="text-center"></div>
 
-        <div id="writeTable" style="display: none">
-            <p>제목:</p>
-            <p><input class="form-control" id="TITLE" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
-            <p>내용:</p>
-            <p><textarea name="editor1" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required autofocus></textarea></p>
-
-            <script>
-                CKEDITOR.replace("editor1",{
-                    extraPlugins : 'confighelper',
-                    filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
-                });
-                CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
-            </script>
-            <input type="hidden" id="returnFileList" value=""/>
-            <form name="fileForm" method="post" enctype="multipart/form-data">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button type="button" class="input-group-text" id="sendFile">Upload</button>
-                    </div>
-                    <div class="custom-file">
-                        <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
-                        <label class="custom-file-label" id="showFiles" for="fileList">Choose file</label>
-                    </div>
-                </div>
-            </form>
-            <br>
-            <input type="hidden" id="returnHeader" value=""/>
-            <form name="headerForm" method="post">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button type="button" class="input-group-text" id="sendHeader">Upload</button>
-                    </div>
-                    <div class="custom-file">
-                        <input class="custom-file-input" type="file" id="headerList" name="upload" accept="image/png, image/jpg, image/jpeg, image/gif">
-                        <label class="custom-file-label" id="showHeader" for="headerList">Choose header image</label>
-                    </div>
-                </div>
-            </form>
-            <br>
-            <div class="text-center">
-                <p>
-                    <a id="send" class="btn btn-primary btn-md" style="color: white">제출</a> &nbsp;&nbsp;&nbsp;
-                    <a id="cancel" class="btn btn-warning btn-md" style="color: white">취소</a>
-                </p>
-            </div>
-        </div>
-
-        <div class="contentBody">
-            <div class="contentBox">
-                <img class="header" src="/resources/image/beach-84533_1920.jpg"/>
-                <div class="body">
-                    <p>쉽고 빠르게 배우는 Java Spring이 짱이다</p>
-                    <div class="etc">
-                        <p class="date">2019.08.22</p>
-                        <p class="writer">realtake</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        <div class="contentBody"></div>
 
         <div class="deleteBox">
             <h1 class="text-center" style="margin-top: 100px;">Delete Here!</h1>
@@ -147,6 +88,53 @@
         <button id="next">Next</button>
     </div> <%--컨테이너--%>
 
+    <div id="writeTable" >
+        <p>제목:</p>
+        <p><input class="form-control" id="TITLE" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
+        <p>내용:</p>
+        <textarea name="editor1" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required autofocus></textarea>
+
+        <script>
+            CKEDITOR.replace("editor1",{
+                extraPlugins : 'confighelper',
+                filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
+            });
+            CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
+        </script>
+        <br>
+        <input type="hidden" id="returnFileList" value=""/>
+        <form name="fileForm" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button type="button" class="input-group-text" id="sendFile">Upload</button>
+                </div>
+                <div class="custom-file">
+                    <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
+                    <label class="custom-file-label" id="showFiles" for="fileList">Choose file</label>
+                </div>
+            </div>
+        </form>
+        <br>
+        <input type="hidden" id="returnHeader" value=""/>
+        <form name="headerForm" method="post">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button type="button" class="input-group-text" id="sendHeader">Upload</button>
+                </div>
+                <div class="custom-file">
+                    <input class="custom-file-input" type="file" id="headerList" name="upload" accept="image/png, image/jpg, image/jpeg, image/gif">
+                    <label class="custom-file-label" id="showHeader" for="headerList">Choose header image</label>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="text-center">
+            <p>
+                <a id="send" class="btn btn-primary btn-md" style="color: white">제출</a> &nbsp;&nbsp;&nbsp;
+                <a id="cancel" class="btn btn-warning btn-md" style="color: white">취소</a>
+            </p>
+        </div>
+    </div>
 
 <%--                    보이지 않는 기능                     --%>
     <div style="display: none">

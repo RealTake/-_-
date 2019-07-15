@@ -6,7 +6,7 @@
 <html>
 <head>
     <title>로그인 페이지</title>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no">
 
     <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">

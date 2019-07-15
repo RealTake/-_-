@@ -43,7 +43,7 @@ function searchProcess(response) {
 
         for (var i = 0; limit > i; i++) {
             if(result[i].HEADER_IMG == null || result[i].HEADER_IMG == "")
-                result[i].HEADER_IMG = "./resources/image/space.jpg";
+                result[i].HEADER_IMG = "https://cdn.pixabay.com/photo/2017/06/09/23/23/background-2388586_960_720.jpg";
             var box = $("<div class='contentBox' bid='" + result[i].BID + "'></div>");
             var header = $("<img class='header' src='" + result[i].HEADER_IMG + "'/>");
             var body = $("<div class='body'><p>" + result[i].TITLE + "</p></div>");
@@ -58,6 +58,7 @@ function searchProcess(response) {
     }
     else {
         $("#pageB").css("display", "none");
+        $(".contentBody")[0].innerHTML = "";// 마지막 하나남은 게시물을 삭제할시 화면에 게시글이 남는현상을 억제
         movePage('prev');
     }
 }
@@ -170,7 +171,7 @@ function withdrawal() {
     $.ajax({
         url : "./withdrawal",
         type : "post",
-        headers: { header : token },
+        headers: csrf,
         success : function (response) {
             if(response == 1)
                 $("#logout").submit();

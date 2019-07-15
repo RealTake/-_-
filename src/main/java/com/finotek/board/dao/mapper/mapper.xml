@@ -34,7 +34,7 @@
 	</insert>
 
     <insert id="joinMember" parameterType="com.finotek.board.dto.MemberDTO">
-		INSERT INTO USERS (ID, PASSWORD, ENABLED, AUTHORITY, EMAIL, JOINDATE, SEX) VALUES (#{ID}, #{PASSWORD}, #{ENABLED}, #{USER_AUTHORITY}, #{EMAIL}, #{JOINDATE}, #{SEX})
+		INSERT INTO USERS (ID, PASSWORD, ENABLED, AUTHORITY, EMAIL, JOINDATE, SEX, NAME ) VALUES (#{ID}, #{PASSWORD}, #{ENABLED}, #{USER_AUTHORITY}, #{EMAIL}, #{JOINDATE}, #{SEX}, #{NAME})
 	</insert>
 
     <select id="checkOverlap" resultType="String">

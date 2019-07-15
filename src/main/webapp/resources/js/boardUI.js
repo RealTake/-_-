@@ -106,15 +106,18 @@ $().ready( function() {
     //게시글 전송시 작성화면 숨김
     $("#send").click( function() {
         writePost();
+        $(".container-fluid").css("filter", "none");
     });
 
     //글 작성 취소시 에디터 초기화 및 숨김
     $("#cancel").click( function() {
+        $(".container-fluid").css("filter", "none");
         writeB(false);
     });
 
     //글쓰기 창을 활성화
     $("#writeB").click( function() {
+        $(".container-fluid").css("filter", "blur(5px)");
         writeB(true);
     });
 
@@ -149,7 +152,7 @@ $(document).on("click","button[name=delB]",function() {
 //클릭시 게시글 보기
 $(document).on("click",".contentBox",function() {
     var bid	= $(this).attr("bid");
-    location.href = "/viewPost2/" + bid;
+    location.href = "./viewPost2/" + bid;
 });
 
 //게시글 목록중 드레그 시

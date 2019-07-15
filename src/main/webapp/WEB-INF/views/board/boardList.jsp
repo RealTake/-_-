@@ -399,7 +399,7 @@
 <body>
 	<div class="container-fluid">
 		<header>
-			<p><a href="/board2" class="btn btn-info btn-sm float-left btn-jumbo">새로운 페이지</a></p>
+			<p><a href="./board2" class="btn btn-info btn-sm float-left btn-jumbo">새로운 페이지</a></p>
 			<p><button id="logoutB" class="btn btn-warning btn-sm float-right btn-jumbo">로그아웃</button></p>
 			<div id="id" class="jumbotron">
 				<div>

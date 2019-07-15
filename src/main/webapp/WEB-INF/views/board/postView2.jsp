@@ -19,7 +19,6 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
-
     <script type="text/javascript">
         var csrf = {};
         csrf["${_csrf.headerName}"] = "${_csrf.token}";
@@ -27,17 +26,18 @@
     <script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
     <script src="<c:url value='/resources/js/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
+    <script src="<c:url value='/resources/js/postView.js'/>"></script>
 </head>
 <c:if test="${!possibility}">
     <script>
-        location.href="<c:url value='/'/>";
+        location.href="<c:url value='/board2'/>";
     </script>
 </c:if>
 <body>
 <div class="container-fluid">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="./board2">Home</a>
+        <a class="navbar-brand" href="<c:url value='/board2'/>">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -59,7 +59,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Old Page</a>
+                    <a class="nav-link" href="<c:url value='/board'/>">Old Page</a>
                 </li>
 
                 <li class="nav-item">
