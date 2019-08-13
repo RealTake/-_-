@@ -1,5 +1,7 @@
 var pageNum = 1;
 var col = ["BID", "WDATE", "TITLE", "WRITER"];
+var header_return = "";
+var file_return = "";
 
 function getSearchedPost() {
     pageNum = 1;
@@ -44,6 +46,9 @@ function searchProcess(response) {
         for (var i = 0; limit > i; i++) {
             if(result[i].HEADER_IMG == null || result[i].HEADER_IMG == "")
                 result[i].HEADER_IMG = "https://cdn.pixabay.com/photo/2017/06/09/23/23/background-2388586_960_720.jpg";
+            else
+                result[i].HEADER_IMG = ctx + result[i].HEADER_IMG;
+
             var box = $("<div class='contentBox' bid='" + result[i].BID + "'></div>");
             var header = $("<img class='header' src='" + result[i].HEADER_IMG + "'/>");
             var body = $("<div class='body'><p>" + result[i].TITLE + "</p></div>");
@@ -66,8 +71,6 @@ function searchProcess(response) {
 function writePost() {
     var title = $("#TITLE").val();
     var content = CKEDITOR.instances.editor1.getData();
-    var fileList = $("#returnFileList").val();
-    var header_img = $("#returnHeader").val();
     if(content.getBytes() > 4000){
         alert('제한된 크기에 내용을 작성해주세요');
     }
@@ -77,7 +80,7 @@ function writePost() {
             type: 'post',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             headers: csrf,
-            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + fileList + '&' + 'HEADER_IMG=' + header_img,
+            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return,
             dataType: 'text',
             success: function () {
                 writeB(false);
@@ -143,8 +146,12 @@ function upload_HeaderImg(){
             alert("업로드 실패");
         },
         success : function(responseText){
-            alert("업로드 성공");
-            $("#returnHeader").val(responseText.url);
+            if(responseText.result == null){
+                header_return = responseText.fileName;
+                alert('업로드 성공');
+            }
+            else
+                alert(responseText.result);
         }
     });
     $("form[name=headerForm]").submit() ;
@@ -155,13 +162,17 @@ function uploadFile(){
         url : "./fileUpload.do",
         headers : csrf,
         enctype : "multipart/form-data",
-        dataType : "text",
+        dataType : "json",
         error : function(){
             alert("업로드 실패") ;
         },
         success : function(responseText){
-            $("#returnFileList").val(responseText);
-            alert('업로드 성공');
+            if(responseText.result == null){
+                file_return = responseText.fileName;
+                alert('업로드 성공');
+            }
+            else
+                alert(responseText.result);
         }
     });
     $("form[name=fileForm]").submit() ;

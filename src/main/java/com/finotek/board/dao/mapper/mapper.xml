@@ -6,11 +6,11 @@
 <mapper namespace="com.finotek.board.dao.IDAO">
 
     <update id="modifyPost_A" parameterType="com.finotek.board.dto.BoardDTO">
-		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST} WHERE BID = #{BID}
+		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST}, HEADER_IMG = #{HEADER_IMG} WHERE BID = #{BID}
 	</update>
 
     <update id="modifyPost_U" parameterType="com.finotek.board.dto.BoardDTO">
-		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST} WHERE BID = #{BID} AND WRITER = #{WRITER}
+		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST}, HEADER_IMG = #{HEADER_IMG} WHERE BID = #{BID} AND WRITER = #{WRITER}
 	</update>
 
     <select id="getPost_A" resultType="com.finotek.board.dto.BoardDTO">

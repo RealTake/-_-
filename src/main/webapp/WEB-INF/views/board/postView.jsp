@@ -43,26 +43,25 @@
 		@media ( max-width : 1070px) {
 
 			#tools {
+				color: white;
 				padding-left: 180px;
 				padding-bottom: 30px;
 			}
 		}
 
 		@media ( min-width : 1070px) {
-			#postTable {
-				margin-left: auto;
-			}
 
 			.container-fluid {
 				width: 1000px;
 			}
 
 			#tools {
+				color: white;
 				margin-top: auto;
 			}
 		}
 		.jumbotron {
-			background-image: url('<c:url value="/resources/image/memo-jumbotron-backgorund.jpg"/>');
+			background-image: url('<c:url value="/resources/image/jumbotron.jpg"/>');
 			background-size: cover;
 			background-repeat: no-repeat;
 			text-shadow: 0.1em 0.1em 0.1em dimgray;

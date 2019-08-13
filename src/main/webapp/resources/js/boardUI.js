@@ -12,13 +12,14 @@ function writeB(mode) {
     }
     else {
         CKEDITOR.instances.editor1.setData('');
-        header_img = "";
         $('#fileList').val("");
-        $('#returnFileList').val("");
+        file_return = "";
+        header_return = "";
         $('#TITLE').val("");
         $('#writeB').css('display', 'block');
         $('#writeTable').css('display', 'none');
-        $('#showFiles')[0].innerHTML = "";
+        $('#showFiles')[0].innerHTML = "Choose files";
+        $('#showHeader')[0].innerHTML = "Choose header image";
     }
 }
 
@@ -117,6 +118,10 @@ $().ready( function() {
 
     //글쓰기 창을 활성화
     $("#writeB").click( function() {
+        $(".container-fluid").css("-webkit-filter", "blur(5px)");
+        $(".container-fluid").css("-moz-filter", "blur(5px)");
+        $(".container-fluid").css("-ms-filter", "blur(5px)");
+        $(".container-fluid").css("-o-filter", "blur(5px)");
         $(".container-fluid").css("filter", "blur(5px)");
         writeB(true);
     });
@@ -140,6 +145,12 @@ $().ready( function() {
     $("#dropB").click( function (){
         withdrawal();
     });
+
+    CKEDITOR.replace("editor1",{
+        extraPlugins : 'confighelper',
+        filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
+    });
+    CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
 
 });
 

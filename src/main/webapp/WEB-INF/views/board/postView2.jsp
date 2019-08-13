@@ -11,7 +11,6 @@
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
     <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
-    <link rel="stylesheet" href="<c:url value='/resources/css/main.css'/>">
     <link rel="stylesheet" href="<c:url value='/resources/css/postView.css'/>">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -22,6 +21,8 @@
     <script type="text/javascript">
         var csrf = {};
         csrf["${_csrf.headerName}"] = "${_csrf.token}";
+        var bid = "${dto.BID}";
+        var ctx = "${pageContext.request.contextPath}";
     </script>
     <script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
@@ -90,9 +91,7 @@
             <div class="r">┛</div>
         </div>
     </div>
-
     <br>
-
     <c:if test="${!empty dto.FILE_ARRAY}">
         <div id="fileBody">
             <c:forEach var="file" items="${dto.FILE_ARRAY}" varStatus="status">
@@ -102,17 +101,58 @@
     </c:if>
 
     <div id="tools" class="float-right">
-        <button class="btn btn-danger btn-sm" style="color: white" name="delB" bid="${dto.BID}">삭제</button>
-        <a class="btn btn-success btn-sm" href="<c:url value="/modifyPage/"/>${dto.BID}">수정</a>
+        <button class="btn btn-danger btn-sm" style="color: white" name="delB">삭제</button>
+        <a class="btn btn-success btn-sm" id="modifyB">수정</a>
         <a class="btn btn-primary btn-sm" href='<c:url value="/board2" />'>목록</a>
     </div>
 
 </div> <%--컨테이너--%>
 <%--                    보이지 않는 기능                     --%>
-<div style="display: none">
-    <form action="<c:url value="/logout"/>" method="POST" id="logout">
+
+<div id="writeTable">
+    <div class="top">
+        <p>제목:</p>
+        <p><input class="form-control" id="TITLE" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
+        <p>내용:</p>
+        <textarea name="editor1" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required autofocus></textarea>
+    </div>
+    <br>
+    <div class="uploads">
+        <form name="fileForm" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button type="button" class="input-group-text" id="sendFile">Upload</button>
+                </div>
+                <div class="custom-file">
+                    <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
+                    <label class="custom-file-label" id="showFiles" for="fileList">Choose file</label>
+                </div>
+            </div>
+        </form>
+        <br>
+        <form name="headerForm" method="post">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button type="button" class="input-group-text" id="sendHeader">Upload</button>
+                </div>
+                <div class="custom-file">
+                    <input class="custom-file-input" type="file" id="headerList" name="upload" accept="image/*">
+                    <label class="custom-file-label" id="showHeader" for="headerList">Choose header image</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="text-center">
+        <p>
+            <a id="send" class="btn btn-primary btn-md" style="color: white">제출</a> &nbsp;&nbsp;&nbsp;
+            <a id="cancel" class="btn btn-warning btn-md" style="color: white">취소</a>
+        </p>
+    </div>
+</div>
+
+    <form action="<c:url value="/logout"/>" method="POST" id="logout" style="display: none">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     </form>
-</div>
 </body>
 </html>

@@ -17,7 +17,7 @@
         box-shadow: 0px 0px 10px black;
         background-color: black;
         opacity: 0.5;
-        z-index: 999;
+        z-index: 900;
 
         top:0;
         position: fixed;
@@ -71,13 +71,16 @@
         background-color: white;
         box-shadow: 0px 0px 5px dimgrey;
         border-radius: 10px;
-        margin-left: 50px;
-        margin-right: 50px;
-        margin-top: 30px;
-        margin-bottom: 30px;
+        margin: 20px;
         width: 280px;
         height: 400px;
         text-align: center;
+        transform: scale(1);
+        transition: transform 0.3s;
+    }
+
+    .contentBox:hover {
+        transform: scale(1.1);
     }
 
     .container-fluid{
@@ -98,7 +101,7 @@
     }
 
     .jumbotron {
-        background-image: url("https://cdn.pixabay.com/photo/2017/06/09/23/23/background-2388586_960_720.jpg");
+        background-image: url("../../resources/image/jumbotron.jpg");
         background-size: cover;
         background-position: center;
         font-family: "Helvetica Neue";
@@ -112,11 +115,20 @@
     }
 
     #prev {
+        font-size: 25px;
+        z-index: 999;
         visibility: hidden;
         color: white;
-        width: 50px;
-        height: 100px;
+
+        width: 30px;
+        height: 200px;
+
         background-color: dimgrey;
+
+        word-wrap: break-word;
+        text-align:center;
+        line-height: 1em;
+
         position: fixed;
         left: 0px;
         top: 50%;
@@ -125,14 +137,23 @@
     }
 
     #next {
+        font-size: 25px;
+        z-index: 999;
         visibility: hidden;
         color: white;
-        width: 50px;
-        height: 100px;
         background-color: dimgrey;
+
+        width: 30px;
+        height: 200px;
+
+        word-wrap: break-word;
+        text-align:center;
+        line-height: 1em;
+
         position: fixed;
         right: 0px;
         top: 50%;
+
         border-radius: 50px 0px 0px 50px;
         opacity: 0.8;
     }
@@ -140,7 +161,8 @@
     #writeTable {
         display: none;
 
-        width: 1488px;
+        max-width: 1473px;
+        width: 100%;
         height: 950px;
 
         margin: auto;
@@ -155,11 +177,11 @@
         left: 0;
         right: 0;
         top: 0;
-        bottom: 0;
-
+        bottom: 0
     }
 
     #writeB {
+        z-index: 999;
         position: fixed;
         right: 20px;
         bottom: 10%;
@@ -178,3 +200,101 @@
 
     }
 
+    @media screen and ( max-width: 900px) {
+
+        .container-fluid{
+            background-color: white;
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .contentBox {
+            z-index: 908;
+            position: relative;
+            background-color: white;
+            box-shadow: 0px 0px 5px dimgrey;
+            border-radius: 10px;
+            margin: 10px;
+            width: 180px;
+            height: 300px;
+            text-align: center;
+            transform: scale(1);
+            transition: transform 0.3s;
+        }
+
+        .jumbotron > h1 {
+            line-height: 250px;
+            font-size: 50px;
+        }
+
+        .contentBox .etc > p{
+            font-size: 13px;
+        }
+
+        #prev {
+            z-index: 999;
+            visibility: hidden;
+            color: white;
+
+            width: 25px;
+            height: 100px;
+
+            background-color: dimgrey;
+            position: fixed;
+            left: 0px;
+            top: 50%;
+
+            word-wrap: break-word;
+            text-align:center;
+            line-height: 1em;
+
+            border-radius: 0 50px 50px 0;
+            opacity: 0.8;
+        }
+
+        #next {
+            z-index: 999;
+            visibility: hidden;
+            color: white;
+
+            width: 25px;
+            height: 100px;
+
+            background-color: dimgrey;
+
+            position: fixed;
+            right: 0px;
+            top: 50%;
+
+            word-wrap: break-word;
+            text-align:center;
+            line-height: 1em;
+
+            border-radius: 50px 0px 0px 50px;
+            opacity: 0.8;
+        }
+
+        .uploads {
+            display: none;
+        }
+
+        #writeTable {
+            display: none;
+
+            max-width: 1473px;
+            width: 100%;
+            height: auto;
+
+            margin: auto;
+            padding: 20px;
+
+            z-index: 990;
+            box-shadow: 0px 0px 10px black;
+            border-radius: 10px;
+            background-color: white;
+            position: relative;
+        }
+
+    }

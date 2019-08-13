@@ -49,6 +49,7 @@ public class fileUploadController {
 			data.put("uploaded", 0);
 			data.put("error", "");
 		}
+
 		return data.toString();
 	}
 
@@ -63,7 +64,7 @@ public class fileUploadController {
 		for (MultipartFile mf : fileList) {
 			if(!mf.isEmpty()) {
                 try {
-                    String filename = getDate() + "_" + name + "_" + new String(mf.getOriginalFilename().getBytes("8859_1"),"UTF-8");// 업로드된 파일의 실제 이름
+                    String filename = getDate() + "_" + name + "_" + new String(mf.getOriginalFilename().getBytes("UTF-8"),"UTF-8");// 업로드된 파일의 실제 이름
                     fileListDB.add(filename);// 파일 이름을 리스트에 저장한다.
                     String filePath = rootPath + "UpLoadFiles" + File.separator;// 파일들이 저장될 위치
                     System.out.println(filePath+filename);
@@ -84,7 +85,9 @@ public class fileUploadController {
 				return jsonData.toString();
 			}
 		}
-		return fileListDB.toString();
+		JSONObject jsonData = new JSONObject();
+		jsonData.put("fileName",fileListDB.toString());
+		return jsonData.toString();
 	}
 
 	@RequestMapping("/uploadP")

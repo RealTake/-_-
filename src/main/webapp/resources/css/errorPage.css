@@ -1,0 +1,39 @@
+
+* {
+    font-family: "Helvetica Neue";
+}
+
+#errorCode {
+    text-align: center;
+}
+
+#errorBody {
+    padding: 20px;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0px 0px 5px black;
+}
+
+.container-fluid{
+    background-color: white;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.jumbotron > h1 {
+    line-height: 250px;
+    font-size: 63px;
+}
+
+.jumbotron > p {
+    font-weight: 200;
+}
+
+.jumbotron {
+    background-image: url("../image/jumbotron.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    color: white;
+}

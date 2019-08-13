@@ -100,7 +100,7 @@
 					type: 'post',
 					contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 					headers: {'${_csrf.headerName}' : '${_csrf.token}'},
-					data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + fileList,
+					data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + fileList + '&' + 'HEADER_IMG=' + '',
 					dataType: 'text',
 					success: function () {
 						writeB(false);
@@ -284,7 +284,7 @@
 				overflow: hidden;
 			}
 			.jumbotron {
-				background-image: url('<c:url value="/resources/image/strawberry-backgroundImage.jpg"/>');
+				background-image: url('<c:url value="/resources/image/jumbotron.jpg"/>');
 				background-size: cover;
 				background-repeat: no-repeat;
 				margin-bottom: 0px;
@@ -343,7 +343,7 @@
 
 		.jumbotron {
 			margin-top: 10px;
-			background-image: url('<c:url value="/resources/image/strawberry-backgroundImage.jpg"/>');
+			background-image: url('<c:url value="/resources/image/jumbotron.jpg"/>');
 			background-size: cover;
 			background-position: center;
 			background-repeat: no-repeat;
@@ -428,7 +428,8 @@
             <script>
 					CKEDITOR.replace("editor1",{
 						extraPlugins : 'confighelper',
-                        filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
+                        filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}',
+                        width : '100%'
 					});
                     CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
             </script>

@@ -1,3 +1,7 @@
+body {
+    font-family: "맑은 고딕", 굴림, 바탕, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
 #postContainer {
     width: 100%;
     min-height: 500px;
@@ -21,6 +25,7 @@
     border-radius: 5px;
     box-shadow: 0px 0px 1px black;
 }
+
 .upDan {
     position: relative;
     top: 15px;
@@ -48,4 +53,57 @@
 img {
     max-width: 100%;
     height: auto !important;
+}
+
+.container-fluid{
+    background-color: white;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.jumbotron > h1 {
+    line-height: 250px;
+    font-size: 63px;
+}
+
+.jumbotron > p {
+    font-weight: 200;
+}
+
+.jumbotron {
+    background-image: url("../../resources/image/jumbotron.jpg");
+    background-size: cover;
+    background-position: center;
+    font-family: "Helvetica Neue";
+    height: 500px;
+    color: white;
+    margin-bottom: 0px;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+#writeTable {
+    display: none;
+
+    max-width: 1473px;
+    width: 100%;
+    height: 950px;
+
+    margin: auto;
+    padding: 20px;
+
+    z-index: 990;
+    box-shadow: 0px 0px 10px black;
+    border-radius: 10px;
+    background-color: white;
+
+    position: relative;
+}
+
+#tools {
+    color: white;
 }

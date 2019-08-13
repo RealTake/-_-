@@ -62,7 +62,7 @@ public class BoardService {
 	}
 
     // 작성글을 보여주는 메서드
-	public void getPost_S(String bid, Model model, Authentication authentication) {
+	public void getPost_S(int bid, Model model, Authentication authentication) {
 	    String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
 
@@ -75,7 +75,7 @@ public class BoardService {
 
                 if(auth_S.equals("ROLE_USER")) {
                     IDAO dao = sqlSession.getMapper(IDAO.class);
-                    BoardDTO dto = dao.getPost_U(Integer.valueOf(bid), authentication.getName());
+                    BoardDTO dto = dao.getPost_U(bid, authentication.getName());
                     dto.setBID(bid);
                     String list = dto.getFILE_LIST();
                     if(list != null) {
@@ -100,6 +100,35 @@ public class BoardService {
         catch (Exception e) { e.printStackTrace(); model.addAttribute("possibility", false);}
         finally { printInfo(new Object(){}.getClass().getEnclosingMethod(), approach, auth_S); }// 실행중인 메소드 정보 호출
 	}
+
+    // 작성글을 JSON으로 보여주는 메서드
+    public BoardDTO getPostA_S(int bid, Authentication authentication) {
+        String auth_S = null;// 사용자의 권한이 저장될 변수
+        String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
+
+        Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
+
+        try {
+            while(auth.hasNext())
+            {
+                auth_S = auth.next().getAuthority();
+
+                if(auth_S.equals("ROLE_USER")) {
+                    IDAO dao = sqlSession.getMapper(IDAO.class);
+                    BoardDTO dto = dao.getPost_U(bid, authentication.getName());
+                   return dto;
+                }
+                else if(auth_S.equals("ROLE_ADMIN")) {
+                    IDAO dao = sqlSession.getMapper(IDAO.class);
+                    BoardDTO dto = dao.getPost_A(bid);
+                    return dto;
+                }
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); return null;}
+        finally { printInfo(new Object(){}.getClass().getEnclosingMethod(), approach, auth_S); }// 실행중인 메소드 정보 호출
+        return null;
+    }
 
     // 글을 작성하는 메서드
 	public String writePost_S(BoardDTO dto, Authentication authentication) {
@@ -135,7 +164,7 @@ public class BoardService {
 	}
 
     // 작성글을 지워주는 메소드
-	public String deletePost_S(String bid, Authentication authentication) {
+	public String deletePost_S(int bid, Authentication authentication) {
 	    String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
         Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
@@ -146,11 +175,11 @@ public class BoardService {
                 auth_S = auth.next().getAuthority();
 
                 if(auth_S.equals("ROLE_USER")) {
-                    sqlSession.getMapper(IDAO.class).deletePost_U(Integer.valueOf(bid), authentication.getName());
+                    sqlSession.getMapper(IDAO.class).deletePost_U(bid, authentication.getName());
                     return "1";
                 }
                 else if(auth_S.equals("ROLE_ADMIN")) {
-                    sqlSession.getMapper(IDAO.class).deletePost_A(Integer.valueOf(bid));
+                    sqlSession.getMapper(IDAO.class).deletePost_A(bid);
                     return "1";
                 }
 
@@ -163,7 +192,7 @@ public class BoardService {
 		}
 
 	// 작성한 글을 수정하는 메소드
-    public String modifyPost_S(String bid, BoardDTO dto, Authentication authentication) {
+    public String modifyPost_S(int bid, BoardDTO dto, Authentication authentication) {
         String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
 

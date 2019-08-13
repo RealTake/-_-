@@ -30,6 +30,11 @@
 			invalidate-session="true"
 			logout-success-url="/Login"
 		/>
+
+		<security:session-management invalid-session-url="/">
+			<security:concurrency-control max-sessions="1" expired-url="/" />
+		</security:session-management>
+
 	</security:http>
 	
 	<security:jdbc-user-service 
