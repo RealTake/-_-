@@ -13,6 +13,8 @@ public interface IDAO {
 
 	public void joinMember(MemberDTO dto);
 	public void writePost(BoardDTO dto);
+	public int getCount_A();
+	public int getCount_U(String value);
 	public void modifyPost_A(BoardDTO dto);
 	public void modifyPost_U(BoardDTO dto);
 	public void deletePost_A(int bid);

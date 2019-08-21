@@ -220,6 +220,46 @@ public class BoardService {
         return "0"; //삭제 실패시 0 리턴
     }
 
+    // 게시물의 개수를 가져온다.
+    public int getCount_S(Authentication authentication) {
+        String auth_S = null; //사용자의 권한이 저장될 변수
+        String approach = authentication.getName(); // 접근자의 아이디(이름)
+        Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
+
+	    int board_count = 0; // 게시물 개수
+	    int quotient; // 게시물 몫
+	    int remainder;// 게시물 나머지
+
+        try {
+            while(auth.hasNext())
+            {
+                auth_S = auth.next().getAuthority();
+
+                if(auth_S.equals("ROLE_USER")) {
+                    board_count = sqlSession.getMapper(IDAO.class).getCount_U(approach);
+                    break;
+                }
+                else if(auth_S.equals("ROLE_ADMIN")) {
+                    board_count = sqlSession.getMapper(IDAO.class).getCount_A();
+                    break;
+                }
+            }
+            quotient = board_count/10;
+            remainder = board_count%10;
+
+            if(remainder > 0)
+                return quotient+1;
+            else
+                return quotient;
+
+        }
+        catch (Exception e) { e.printStackTrace(); return 0;}
+
+        finally { printInfo(new Object(){}.getClass().getEnclosingMethod(), approach, auth_S); }// 실행중인 메소드 정보 호출
+    }
+
+
+    // 사용자 정보 가져오기
     public MemberDTO getAccountInfo_S(Authentication authentication){
 	    return sqlSession.getMapper(IDAO.class).getAccountInfo(authentication.getName());
     }

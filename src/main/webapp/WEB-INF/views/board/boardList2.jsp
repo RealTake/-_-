@@ -80,6 +80,8 @@
 
         <div class="contentBody"></div>
 
+        <ul class="pagination justify-content-center"></ul>
+
         <div class="deleteBox">
             <h1 class="text-center" style="margin-top: 100px;">Delete Here!</h1>
         </div>

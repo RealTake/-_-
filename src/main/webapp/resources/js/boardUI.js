@@ -67,14 +67,39 @@ $().ready( function() {
         var filelist = '';
 
         for(var i =0; i < files.length; i++){
-            if((files.length - 1) == i) {
-                filelist += files[i].name
-            } else {
-                filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+            var temp = files[i].name.split(".");
+            var valid;
+
+            switch (temp[temp.length-1]) {
+                case "jpg" :
+                    break;
+                case "jpeg" :
+                    break;
+                case "png" :
+                    break;
+                case "gif" :
+                    break;
+                default :
+                    alert("지원하지 않는 파일 형식입니다.\n\n지원되는 형식(jpg, jpeg, png, gif)");
+                    $("form[name=headerForm]").get(0).reset();
+                    valid = true;
+                    break;
+            }
+
+            if(valid)
+                break;
+            else {
+
+                if ((files.length - 1) == i) {
+                    filelist += files[i].name
+                } else {
+                    filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+                }
+
+                console.log(filelist);
+                $('.custom-file-label')[1].innerHTML = filelist;
             }
         }
-        console.log(filelist);
-        $('.custom-file-label')[1].innerHTML = filelist;
     });
 
     //검색공간에 키보드 입력시 즉각 검색한다.
@@ -118,10 +143,6 @@ $().ready( function() {
 
     //글쓰기 창을 활성화
     $("#writeB").click( function() {
-        $(".container-fluid").css("-webkit-filter", "blur(5px)");
-        $(".container-fluid").css("-moz-filter", "blur(5px)");
-        $(".container-fluid").css("-ms-filter", "blur(5px)");
-        $(".container-fluid").css("-o-filter", "blur(5px)");
         $(".container-fluid").css("filter", "blur(5px)");
         writeB(true);
     });
@@ -175,4 +196,12 @@ $( document ).on("dragstart",".contentBox",function(e){
 //게시글 목록중 드레그 멈추면
 $( document ).on("dragstop",".contentBox",function(){
     $(".deleteBox").css("display", "none");
+});
+
+//페이지 이동
+$( document ).on("click",".page-link", function () {
+    var selectPage = $(this)[0].innerHTML;
+    pageNum = selectPage;
+    console.log(selectPage);
+    getMovedPage(selectPage);
 });

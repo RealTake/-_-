@@ -3,8 +3,30 @@ var col = ["BID", "WDATE", "TITLE", "WRITER"];
 var header_return = "";
 var file_return = "";
 
+function setPaging() {
+    $.ajax({
+        url: './count',
+        type: 'get',
+        dataType: 'text',
+        success: function (response) {
+            $(".pagination")[0].innerHTML = "";
+            for(var i=1; i<=response;i++) {
+                if(i == pageNum)
+                    pageBox = $("<li class='page-item active'><button class='page-link'>" + i +"</button></li>");
+                else
+                    pageBox = $("<li class='page-item'><button class='page-link'>" + i +"</button></li>");
+                $(".pagination").append(pageBox);
+            }
+        },
+        fail: function (error) {
+            alert('로드 실패');
+        },
+    });
+}
+
 function getSearchedPost() {
     pageNum = 1;
+    pageBox = "";
     $.ajax({
         url: './searchPost.json/1?content=' + encodeURIComponent($("#searchContent").val()),
         type: 'get',
@@ -22,9 +44,11 @@ function searchProcess(response) {
     var table = $(".contentBody")[0];
     var result = response.result;
     var limit;
+    setPaging();// 페이징 버튼 생성
 
     if (result.length > 0) {
         table.innerHTML = "";
+
         $("#pageN").text(pageNum);
         $("#pageB").css("display", "block");
 
@@ -114,6 +138,17 @@ function deletePost(bid) {
     });
 }
 
+function getMovedPage(temp) {
+    $.ajax({
+        url: './searchPost.json/' + temp + '?' + 'content=' + encodeURIComponent($("#searchContent").val(), true),
+        type: 'get',
+        dataType: 'json',
+        success: function (response) {
+            searchProcess(response);
+        }
+    });
+}
+
 function movePage(mode) {
     var flag = 0;
     if (mode == 'next' && pageNum >= 1) {
@@ -126,14 +161,7 @@ function movePage(mode) {
     }
 
     if(flag == 1){
-        $.ajax({
-            url: './searchPost.json/' + pageNum + '?' + 'content=' + encodeURIComponent($("#searchContent").val(), true),
-            type: 'get',
-            dataType: 'json',
-            success: function (response) {
-                searchProcess(response);
-            }
-        });
+       getMovedPage(pageNum);
     }
 }
 

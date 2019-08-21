@@ -24,14 +24,15 @@
                     <p>EMAIL: chldnjstkd2@naver.com</p>
                 </div>
             </div>
-            <div id="errorBody">
-                <p>에러 타입: ${requestScope['javax.servlet.error.exception_type']}</p>
-                <p>에러 메세지: ${requestScope['javax.servlet.error.message']}</p>
-                <s:authorize access="hasRole('ROLE_ADMIN')">
+
+            <a class="btn btn-outline-info" href="<c:url value="/board2"/>">목록으로 돌아가기</a>
+
+            <s:authorize access="hasRole('ROLE_ADMIN')">
+                <div id="errorBody">
                     <p>에러 타입: ${requestScope['javax.servlet.error.exception_type']}</p>
                     <p>에러 메세지: ${requestScope['javax.servlet.error.message']}</p>
-                </s:authorize>
-            </div>
+                </div>
+            </s:authorize>
         </div>
     </body>
 </html>

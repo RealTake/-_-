@@ -21,7 +21,7 @@
 			login-processing-url="/login"
 			username-parameter="id"
 			password-parameter="password"
-			default-target-url="/board"
+			default-target-url="/board2"
 			authentication-failure-url="/Login?error"
 		/>
 		

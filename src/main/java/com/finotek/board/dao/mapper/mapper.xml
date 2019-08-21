@@ -57,4 +57,11 @@
 		SELECT * FROM USERS WHERE ID = #{param1}
 	</select>
 
+	<select id="getCount_A" resultType="int">
+		SELECT COUNT(BID) FROM BOARDS
+	</select>
+
+	<select id="getCount_U" resultType="int">
+		SELECT COUNT(BID) FROM BOARDS WHERE WRITER = #{param1}
+	</select>
 </mapper>

@@ -26,9 +26,14 @@ public class BoardController {
     	return "board/boardList2";
     }
 
+    // 매인페이지를 불러오는 메소드
+	@RequestMapping(value="/")
+	public String mainPage2(Model model, Authentication authentication) {
+		model.addAttribute("AccountInfo", service.getAccountInfo_S(authentication));
+		return "board/boardList2";
+	}
+
     // 위와 같은 기능을 하지만 루트 주소로 메인 페이지를 불러온다.
-    @RequestMapping(value="/")
-    public String mainPage() { return "board/boardList"; }
 
 	//  포스팅된 글을 불러올 메소드
 	@GetMapping(value="/viewPost/{bid}")
@@ -86,4 +91,11 @@ public class BoardController {
 	    return service.modifyPost_S(bid, dto, authentication);
     }
 
+
+    // 게시글의 개수를 알려주는 메소드
+    @ResponseBody
+    @GetMapping(value="/count")
+    public int getCount(Authentication authentication){
+        return service.getCount_S(authentication);
+    }
 }

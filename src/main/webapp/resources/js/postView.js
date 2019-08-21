@@ -189,20 +189,45 @@ $().ready( function() {
         $('.custom-file-label')[0].innerHTML = filelist;
     });
 
-    //헤더 이미지 업로드시 업로드 파일 이름을 알려줌
+    //파일 업로드시 업로드 파일 이름을 알려줌
     $("#headerList").change(function () {
         var files = $(this)[0].files;
         var filelist = '';
 
         for(var i =0; i < files.length; i++){
-            if((files.length - 1) == i) {
-                filelist += files[i].name
-            } else {
-                filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+            var temp = files[i].name.split(".");
+            var valid;
+
+            switch (temp[temp.length-1]) {
+                case "jpg" :
+                    break;
+                case "jpeg" :
+                    break;
+                case "png" :
+                    break;
+                case "gif" :
+                    break;
+                default :
+                    alert("지원하지 않는 파일 형식입니다.\n\n지원되는 형식(jpg, jpeg, png, gif)");
+                    $("form[name=headerForm]").get(0).reset();
+                    valid = true;
+                    break;
+            }
+
+            if(valid)
+                break;
+            else {
+
+                if ((files.length - 1) == i) {
+                    filelist += files[i].name
+                } else {
+                    filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+                }
+
+                console.log(filelist);
+                $('.custom-file-label')[1].innerHTML = filelist;
             }
         }
-        console.log(filelist);
-        $('.custom-file-label')[1].innerHTML = filelist;
     });
 
     CKEDITOR.replace("editor1",{

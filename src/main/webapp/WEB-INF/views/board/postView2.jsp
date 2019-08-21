@@ -79,7 +79,6 @@
         <p>Writer: ${dto.WRITER}</p>
         <p>Date : ${dto.WDATE}</p>
     </div>
-
     <div id="postContainer">
         <div class="upDan">
             <div class="l">┏</div>
