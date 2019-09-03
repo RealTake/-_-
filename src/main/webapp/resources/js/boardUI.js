@@ -167,12 +167,6 @@ $().ready( function() {
         withdrawal();
     });
 
-    CKEDITOR.replace("editor1",{
-        extraPlugins : 'confighelper',
-        filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
-    });
-    CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
-
 });
 
 //Dom로드후 만들어진 삭제 버튼 요소에대한 클릭 이벤트를 가능하게한다.

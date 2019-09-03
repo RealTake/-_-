@@ -91,11 +91,10 @@ public class BoardController {
 	    return service.modifyPost_S(bid, dto, authentication);
     }
 
-
     // 게시글의 개수를 알려주는 메소드
     @ResponseBody
     @GetMapping(value="/count")
-    public int getCount(Authentication authentication){
-        return service.getCount_S(authentication);
+    public int getCount(@RequestParam String content, Authentication authentication){
+        return service.getCount_S(content, authentication);
     }
 }

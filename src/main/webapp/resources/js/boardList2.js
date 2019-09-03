@@ -5,7 +5,7 @@ var file_return = "";
 
 function setPaging() {
     $.ajax({
-        url: './count',
+        url: './count?content=' + $("#searchContent").val(),
         type: 'get',
         dataType: 'text',
         success: function (response) {

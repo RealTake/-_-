@@ -58,10 +58,10 @@
 	</select>
 
 	<select id="getCount_A" resultType="int">
-		SELECT COUNT(BID) FROM BOARDS
+		SELECT COUNT(BID) FROM BOARDS WHERE (UPPER(CONTENT) LIKE UPPER('%'|| #{param1} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{param1} ||'%'))
 	</select>
 
 	<select id="getCount_U" resultType="int">
-		SELECT COUNT(BID) FROM BOARDS WHERE WRITER = #{param1}
+		SELECT COUNT(BID) FROM BOARDS WHERE WRITER = #{param2} AND (UPPER(CONTENT) LIKE UPPER('%'|| #{param1} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{param1} ||'%'))
 	</select>
 </mapper>

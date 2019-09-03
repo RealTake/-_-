@@ -22,6 +22,15 @@
        var csrf = {};
        csrf["${_csrf.headerName}"] = "${_csrf.token}";
        var ctx = "${pageContext.request.contextPath}" + "/editorImg/";
+
+       $().ready( function () {
+               CKEDITOR.replace("editor1",{
+                   extraPlugins : 'confighelper',
+                   filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
+               });
+               CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
+           }
+       );
     </script>
     <script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
@@ -64,7 +73,7 @@
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <input id="searchContent" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button id="searchB" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <button id="searchB" class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
                 </form>
             </div>
         </nav>

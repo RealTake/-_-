@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.finotek.board.dto.MemberDTO;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -221,7 +220,7 @@ public class BoardService {
     }
 
     // 게시물의 개수를 가져온다.
-    public int getCount_S(Authentication authentication) {
+    public int getCount_S(String content, Authentication authentication) {
         String auth_S = null; //사용자의 권한이 저장될 변수
         String approach = authentication.getName(); // 접근자의 아이디(이름)
         Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
@@ -236,11 +235,11 @@ public class BoardService {
                 auth_S = auth.next().getAuthority();
 
                 if(auth_S.equals("ROLE_USER")) {
-                    board_count = sqlSession.getMapper(IDAO.class).getCount_U(approach);
+                    board_count = sqlSession.getMapper(IDAO.class).getCount_U(content, approach);
                     break;
                 }
                 else if(auth_S.equals("ROLE_ADMIN")) {
-                    board_count = sqlSession.getMapper(IDAO.class).getCount_A();
+                    board_count = sqlSession.getMapper(IDAO.class).getCount_A(content);
                     break;
                 }
             }

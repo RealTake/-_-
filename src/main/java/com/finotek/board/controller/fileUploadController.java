@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
@@ -90,10 +89,10 @@ public class fileUploadController {
 		return jsonData.toString();
 	}
 
-	@RequestMapping("/uploadP")
-	public String page(){
-		return "page";
-	}
+//	@RequestMapping("/uploadP")
+//	public String page(){
+//		return "page";
+//	}
 
 	public String getDate(){
 		Date date = new Date();// 글이 작성된 시점을 기록한다

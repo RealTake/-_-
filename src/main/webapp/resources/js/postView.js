@@ -229,11 +229,4 @@ $().ready( function() {
             }
         }
     });
-
-    CKEDITOR.replace("editor1",{
-        extraPlugins : 'confighelper',
-        filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
-    });
-    CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
-
 });

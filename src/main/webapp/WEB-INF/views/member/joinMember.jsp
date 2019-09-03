@@ -22,113 +22,108 @@
         var validatePwdv = 0;
         var validateEmail = 0;
 
-        function checkID() {
-            var id = encodeURIComponent($("#ID").val(), true);
-            $.ajax({
-                url: '<c:url value="/checkOverlap/"/>' + id,
-                type: 'get',
-                dataType: 'text',
-                success: function (response) {
-                    checkProcess(response);
-                },
-                error: function () {
-                },
-            });
-        }
-
-        function checkProcess(result) {
-            var node = $("#ID");
-            var tip = $("#IDTip");
-            var length = node.val().length;
-
-            if (length < 5 || length > 16) {
-                validateId = 0;
-                node.css("borderColor", "red");
-                tip.css("color","red");
-                tip[0].innerText = "Id: 5-16";
-            }
-            else if (result == 0) {
-                validateId = 0;
-                node.css("borderColor", "red");
-                tip.css("color","red");
-                tip[0].innerText = "Already exist.";
-            }
-            else if ((result == 1) && (length >= 5 && length <= 16)) {
-                validateId = 1;
-                node.css("borderColor", "#B8B8B8");
-                tip.css("color","blue");
-                tip[0].innerText = "You can use.";
-            }
-        }
-
-        function checkPwd() {
-            var pwd = $("#PASSWORD").val();
-            var pwdv = $("#PASSWORDV").val();
-            var pwdvNode = $("#PASSWORDV");
-            var tip = $("#PWDTip");
-
-            if(pwd != pwdv) {
-                validatePwdv = 0;
-                pwdvNode.css("borderColor", "red");
-                tip.css("color", "red");
-                tip[0].innerText = 'Not same';
-            }
-            else {
-                validatePwdv = 1;
-                pwdvNode.css("borderColor", "grey");
-                tip.css("color", "blue");
-                tip[0].innerText = "It's match";
-            }
-
-        }
-
-        //유효성 검사 함수로 ID는 전용함수가 있다.
-        function checkValidate(s, m, check){
-            var node = $('#' + check);
-            var tip = $('#' + check + "Tip");
-            var length = node.val().length;
-
-            if(length < s || length > m){
-                validates(check, 0);
-                node.css("borderColor", "red");
-                tip.css("color", "red");
-            }
-            else {
-                validates(check, 1);
-                node.css("borderColor", "grey");
-                tip.css("color", "grey");
-            }
-
-            if(check == "PASSWORD")
-                checkPwd();
-        }
-
-        //checkValidate()를 이용할 경우 유효성 검사 대상의 유효성을 설정할수 있도록함
-        function validates(check, value) {
-            switch (check) {
-                case 'PASSWORD' :
-                    validatePwd = value;
-                    break;
-                case 'NAME' :
-                    validateName = value;
-                    break;
-                case 'EMAIL' :
-                    validateEmail = value;
-                    break;
-            }
-
-        }
-
-        //회원가입 버튼 클릭시 최종 검사
-        function submitForm(value) {
-            if( (validatePwd == 1) && (validateId == 1) && (validatePwdv == 1) && (validateName == 1) && (validateEmail ==1))
-                value.submit();
-            else {
-                alert("입력칸을 확인해주세요");
-            }
-        }
-
         $().ready(function () {
+            function checkID() {
+                var id = encodeURIComponent($("#ID").val(), true);
+                $.ajax({
+                    url: '<c:url value="/checkOverlap/"/>' + id,
+                    type: 'get',
+                    dataType: 'text',
+                    success: function (response) {
+                        checkProcess(response);
+                    },
+                    error: function () {
+                    },
+                });
+            }
+
+            function checkProcess(result) {
+                var node = $("#ID");
+                var tip = $("#IDTip");
+                var length = node.val().length;
+
+                if (length < 5 || length > 16) {
+                    validateId = 0;
+                    node.css("borderColor", "red");
+                    tip.css("color","red");
+                    tip[0].innerText = "Id: 5-16";
+                }
+                else if (result == 0) {
+                    validateId = 0;
+                    node.css("borderColor", "red");
+                    tip.css("color","red");
+                    tip[0].innerText = "Already exist.";
+                }
+                else if ((result == 1) && (length >= 5 && length <= 16)) {
+                    validateId = 1;
+                    node.css("borderColor", "#B8B8B8");
+                    tip.css("color","blue");
+                    tip[0].innerText = "You can use.";
+                }
+            }
+
+            function isPwdMatch() {
+                var pwd = $("#PASSWORD").val();
+                var pwdv = $("#PASSWORDV").val();
+                var pwdvNode = $("#PASSWORDV");
+                var tip = $("#PWDTip");
+
+                if(pwd != pwdv) {
+                    validatePwdv = 0;
+                    pwdvNode.css("borderColor", "red");
+                    tip.css("color", "red");
+                    tip[0].innerText = 'Not same';
+                }
+                else {
+                    validatePwdv = 1;
+                    pwdvNode.css("borderColor", "grey");
+                    tip.css("color", "blue");
+                    tip[0].innerText = "It's match";
+                }
+
+            }
+
+            //유효성 검사 함수로
+            function checkValidate(s, m, check){
+                var node = $('#' + check);
+                var tip = $('#' + check + "Tip");
+                var length = node.val().length;
+
+                if(length < s || length > m){
+                    validates(check, 0);
+                    node.css("borderColor", "red");
+                    tip.css("color", "red");
+                }
+                else {
+                    validates(check, 1);
+                    node.css("borderColor", "grey");
+                    tip.css("color", "grey");
+                }
+
+                if(check == "PASSWORD")
+                    isPwdMatch();
+                else if(check == "PASSWORDV")
+                    isPwdMatch();
+
+                checkFinalForm();//회원가입의 최종 유효성을 체크하기위해 호출
+            }
+
+            //checkValidate()를 이용할 경우 유효성 검사 대상의 유효성을 설정할수 있도록함
+            function validates(check, value) {
+                switch (check) {
+                    case 'PASSWORD' :
+                        validatePwd = value;
+                        break;
+                    case 'NAME' :
+                        validateName = value;
+                        break;
+                    case 'EMAIL' :
+                        validateEmail = value;
+                        break;
+                }
+
+            }
+
             $("#NAME").keyup(function () {
                 checkValidate(1, 10, $(this).attr("id"));
             });
@@ -146,13 +141,21 @@
             });
 
             $("#PASSWORDV").keyup(function () {
-                checkPwd();
+                checkValidate(0, 999, $(this).attr("id"));
             });
 
-            $("#joinB").click(function () {
-                submitForm(this.form);
-            });
-        })
+            //회원가입 버튼 클릭시 최종 검사
+            function checkFinalForm() {
+                if( (validatePwd == 1) && (validateId == 1) && (validatePwdv == 1) && (validateName == 1) && (validateEmail ==1)) {
+                    $("#joinB")[0].disabled = false;
+                    $("#joinB").css("borderColor", "blue");
+                }
+                else{
+                    $("#joinB")[0].disabled = true;
+                    $("#joinB").css("borderColor", "red");
+                }
+            }
+        });
     </script>
     <s:authorize access="isAuthenticated()">
         <c:redirect url="/"/>
@@ -161,7 +164,7 @@
 </head>
 <body>
 <div class = "body">
-    <form action="<c:url value="/join"/>" method="POST" class="center">
+    <form action="<c:url value="/join"/>" method="POST" class="center" id="joinForm">
         <input name="NAME" id="NAME" class="underline" type="text" placeholder="NAME" required autofocus/>
         <tip id="NAMETip">Name: 1-10</tip>
 
@@ -178,7 +181,7 @@
         <tip id="PWDTip">팁: 비밀번호를 다시 써주세요.</tip>
 
         <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
-        <button type="button" id="joinB">Join</button>
+        <button type="submit" id="joinB" disabled>Join</button>
     </form>
 </div>
 </body>
