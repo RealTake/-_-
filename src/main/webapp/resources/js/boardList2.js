@@ -72,8 +72,8 @@ function searchProcess(response) {
                 result[i].HEADER_IMG = "https://cdn.pixabay.com/photo/2017/06/09/23/23/background-2388586_960_720.jpg";
             else
                 result[i].HEADER_IMG = ctx + result[i].HEADER_IMG;
-
-            var box = $("<div class='contentBox' bid='" + result[i].BID + "'></div>");
+            var draggable = (auth == "ROLE_ADMIN") || (name == result[i].WRITER) ? " dragContent" : "";
+            var box = $("<div class='contentBox" + draggable + "' bid='" + result[i].BID + "'></div>");
             var header = $("<img class='header' src='" + result[i].HEADER_IMG + "'/>");
             var body = $("<div class='body'><p>" + result[i].TITLE + "</p></div>");
             var etc = $("<div class='etc'><p class='date'>" + result[i].WDATE + "</p><p class='writer'>" + result[i].WRITER + "</p></div>");
@@ -82,7 +82,7 @@ function searchProcess(response) {
             box.append(body);
 
             $(".contentBody").append(box);
-            $(".contentBox").draggable({revert:true });
+            $(".dragContent").draggable({revert:true });
         }
     }
     else {
@@ -95,8 +95,14 @@ function searchProcess(response) {
 function writePost() {
     var title = $("#TITLE").val();
     var content = CKEDITOR.instances.editor1.getData();
+    console.log('TITLE=' + title);
+    console.log('FILE_LIST=' + file_return);
+    console.log('HEADER_IMG=' + header_return);
     if(content.getBytes() > 4000){
-        alert('제한된 크기에 내용을 작성해주세요');
+        alert('제한된 크기에 내용을 작성해주세요.');
+    }
+    else if(content.getBytes() <= 0 || title.getBytes() <= 0){
+        alert('입력칸을 채워주세요.');
     }
     else{
         $.ajax({
@@ -171,18 +177,21 @@ function upload_HeaderImg(){
         headers : csrf,
         dataType : "json",
         error : function(){
-            alert("업로드 실패");
+            console.log("업로드 실패");
         },
         success : function(responseText){
             if(responseText.result == null){
                 header_return = responseText.fileName;
-                alert('업로드 성공');
+                console.log('업로드 성공');
             }
             else
-                alert(responseText.result);
+                console.log(responseText.result);
+        },
+        complete : function () {
+            writePost();
         }
     });
-    $("form[name=headerForm]").submit() ;
+    $("form[name=headerForm]").submit();
 }
 
 function uploadFile(){
@@ -192,15 +201,18 @@ function uploadFile(){
         enctype : "multipart/form-data",
         dataType : "json",
         error : function(){
-            alert("업로드 실패") ;
+           console.log("업로드 실패");
         },
         success : function(responseText){
             if(responseText.result == null){
                 file_return = responseText.fileName;
-                alert('업로드 성공');
+                console.log('업로드 성공');
             }
             else
                 alert(responseText.result);
+        },
+        complete : function () {
+            upload_HeaderImg();
         }
     });
     $("form[name=fileForm]").submit() ;

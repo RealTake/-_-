@@ -45,7 +45,7 @@ public class BoardService {
 
                 if(auth_S.equals("ROLE_USER")) {
                     System.out.println("사용자권한 : " + auth_S);
-                    return "{\"result\":" + gson.toJson(sqlSession.getMapper(IDAO.class).getSearchPostList_U(param)) + "}";						// 유저id와 작성자를 비교한다.
+                    return "{\"result\":" + gson.toJson(sqlSession.getMapper(IDAO.class).getSearchPostList_A(param)) + "}";						// 유저id와 작성자를 비교한다.
                 }
                 else if(auth_S.equals("ROLE_ADMIN")) {
                     System.out.println("사용자 권한 : " + auth_S);
@@ -74,7 +74,7 @@ public class BoardService {
 
                 if(auth_S.equals("ROLE_USER")) {
                     IDAO dao = sqlSession.getMapper(IDAO.class);
-                    BoardDTO dto = dao.getPost_U(bid, authentication.getName());
+                    BoardDTO dto = dao.getPost_A(bid);
                     dto.setBID(bid);
                     String list = dto.getFILE_LIST();
                     if(list != null) {
@@ -85,7 +85,7 @@ public class BoardService {
                 }
                 else if(auth_S.equals("ROLE_ADMIN")) {
                     IDAO dao = sqlSession.getMapper(IDAO.class);
-                    BoardDTO dto = dao.getPost_A(Integer.valueOf(bid));
+                    BoardDTO dto = dao.getPost_A(bid);
                     dto.setBID(bid);
                     String list = dto.getFILE_LIST();
                     if(list != null) {
@@ -235,7 +235,8 @@ public class BoardService {
                 auth_S = auth.next().getAuthority();
 
                 if(auth_S.equals("ROLE_USER")) {
-                    board_count = sqlSession.getMapper(IDAO.class).getCount_U(content, approach);
+                    board_count = sqlSession.getMapper(IDAO.class).getCount_A(content);
+//                    board_count = sqlSession.getMapper(IDAO.class).getCount_U(content, approach);
                     break;
                 }
                 else if(auth_S.equals("ROLE_ADMIN")) {

@@ -31,13 +31,14 @@
                CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
            }
        );
+       var name = "${pageContext.request.userPrincipal.name}";
+       var auth = "${AccountInfo.AUTHORITY}";
     </script>
     <script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
     <script src="<c:url value='/resources/js/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
-    <script src="<c:url value='/resources/js/boardUI.js'/>"></script> <%--유저 인터페이스 컨트롤 함수--%>
     <script src="<c:url value='/resources/js/boardList2.js'/>"></script> <%-- 기능(Ajax) 함수--%>
-    <filter id="blur"> <feGaussianBlur stdDeviation="3"/> </filter>
+    <script src="<c:url value='/resources/js/boardUI.js'/>"></script> <%--유저 인터페이스 컨트롤 함수--%>
 </head>
 <body>
     <div class="container-fluid">

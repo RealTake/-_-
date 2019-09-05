@@ -10,7 +10,7 @@ public class MemberDTO {
 	String EMAIL;			// 이메일
 	String PASSWORD;		// 비밀번호
 	char SEX;				// 성별
-	String USER_AUTHORITY;	// 가지고있는 권한
+	String AUTHORITY;	    // 가지고있는 권한
 	String JOINDATE;		// 가입날짜
 	int ENABLED;			// 계정 활성화 여부 1: 활성화, 0: 비활성화
 

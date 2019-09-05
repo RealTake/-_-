@@ -42,7 +42,7 @@ function upload_HeaderImg(){
                alert(responseText.result);
         }
     });
-    $("form[name=headerForm]").submit() ;
+    $("form[name=headerForm]").submit();
 }
 
 function uploadFile(){
@@ -63,7 +63,7 @@ function uploadFile(){
                 alert(responseText.result);
         }
     });
-    $("form[name=fileForm]").submit() ;
+    $("form[name=fileForm]").submit();
 }
 
 
@@ -126,7 +126,7 @@ function getPost(bid) {
 
 $().ready( function() {
 
-    getPost(bid);
+    //getPost(bid);
 
     //게시글 삭제
     $("button[name=delB]").click(function () {

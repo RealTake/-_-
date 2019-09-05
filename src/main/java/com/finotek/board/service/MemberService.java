@@ -33,7 +33,7 @@ public class MemberService {
 
         dto.setJOINDATE(sDate.format(date)); // 가입날짜 등록
         dto.setENABLED(1); //활성화 여부는 기본값으로 활성화 값을 준다.
-        dto.setUSER_AUTHORITY("ROLE_USER");
+        dto.setAUTHORITY("ROLE_USER");
         dto.setSEX('n');
 
         try {

@@ -105,8 +105,10 @@
     </c:if>
 
     <div id="tools" class="float-right">
-        <button class="btn btn-danger btn-sm" style="color: white" name="delB">삭제</button>
-        <a class="btn btn-success btn-sm" id="modifyB">수정</a>
+        <s:authorize access="hasRole('ROLE_ADMIN') or ${pageContext.request.userPrincipal.name eq dto.WRITER}">
+            <button class="btn btn-danger btn-sm" style="color: white" name="delB">삭제</button>
+            <a class="btn btn-success btn-sm" id="modifyB">수정</a>
+        </s:authorize>
         <a class="btn btn-primary btn-sm" href='<c:url value="/board2" />'>목록</a>
     </div>
 

@@ -131,7 +131,7 @@
 
         position: fixed;
         left: 0px;
-        top: 50%;
+        top: 40%;
         border-radius: 0 50px 50px 0;
         opacity: 0.8;
     }
@@ -152,7 +152,7 @@
 
         position: fixed;
         right: 0px;
-        top: 50%;
+        top: 40%;
 
         border-radius: 50px 0px 0px 50px;
         opacity: 0.8;

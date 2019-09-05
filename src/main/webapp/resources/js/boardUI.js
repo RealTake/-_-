@@ -27,9 +27,6 @@ $().ready( function() {
     //페이지 로드후 리스트를 출력하기 위함.
     getSearchedPost();
 
-    //드레그 허용
-    $(".contentBox").draggable({revert:true });
-
     //삭제 드레그시
     $(".deleteBox").droppable({
         over : function(){
@@ -114,15 +111,15 @@ $().ready( function() {
         getSearchedPost(content);
     });
 
-    //클릭시 파일을 서버에 업로드한다.
-    $("#sendFile").click( function() {
-        uploadFile();
-    });
-
-    //클릭시 파일을 서버에 업로드한다.
-    $("#sendHeader").click( function() {
-        upload_HeaderImg();
-    });
+    // //클릭시 파일을 서버에 업로드한다.
+    // $("#sendFile").click( function() {
+    //     uploadFile();
+    // });
+    //
+    // //클릭시 파일을 서버에 업로드한다.
+    // $("#sendHeader").click( function() {
+    //     upload_HeaderImg();
+    // });
 
     //제목 바이트 확인
     $("#TITLE").keyup( function() {
@@ -131,7 +128,7 @@ $().ready( function() {
 
     //게시글 전송시 작성화면 숨김
     $("#send").click( function() {
-        writePost();
+        uploadFile();
         $(".container-fluid").css("filter", "none");
     });
 
@@ -182,13 +179,13 @@ $(document).on("click",".contentBox",function() {
 });
 
 //게시글 목록중 드레그 시
-$( document ).on("dragstart",".contentBox",function(e){
+$( document ).on("dragstart",".dragContent",function(e){
     $(".deleteBox").css("display", "block");
     temp_bid = $(this).attr("bid");
 });
 
 //게시글 목록중 드레그 멈추면
-$( document ).on("dragstop",".contentBox",function(){
+$( document ).on("dragstop",".dragContent",function(){
     $(".deleteBox").css("display", "none");
 });
 
@@ -198,4 +195,8 @@ $( document ).on("click",".page-link", function () {
     pageNum = selectPage;
     console.log(selectPage);
     getMovedPage(selectPage);
+});
+
+$( document ).on(function () {
+    $(".dragContent").draggable({revert:true });
 });
