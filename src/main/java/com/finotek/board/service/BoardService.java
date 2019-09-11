@@ -142,12 +142,15 @@ public class BoardService {
             String auth_S = null;// 사용자의 권한이 저장될 변수
             String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수
 
-            moveFile(dto);
+            if(!dto.getTEMP_IMGS()[0].equals("null"))
+            	moveFile(dto.getTEMP_IMGS());
 
             Date date = new Date();// 글이 작성된 시점을 기록한다
             SimpleDateFormat sDate = new SimpleDateFormat("yyyy.MM.dd");
             Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
-
+            
+            String temp = Arrays.toString(dto.getTEMP_IMGS());
+            dto.setTEMP_IMGS_LIST(temp.substring(1, temp.length() - 1));
             dto.setWRITER(authentication.getName());
             dto.setWDATE(sDate.format(date));
 
@@ -177,6 +180,9 @@ public class BoardService {
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
         Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
 
+        deleteFiles(bid);
+        deleteHeader(bid);
+        
         try {
             while(auth.hasNext())
             {
@@ -204,11 +210,18 @@ public class BoardService {
         String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
 
-        moveFile(dto);
+        
+        if(!dto.getTEMP_IMGS()[0].equals("null"))
+        	moveFile(dto.getTEMP_IMGS());
 
+        System.out.println(dto.getTEMP_IMGS()[0]);
+        System.out.println(dto.getORIGINAL_IMGS()[0]);
+        
         dto.setBID(bid);// 수정할 게시물의 bid를 dto에 담는다
         dto.setWRITER(approach);// 접근 주체의 이름을 dto로 한번에 보내기 위해 WRITER에 저장한다
 
+        
+        
         Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
 
         try {
@@ -285,13 +298,11 @@ public class BoardService {
 
 
 
-
-
-    public void moveFile(BoardDTO dto){
+    public void moveFile(String[] tempImgs){
         String rootPath = context.getRealPath("/resources/");
-        if(dto.getTEMP_IMAGES().length > 0) {
+        if(tempImgs.length > 0) {
             //임시폴더에 저장되어있던 이미지 파일들을 옮긴다
-            for (String name : dto.getTEMP_IMAGES()) {
+            for (String name : tempImgs) {
                 String beforeFilePath = rootPath + "tempFile" + File.separator; //옮길 대상 경로
                 String afterFilePath = rootPath + "uploadImage" + File.separator;//옮겨질 경로
 
@@ -316,7 +327,45 @@ public class BoardService {
     public boolean deleteFiles(int bid) {
         String rootPath = context.getRealPath("/resources/uploadFile/");
         String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getFILE_LIST();
-        String[] fileList = tempList.substring(1, tempList.length() - 1).split(",");
+        String[] fileList = tempList.substring(1, tempList.length() - 1).split(", ");
+        boolean result = true;
+        
+        try {
+            for (String fileName : fileList) {
+            	File deleteFile = new File(rootPath + fileName);
+                if (!deleteFile.delete()) {
+                	result = false;
+                	System.out.println(fileName + ":안지워짐");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return result;
+    }
+
+    public boolean deleteHeader(int bid) {
+        String rootPath = context.getRealPath("/resources/uploadImage/");
+        String temp = sqlSession.getMapper(IDAO.class).getPost_A(bid).getHEADER_IMG();
+
+        try {
+            File deleteFile = new File(rootPath + temp);
+            if (deleteFile.delete())
+                return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;// 삭제가 되지 않으면 false 반환
+    }
+    
+    public boolean deleteImgs(int bid) {
+        String rootPath = context.getRealPath("/resources/uploadImage/");
+        String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getTEMP_IMGS_LIST();
+        String[] fileList = tempList.substring(1, tempList.length() - 1).split(", ");
         File deleteFile = null;
         boolean result = true;
 
@@ -333,20 +382,5 @@ public class BoardService {
 
         return result;
     }
-
-    public boolean deleteHeader(int bid) {
-        String rootPath = context.getRealPath("/resources/uploadFile/");
-        String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getHEADER_IMG();
-
-        try {
-            File deleteFile = new File(rootPath + tempList);
-            if (deleteFile.delete())
-                return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return false;// 삭제가 되지 않으면 false 반환
-    }
+    
 }

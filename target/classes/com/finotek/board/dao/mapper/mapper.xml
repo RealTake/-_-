@@ -6,11 +6,11 @@
 <mapper namespace="com.finotek.board.dao.IDAO">
 
     <update id="modifyPost_A" parameterType="com.finotek.board.dto.BoardDTO">
-		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST}, HEADER_IMG = #{HEADER_IMG} WHERE BID = #{BID}
+		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST}, HEADER_IMG = #{HEADER_IMG}, TEMP_IMGS = #{TEMP_IMGS_LIST} WHERE BID = #{BID}
 	</update>
 
     <update id="modifyPost_U" parameterType="com.finotek.board.dto.BoardDTO">
-		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST}, HEADER_IMG = #{HEADER_IMG} WHERE BID = #{BID} AND WRITER = #{WRITER}
+		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST}, HEADER_IMG = #{HEADER_IMG}, TEMP_IMGS = #{TEMP_IMGS_LIST}  WHERE BID = #{BID} AND WRITER = #{WRITER}
 	</update>
 
     <select id="getPost_A" resultType="com.finotek.board.dto.BoardDTO">
@@ -30,7 +30,7 @@
 	</select>
 
     <insert id="writePost" parameterType="com.finotek.board.dto.BoardDTO">
-		INSERT INTO BOARDS (BID, WRITER, CONTENT, TITLE, WDATE, FILE_LIST, HEADER_IMG) VALUES (BOARD_SEQ.NEXTVAL, #{WRITER}, #{CONTENT}, #{TITLE}, #{WDATE}, #{FILE_LIST}, #{HEADER_IMG})
+		INSERT INTO BOARDS (BID, WRITER, CONTENT, TITLE, WDATE, FILE_LIST, HEADER_IMG, TEMP_IMGS) VALUES (BOARD_SEQ.NEXTVAL, #{WRITER}, #{CONTENT}, #{TITLE}, #{WDATE}, #{FILE_LIST}, #{HEADER_IMG}, #{TEMP_IMGS_LIST})
 	</insert>
 
     <insert id="joinMember" parameterType="com.finotek.board.dto.MemberDTO">

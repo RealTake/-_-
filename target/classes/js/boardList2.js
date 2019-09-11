@@ -114,7 +114,7 @@ function writePost() {
             type: 'post',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             headers: csrf,
-            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMAGES=' + temp_images,
+            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMGS=' + temp_images,
             dataType: 'text',
             success: function () {
                 writeB(false);

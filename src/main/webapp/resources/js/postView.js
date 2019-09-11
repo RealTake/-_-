@@ -19,7 +19,7 @@ function modifyPost(bid) {
             type: 'post',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             headers: csrf,
-            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMAGES=' + temp_images,
+            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMGS=' + temp_images + '&' + 'ORIGINAL_IMGS=' + orginal_images,
             dataType: 'text',
             success: function () {
                 location.reload(true);
@@ -191,12 +191,12 @@ $().ready( function() {
 
     //클릭시 파일을 비운다
     $("#sendFile").click( function() {
-        clearInputFile("fileForm");
+        cleanInputFile("fileForm");
     });
 
     //클릭시 파일을 비운다
     $("#sendHeader").click( function() {
-        clearInputFile("headerForm")
+        cleanInputFile("headerForm")
     });
 
     //파일 업로드시 업로드 파일 이름을 알려줌

@@ -1,17 +1,26 @@
 function replaceOriginUrl(content) {
+	var getOriginalImages = new RegExp('src="' + CONTEXT + '/uploadImage/(.*?)"', 'g');
     var getImages = new RegExp('src="' + CONTEXT + '/temp/(.*?)"', 'g');
     var change = new RegExp('src="' + CONTEXT + '/temp', 'g');
     temp_images = content.match(getImages);
-    for(image in temp_images){
-        temp_images[image] = temp_images[image].substring(11 + CONTEXT.length, temp_images[image].length - 1);
+    orginal_images = content.match(getOriginalImages);
+    
+    for(var image in temp_images){
+    	console.log(temp_images[image]);
+        temp_images[image] = temp_images[image].substring(CONTEXT.length + 6, temp_images[image].length - 1);
     }
+    for(var image in orginal_images){
+    	orginal_images[image] = orginal_images[image].substring(CONTEXT.length + 13, orginal_images[image].length - 1);
+    }
+    
     console.log('임시파일로 저장된 파일들: ' + temp_images);
-
+    console.log('오리지날로 저장된 파일들: ' + orginal_images);
+    
     return content.replace(change, 'src="' + CONTEXT + '/uploadImage');
 }
 
-function clearInputFile(select) {
-    $("form[name=" + select + "]").get(0).reset();
+function cleanInputFile(select) {
+    $("#" + select).get(0).reset();
     switch (select) {
         case "headerForm" :
             header_return = "";

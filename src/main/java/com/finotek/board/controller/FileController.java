@@ -92,7 +92,6 @@ public class FileController {
 		}
 
 		jsonData.put("fileName",fileListDB.toString());
-		System.out.println(jsonData.toString());
 		return jsonData.toString();
 	}
 

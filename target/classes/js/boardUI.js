@@ -116,12 +116,12 @@ $().ready( function() {
 
     //클릭시 파일을 비운다
     $("#sendFile").click( function() {
-        clearInputFile("fileForm");
+        cleanInputFile("fileForm");
     });
 
     //클릭시 파일을 비운다
     $("#sendHeader").click( function() {
-        clearInputFile("headerForm")
+        cleanInputFile("headerForm")
     });
 
     //제목 바이트 확인
