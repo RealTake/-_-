@@ -169,8 +169,9 @@ function movePage(mode) {
 }
 
 function upload_HeaderImg(){
-    if ($("#headerList")[0].files.length > 0) {
-        $("form[name=headerForm]").ajaxForm({
+    var form = $("#headerList");
+    if (form[0].files.length > 0) {
+        form.ajaxForm({
             url: CONTEXT + "/imageUpload.do/header",
             headers: csrf,
             dataType: "json",
@@ -189,15 +190,16 @@ function upload_HeaderImg(){
                 writePost();
             }
         });
-        $("form[name=headerForm]").submit();
+        form.submit();
     }
     else
         writePost();
 }
 
 function uploadFile() {
-    if ($("#fileList")[0].files.length > 0){
-        $("form[name=fileForm]").ajaxForm({
+    var form = $("#fileList");
+    if (form[0].files.length > 0){
+        form.ajaxForm({
             url: CONTEXT + "/fileUpload.do",
             headers: csrf,
             enctype: "multipart/form-data",
@@ -216,7 +218,7 @@ function uploadFile() {
                 upload_HeaderImg();
             }
         });
-        $("form[name=fileForm]").submit();
+        form.submit();
     }
     else
         upload_HeaderImg();
