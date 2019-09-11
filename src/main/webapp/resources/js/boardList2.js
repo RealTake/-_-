@@ -2,10 +2,13 @@ var pageNum = 1;
 var col = ["BID", "WDATE", "TITLE", "WRITER"];
 var header_return = "";
 var file_return = "";
+var temp_images = "";
+
+jQuery.ajaxSettings.traditional = true;
 
 function setPaging() {
     $.ajax({
-        url: './count?content=' + $("#searchContent").val(),
+        url: CONTEXT + '/count?content=' + encodeURIComponent($("#searchContent").val()),
         type: 'get',
         dataType: 'text',
         success: function (response) {
@@ -28,7 +31,7 @@ function getSearchedPost() {
     pageNum = 1;
     pageBox = "";
     $.ajax({
-        url: './searchPost.json/1?content=' + encodeURIComponent($("#searchContent").val()),
+        url: CONTEXT + '/searchPost.json/1?content=' + encodeURIComponent($("#searchContent").val()),
         type: 'get',
         dataType: 'json',
         success: function (response) {
@@ -71,7 +74,7 @@ function searchProcess(response) {
             if(result[i].HEADER_IMG == null || result[i].HEADER_IMG == "")
                 result[i].HEADER_IMG = "https://cdn.pixabay.com/photo/2017/06/09/23/23/background-2388586_960_720.jpg";
             else
-                result[i].HEADER_IMG = ctx + result[i].HEADER_IMG;
+                result[i].HEADER_IMG = CONTEXT + "/uploadImage/" + result[i].HEADER_IMG;
             var draggable = (auth == "ROLE_ADMIN") || (name == result[i].WRITER) ? " dragContent" : "";
             var box = $("<div class='contentBox" + draggable + "' bid='" + result[i].BID + "'></div>");
             var header = $("<img class='header' src='" + result[i].HEADER_IMG + "'/>");
@@ -94,7 +97,8 @@ function searchProcess(response) {
 
 function writePost() {
     var title = $("#TITLE").val();
-    var content = CKEDITOR.instances.editor1.getData();
+    var content = replaceOriginUrl(CKEDITOR.instances.editor1.getData());
+    console.log('서버에 전송될 요소');
     console.log('TITLE=' + title);
     console.log('FILE_LIST=' + file_return);
     console.log('HEADER_IMG=' + header_return);
@@ -106,11 +110,11 @@ function writePost() {
     }
     else{
         $.ajax({
-            url: './writePost',
+            url: CONTEXT + '/writePost',
             type: 'post',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             headers: csrf,
-            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return,
+            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMAGES=' + temp_images,
             dataType: 'text',
             success: function () {
                 writeB(false);
@@ -118,19 +122,19 @@ function writePost() {
             },
             error: function () {
                 alert('등록을 실패하였습니다.');
-            },
+            }
         });
     }
 }
 
 function deletePost(bid) {
     $.ajax({
-        url: './deletePost/' + bid,
+        url: CONTEXT + '/deletePost/' + bid,
         type: 'get',
         dataType: 'json',
         success: function () {
             $.ajax({
-                url: './searchPost.json/' + pageNum + '?' + 'content=' + encodeURIComponent($("#searchContent").val(), true),
+                url: CONTEXT + '/searchPost.json/' + pageNum + '?' + 'content=' + encodeURIComponent($("#searchContent").val(), true),
                 type: 'get',
                 dataType: 'json',
                 success: function (response) {
@@ -146,7 +150,7 @@ function deletePost(bid) {
 
 function getMovedPage(temp) {
     $.ajax({
-        url: './searchPost.json/' + temp + '?' + 'content=' + encodeURIComponent($("#searchContent").val(), true),
+        url: CONTEXT + '/searchPost.json/' + temp + '?' + 'content=' + encodeURIComponent($("#searchContent").val()),
         type: 'get',
         dataType: 'json',
         success: function (response) {
@@ -156,71 +160,71 @@ function getMovedPage(temp) {
 }
 
 function movePage(mode) {
-    var flag = 0;
     if (mode == 'next' && pageNum >= 1) {
-        pageNum++;
-        flag = 1;
+        getMovedPage(++pageNum);
     }
     else if (mode == 'prev' && pageNum > 1) {
-        pageNum--;
-        flag = 1;
-    }
-
-    if(flag == 1){
-       getMovedPage(pageNum);
+        getMovedPage(--pageNum);
     }
 }
 
 function upload_HeaderImg(){
-    $("form[name=headerForm]").ajaxForm({
-        url : "./imageUpload.do",
-        headers : csrf,
-        dataType : "json",
-        error : function(){
-            console.log("업로드 실패");
-        },
-        success : function(responseText){
-            if(responseText.result == null){
-                header_return = responseText.fileName;
-                console.log('업로드 성공');
+    if ($("#headerList")[0].files.length > 0) {
+        $("form[name=headerForm]").ajaxForm({
+            url: CONTEXT + "/imageUpload.do/header",
+            headers: csrf,
+            dataType: "json",
+            error: function () {
+                console.log("헤더 이미지 업로드 실패");
+            },
+            success: function (responseText) {
+                if (responseText.result == null) {
+                    header_return = responseText.fileName;
+                    console.log('헤더업로드 성공');
+                }
+                else
+                    console.log(responseText.result);
+            },
+            complete: function () {
+                writePost();
             }
-            else
-                console.log(responseText.result);
-        },
-        complete : function () {
-            writePost();
-        }
-    });
-    $("form[name=headerForm]").submit();
+        });
+        $("form[name=headerForm]").submit();
+    }
+    else
+        writePost();
 }
 
-function uploadFile(){
-    $("form[name=fileForm]").ajaxForm({
-        url : "./fileUpload.do",
-        headers : csrf,
-        enctype : "multipart/form-data",
-        dataType : "json",
-        error : function(){
-           console.log("업로드 실패");
-        },
-        success : function(responseText){
-            if(responseText.result == null){
-                file_return = responseText.fileName;
-                console.log('업로드 성공');
+function uploadFile() {
+    if ($("#fileList")[0].files.length > 0){
+        $("form[name=fileForm]").ajaxForm({
+            url: CONTEXT + "/fileUpload.do",
+            headers: csrf,
+            enctype: "multipart/form-data",
+            dataType: "json",
+            error: function () {
+                console.log("파일 업로드 실패");
+            },
+            success: function (responseText) {
+                if (responseText.result == null) {
+                    file_return = responseText.fileName;
+                    console.log('파일 업로드 성공');
+                } else
+                    alert(responseText.result);
+            },
+            complete: function () {
+                upload_HeaderImg();
             }
-            else
-                alert(responseText.result);
-        },
-        complete : function () {
-            upload_HeaderImg();
-        }
-    });
-    $("form[name=fileForm]").submit() ;
+        });
+        $("form[name=fileForm]").submit();
+    }
+    else
+        upload_HeaderImg();
 }
 
 function withdrawal() {
     $.ajax({
-        url : "./withdrawal",
+        url : CONTEXT + "/withdrawal",
         type : "post",
         headers: csrf,
         success : function (response) {
@@ -232,3 +236,4 @@ function withdrawal() {
         }
     });
 }
+

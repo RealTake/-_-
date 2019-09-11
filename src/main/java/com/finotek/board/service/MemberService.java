@@ -4,7 +4,6 @@ import com.finotek.board.dao.IDAO;
 import com.finotek.board.dto.MemberDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 

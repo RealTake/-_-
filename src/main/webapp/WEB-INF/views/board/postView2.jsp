@@ -22,12 +22,12 @@
         var csrf = {};
         csrf["${_csrf.headerName}"] = "${_csrf.token}";
         var bid = "${dto.BID}";
-        var ctx = "${pageContext.request.contextPath}";
+        var CONTEXT = "${pageContext.request.contextPath}";
 
         $().ready( function () {
                 CKEDITOR.replace("editor1",{
                     extraPlugins : 'confighelper',
-                    filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
+                    filebrowserImageUploadUrl:'<c:url value="/imageUpload.do/image"/>?${_csrf.parameterName}=${_csrf.token}'
                 });
                 CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
             }
@@ -37,6 +37,7 @@
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
     <script src="<c:url value='/resources/js/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
     <script src="<c:url value='/resources/js/postView.js'/>"></script>
+    <script src="<c:url value='/resources/js/combinFunction.js'/>"></script>
 </head>
 <c:if test="${!possibility}">
     <script>
@@ -72,9 +73,9 @@
                     <a class="nav-link" href="<c:url value='/board'/>">Old Page</a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
+<%--                <li class="nav-item">--%>
+<%--                    <a class="nav-link disabled" href="#">Disabled</a>--%>
+<%--                </li>--%>
             </ul>
         </div>
     </nav>
@@ -114,7 +115,6 @@
 
 </div> <%--컨테이너--%>
 <%--                    보이지 않는 기능                     --%>
-
 <div id="writeTable">
     <div class="top">
         <p>제목:</p>
@@ -127,7 +127,7 @@
         <form name="fileForm" method="post" enctype="multipart/form-data">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <button type="button" class="input-group-text" id="sendFile">Upload</button>
+                    <button type="button" class="input-group-text" id="sendFile" >Clean</button>
                 </div>
                 <div class="custom-file">
                     <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
@@ -139,7 +139,7 @@
         <form name="headerForm" method="post">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <button type="button" class="input-group-text" id="sendHeader">Upload</button>
+                    <button type="button" class="input-group-text" id="sendHeader" >Clean</button>
                 </div>
                 <div class="custom-file">
                     <input class="custom-file-input" type="file" id="headerList" name="upload" accept="image/*">
@@ -156,7 +156,6 @@
         </p>
     </div>
 </div>
-
     <form action="<c:url value="/logout"/>" method="POST" id="logout" style="display: none">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     </form>

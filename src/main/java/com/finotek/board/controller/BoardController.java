@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import com.finotek.board.dto.BoardDTO;
 import com.finotek.board.service.BoardService;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class BoardController {
 
@@ -97,4 +99,5 @@ public class BoardController {
     public int getCount(@RequestParam String content, Authentication authentication){
         return service.getCount_S(content, authentication);
     }
+
 }

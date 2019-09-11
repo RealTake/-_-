@@ -1,19 +1,25 @@
-var header = "";
-var files = "";
+var header_return = "";
+var file_return = "";
+
+jQuery.ajaxSettings.traditional = true;
 
 function modifyPost(bid) {
     var title = $("#TITLE").val();
-    var content = CKEDITOR.instances.editor1.getData();
+    var content = replaceOriginUrl(CKEDITOR.instances.editor1.getData());
+
     if(content.getBytes() > 4000){
         alert('제한된 크기에 내용을 작성해주세요');
     }
+    else if(content.getBytes() <= 0 || title.getBytes() <= 0){
+        alert('입력칸을 채워주세요.');
+    }
     else{
         $.ajax({
-            url: '../modifyPost/' + bid,
+            url: CONTEXT + '/modifyPost/' + bid,
             type: 'post',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             headers: csrf,
-            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + files + '&' + 'HEADER_IMG=' + header,
+            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMAGES=' + temp_images,
             dataType: 'text',
             success: function () {
                 location.reload(true);
@@ -26,50 +32,62 @@ function modifyPost(bid) {
 }
 
 function upload_HeaderImg(){
-    $("form[name=headerForm]").ajaxForm({
-        url : "../imageUpload.do",
-        headers : csrf,
-        dataType : "json",
-        error : function(){
-            alert("업로드 실패");
-        },
-        success : function(responseText){
-            if(responseText.result == null){
-                header = responseText.fileName;
-                alert("업로드 성공");
+    if ($("#headerList")[0].files.length > 0) {
+        $("form[name=headerForm]").ajaxForm({
+            url: CONTEXT + "/imageUpload.do/header",
+            headers: csrf,
+            dataType: "json",
+            error: function () {
+                console.log("헤더 이미지 업로드 실패");
+            },
+            success: function (responseText) {
+                if (responseText.result == null) {
+                    header_return = responseText.fileName;
+                    console.log('헤더업로드 성공');
+                } else
+                    console.log(responseText.result);
+            },
+            complete: function () {
+                modifyPost(bid);
             }
-           else
-               alert(responseText.result);
-        }
-    });
-    $("form[name=headerForm]").submit();
+        });
+        $("form[name=headerForm]").submit();
+    }
+    else
+        modifyPost(bid);
 }
 
 function uploadFile(){
-    $("form[name=fileForm]").ajaxForm({
-        url : "../fileUpload.do",
-        headers : csrf,
-        enctype : "multipart/form-data",
-        dataType : "json",
-        error : function(){
-            alert("업로드 실패") ;
-        },
-        success : function(responseText){
-            if(responseText.result == null){
-                files = responseText.fileName;
-                alert('업로드 성공');
+    if ($("#fileList")[0].files.length > 0){
+        $("form[name=fileForm]").ajaxForm({
+            url: CONTEXT + "/fileUpload.do",
+            headers: csrf,
+            enctype: "multipart/form-data",
+            dataType: "json",
+            error: function () {
+                console.log("파일 업로드 실패");
+            },
+            success: function (responseText) {
+                if (responseText.result == null) {
+                    file_return = responseText.fileName;
+                    console.log('파일 업로드 성공');
+                } else
+                    alert(responseText.result);
+            },
+            complete: function () {
+                upload_HeaderImg();
             }
-            else
-                alert(responseText.result);
-        }
-    });
-    $("form[name=fileForm]").submit();
+        });
+        $("form[name=fileForm]").submit();
+    }
+    else
+        upload_HeaderImg();
 }
 
 
 function deletePost(bid) {
     $.ajax({
-        url: '../deletePost/' + bid,
+        url: CONTEXT + '/deletePost/' + bid,
         type: 'get',
         dataType: 'json',
         success: function () {
@@ -83,7 +101,7 @@ function deletePost(bid) {
 
 function withdrawal() {
     $.ajax({
-        url : "../withdrawal",
+        url : CONTEXT + "/withdrawal",
         type : "post",
         headers: csrf,
         success : function (response) {
@@ -98,7 +116,7 @@ function withdrawal() {
 
 function getPost(bid) {
     $.ajax({
-        url : "../Post/" + bid,
+        url : CONTEXT + "/Post/" + bid,
         type : "get",
         dataType : "json",
         success : function (response) {
@@ -106,13 +124,13 @@ function getPost(bid) {
             CKEDITOR.instances.editor1.setData(response.CONTENT);
             if(response.FILE_LIST != null || response.FILE_LIST != undefined){
                 $("#showFiles")[0].innerHTML = response.FILE_LIST.substring(1 ,response.FILE_LIST.length - 1);
-                files = response.FILE_LIST;
+                file_return = response.FILE_LIST;
             }
             else
                 $("#showFiles")[0].innerHTML = "Choose files";
             if(response.HEADER_IMG != null) {
                 $("#showHeader")[0].innerHTML = response.HEADER_IMG;
-                header = response.HEADER_IMG;
+                header_return = response.HEADER_IMG;
             }
             else
                 $("#showHeader")[0].innerHTML = "Choose header image";
@@ -150,9 +168,13 @@ $().ready( function() {
         $("#writeTable").css("display", "block");// 에디터 활성화
     });
 
+    $("#TITLE").keyup( function() {
+        checkByte("TITLE");
+    });
+
     //게시글 전송시 작성화면 숨김
     $("#send").click( function() {
-        modifyPost(bid);
+        uploadFile();
         $("#writeTable").css("display", "none");
         $(".container-fluid").css("filter", "none");
     });
@@ -163,14 +185,14 @@ $().ready( function() {
         $(".container-fluid").css("filter", "none");
     });
 
-    //클릭시 파일을 서버에 업로드한다.
+    //클릭시 파일을 비운다
     $("#sendFile").click( function() {
-        uploadFile();
+        clearInputFile("fileForm");
     });
 
-    //클릭시 파일을 서버에 업로드한다.
+    //클릭시 파일을 비운다
     $("#sendHeader").click( function() {
-        upload_HeaderImg();
+        clearInputFile("headerForm")
     });
 
     //파일 업로드시 업로드 파일 이름을 알려줌
@@ -205,11 +227,13 @@ $().ready( function() {
                     break;
                 case "png" :
                     break;
+                case "PNG" :
+                    break;
                 case "gif" :
                     break;
                 default :
                     alert("지원하지 않는 파일 형식입니다.\n\n지원되는 형식(jpg, jpeg, png, gif)");
-                    $("form[name=headerForm]").get(0).reset();
+                    $("form[name=headerForm]")[0].reset();
                     valid = true;
                     break;
             }
@@ -221,10 +245,10 @@ $().ready( function() {
                 if ((files.length - 1) == i) {
                     filelist += files[i].name
                 } else {
-                    filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
-                }
+                    f
 
-                console.log(filelist);
+                ilelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+            }     console.log(filelist);
                 $('.custom-file-label')[1].innerHTML = filelist;
             }
         }

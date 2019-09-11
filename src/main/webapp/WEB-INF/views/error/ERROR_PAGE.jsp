@@ -26,8 +26,8 @@
             </div>
 
             <a class="btn btn-outline-info" href="<c:url value="/board2"/>">목록으로 돌아가기</a>
-
             <s:authorize access="hasRole('ROLE_ADMIN')">
+                sdfasd
                 <div id="errorBody">
                     <p>에러 타입: ${requestScope['javax.servlet.error.exception_type']}</p>
                     <p>에러 메세지: ${requestScope['javax.servlet.error.message']}</p>

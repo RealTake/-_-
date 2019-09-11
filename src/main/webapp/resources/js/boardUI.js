@@ -15,6 +15,7 @@ function writeB(mode) {
         $('#fileList').val("");
         file_return = "";
         header_return = "";
+        temp_files = "";
         $('#TITLE').val("");
         $('#writeB').css('display', 'block');
         $('#writeTable').css('display', 'none');
@@ -74,6 +75,8 @@ $().ready( function() {
                     break;
                 case "png" :
                     break;
+                case "PNG" :
+                    break;
                 case "gif" :
                     break;
                 default :
@@ -111,15 +114,20 @@ $().ready( function() {
         getSearchedPost(content);
     });
 
-    // //클릭시 파일을 서버에 업로드한다.
-    // $("#sendFile").click( function() {
-    //     uploadFile();
-    // });
-    //
-    // //클릭시 파일을 서버에 업로드한다.
-    // $("#sendHeader").click( function() {
-    //     upload_HeaderImg();
-    // });
+    //클릭시 파일을 비운다
+    $("#sendFile").click( function() {
+        clearInputFile("fileForm");
+    });
+
+    //클릭시 파일을 비운다
+    $("#sendHeader").click( function() {
+        clearInputFile("headerForm")
+    });
+
+    //카테고리 선택
+    $(".nav-item").click( function () {
+        getSearchedPost2($(this).attr("id"));
+    });
 
     //제목 바이트 확인
     $("#TITLE").keyup( function() {

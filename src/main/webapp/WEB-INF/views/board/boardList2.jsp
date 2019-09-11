@@ -21,24 +21,25 @@
     <script type="text/javascript">
        var csrf = {};
        csrf["${_csrf.headerName}"] = "${_csrf.token}";
-       var ctx = "${pageContext.request.contextPath}" + "/editorImg/";
 
        $().ready( function () {
                CKEDITOR.replace("editor1",{
                    extraPlugins : 'confighelper',
-                   filebrowserImageUploadUrl:'<c:url value="/imageUpload.do"/>?${_csrf.parameterName}=${_csrf.token}'
+                   filebrowserImageUploadUrl:'<c:url value="/imageUpload.do/image"/>?${_csrf.parameterName}=${_csrf.token}'
                });
                CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
            }
        );
        var name = "${pageContext.request.userPrincipal.name}";
        var auth = "${AccountInfo.AUTHORITY}";
+       var CONTEXT = "${pageContext.request.contextPath}";
     </script>
     <script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
     <script src="<c:url value='/resources/js/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
     <script src="<c:url value='/resources/js/boardList2.js'/>"></script> <%-- 기능(Ajax) 함수--%>
     <script src="<c:url value='/resources/js/boardUI.js'/>"></script> <%--유저 인터페이스 컨트롤 함수--%>
+    <script src="<c:url value='/resources/js/combinFunction.js'/>"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -68,9 +69,17 @@
                         <a class="nav-link" href="<c:url value='/board'/>">Old Page</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
+<%--                    <li class="nav-item" id="Community">--%>
+<%--                        <a class="nav-link">Community</a>--%>
+<%--                    </li>--%>
+
+<%--                    <li class="nav-item" id="Tech">--%>
+<%--                        <a class="nav-link">Tech QnA</a>--%>
+<%--                    </li>--%>
+
+<%--                    <li class="nav-item">--%>
+<%--                        <a class="nav-link disabled" href="#">Disabled</a>--%>
+<%--                    </li>--%>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <input id="searchContent" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -111,7 +120,7 @@
             <form name="fileForm" method="post" enctype="multipart/form-data">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <button type="button" class="input-group-text" id="sendFile">Upload</button>
+                        <button type="button" class="input-group-text" id="sendFile">Clean</button>
                     </div>
                     <div class="custom-file">
                         <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
@@ -123,7 +132,7 @@
             <form name="headerForm" method="post">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <button type="button" class="input-group-text" id="sendHeader">Upload</button>
+                        <button type="button" class="input-group-text" id="sendHeader">Clean</button>
                     </div>
                     <div class="custom-file">
                         <input class="custom-file-input" type="file" id="headerList" name="upload" accept="image/*">

@@ -1,5 +1,6 @@
 package com.finotek.board.service;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -16,11 +17,17 @@ import com.finotek.board.dao.IDAO;
 import com.finotek.board.dto.BoardDTO;
 import com.google.gson.Gson;
 
+import javax.servlet.ServletContext;
+
 @Service
 public class BoardService {
 	
 	@Autowired
 	SqlSession sqlSession;	// 마이베티스를 사용하기위한 객체
+    @Autowired
+    ServletContext context;
+
+
 	private Gson gson = new Gson(); // List형식의 반환된 게시글들을 json으로 변환 시킴
 
 	// 게시글들을 검색해주는 매소드
@@ -135,6 +142,8 @@ public class BoardService {
             String auth_S = null;// 사용자의 권한이 저장될 변수
             String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수
 
+            moveFile(dto);
+
             Date date = new Date();// 글이 작성된 시점을 기록한다
             SimpleDateFormat sDate = new SimpleDateFormat("yyyy.MM.dd");
             Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
@@ -194,6 +203,8 @@ public class BoardService {
     public String modifyPost_S(int bid, BoardDTO dto, Authentication authentication) {
         String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
+
+        moveFile(dto);
 
         dto.setBID(bid);// 수정할 게시물의 bid를 dto에 담는다
         dto.setWRITER(approach);// 접근 주체의 이름을 dto로 한번에 보내기 위해 WRITER에 저장한다
@@ -258,7 +269,6 @@ public class BoardService {
         finally { printInfo(new Object(){}.getClass().getEnclosingMethod(), approach, auth_S); }// 실행중인 메소드 정보 호출
     }
 
-
     // 사용자 정보 가져오기
     public MemberDTO getAccountInfo_S(Authentication authentication){
 	    return sqlSession.getMapper(IDAO.class).getAccountInfo(authentication.getName());
@@ -271,5 +281,72 @@ public class BoardService {
         System.out.println("접근주체 권한: " + auth);
         System.out.println("접근주체 이름 : " + name);
         System.out.println();
+    }
+
+
+
+
+
+    public void moveFile(BoardDTO dto){
+        String rootPath = context.getRealPath("/resources/");
+        if(dto.getTEMP_IMAGES().length > 0) {
+            //임시폴더에 저장되어있던 이미지 파일들을 옮긴다
+            for (String name : dto.getTEMP_IMAGES()) {
+                String beforeFilePath = rootPath + "tempFile" + File.separator; //옮길 대상 경로
+                String afterFilePath = rootPath + "uploadImage" + File.separator;//옮겨질 경로
+
+                beforeFilePath += name;
+                afterFilePath += name;
+
+                System.out.println("beforeFilePath: " + beforeFilePath);
+                System.out.println("afterFilePath: " + afterFilePath);
+
+                File oldFile = new File(beforeFilePath.toString());
+
+                if (oldFile.renameTo(new File(afterFilePath.toString())))
+                    System.out.println("임시파일 이동성공");
+                else
+                    System.out.println("임시파일 이동 실패");
+            }
+
+            System.out.println();
+        }
+    }
+
+    public boolean deleteFiles(int bid) {
+        String rootPath = context.getRealPath("/resources/uploadFile/");
+        String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getFILE_LIST();
+        String[] fileList = tempList.substring(1, tempList.length() - 1).split(",");
+        File deleteFile = null;
+        boolean result = true;
+
+        try {
+            for (String fileName : fileList) {
+                deleteFile = new File(rootPath + fileName);
+                if (!deleteFile.delete()) ;
+                result = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return result;
+    }
+
+    public boolean deleteHeader(int bid) {
+        String rootPath = context.getRealPath("/resources/uploadFile/");
+        String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getHEADER_IMG();
+
+        try {
+            File deleteFile = new File(rootPath + tempList);
+            if (deleteFile.delete())
+                return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;// 삭제가 되지 않으면 false 반환
     }
 }
