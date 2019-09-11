@@ -124,7 +124,7 @@
     </div>
     <br>
     <div class="uploads">
-        <form name="fileForm" method="post" enctype="multipart/form-data">
+        <form id="fileForm">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <button type="button" class="input-group-text" id="sendFile" >Clean</button>
@@ -136,7 +136,7 @@
             </div>
         </form>
         <br>
-        <form name="headerForm" method="post">
+        <form id="headerForm">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <button type="button" class="input-group-text" id="sendHeader" >Clean</button>

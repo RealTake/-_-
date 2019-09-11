@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.finotek.board.dao.IDAO">
+
+    <update id="modifyPost_A" parameterType="com.finotek.board.dto.BoardDTO">
+		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST}, HEADER_IMG = #{HEADER_IMG} WHERE BID = #{BID}
+	</update>
+
+    <update id="modifyPost_U" parameterType="com.finotek.board.dto.BoardDTO">
+		UPDATE BOARDS SET TITLE = #{TITLE}, CONTENT = #{CONTENT}, FILE_LIST = #{FILE_LIST}, HEADER_IMG = #{HEADER_IMG} WHERE BID = #{BID} AND WRITER = #{WRITER}
+	</update>
+
+    <select id="getPost_A" resultType="com.finotek.board.dto.BoardDTO">
+		SELECT * FROM BOARDS WHERE BID = #{param1}
+	</select>
+
+    <select id="getPost_U" resultType="com.finotek.board.dto.BoardDTO">
+		SELECT * FROM BOARDS WHERE BID =  #{param1} AND WRITER = #{param2}
+	</select>
+
+    <select id="getSearchPostList_A" resultType="com.finotek.board.dto.BoardDTO" parameterType="map">
+		SELECT * FROM (SELECT rownum as rownumber, BID, TITLE, WRITER, WDATE, HEADER_IMG FROM (SELECT * FROM BOARDS  WHERE (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) ORDER BY BID DESC))  WHERE rownumber >= #{start} AND rownumber &lt;= #{end}
+	</select>
+
+    <select id="getSearchPostList_U" resultType="com.finotek.board.dto.BoardDTO" parameterType="map">
+		SELECT * FROM (SELECT rownum as rownumber, BID, TITLE, WRITER, WDATE, HEADER_IMG FROM (SELECT * FROM BOARDS  WHERE WRITER = #{ID} AND (UPPER(CONTENT) LIKE UPPER('%'|| #{CONTENT} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{CONTENT} ||'%')) ORDER BY BID DESC))  WHERE rownumber >= #{start} AND rownumber &lt;= #{end}
+	</select>
+
+    <insert id="writePost" parameterType="com.finotek.board.dto.BoardDTO">
+		INSERT INTO BOARDS (BID, WRITER, CONTENT, TITLE, WDATE, FILE_LIST, HEADER_IMG) VALUES (BOARD_SEQ.NEXTVAL, #{WRITER}, #{CONTENT}, #{TITLE}, #{WDATE}, #{FILE_LIST}, #{HEADER_IMG})
+	</insert>
+
+    <insert id="joinMember" parameterType="com.finotek.board.dto.MemberDTO">
+		INSERT INTO USERS (ID, PASSWORD, ENABLED, AUTHORITY, EMAIL, JOINDATE, SEX, NAME ) VALUES (#{ID}, #{PASSWORD}, #{ENABLED}, #{AUTHORITY}, #{EMAIL}, #{JOINDATE}, #{SEX}, #{NAME})
+	</insert>
+
+    <select id="checkOverlap" resultType="String">
+		SELECT ID FROM USERS WHERE ID = #{param1}
+	</select>
+
+    <delete id="deletePost_A">
+		DELETE FROM BOARDS WHERE BID = #{param1}
+	</delete>
+
+    <delete id="deletePost_U">
+		DELETE FROM BOARDS WHERE BID = #{param1} AND WRITER = #{param2}
+	</delete>
+
+	<delete id="deleteAccount">
+		DELETE FROM USERS WHERE ID = #{param1}
+	</delete>
+
+	<select id="getAccountInfo" resultType="com.finotek.board.dto.MemberDTO">
+		SELECT * FROM USERS WHERE ID = #{param1}
+	</select>
+
+	<select id="getCount_A" resultType="int">
+		SELECT COUNT(BID) FROM BOARDS WHERE (UPPER(CONTENT) LIKE UPPER('%'|| #{param1} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{param1} ||'%'))
+	</select>
+
+	<select id="getCount_U" resultType="int">
+		SELECT COUNT(BID) FROM BOARDS WHERE WRITER = #{param2} AND (UPPER(CONTENT) LIKE UPPER('%'|| #{param1} ||'%') OR UPPER(TITLE) LIKE UPPER('%'|| #{param1} ||'%'))
+	</select>
+</mapper>
