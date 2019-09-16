@@ -7,10 +7,10 @@ function replaceOriginUrl(content) {
     
     for(var image in temp_images){
     	console.log(temp_images[image]);
-        temp_images[image] = temp_images[image].substring(CONTEXT.length + 6, temp_images[image].length - 1);
+        temp_images[image] = temp_images[image].substring(CONTEXT.length + 11, temp_images[image].length - 1);
     }
     for(var image in orginal_images){
-    	orginal_images[image] = orginal_images[image].substring(CONTEXT.length + 13, orginal_images[image].length - 1);
+    	orginal_images[image] = orginal_images[image].substring(CONTEXT.length + 18, orginal_images[image].length - 1);
     }
     
     console.log('임시파일로 저장된 파일들: ' + temp_images);

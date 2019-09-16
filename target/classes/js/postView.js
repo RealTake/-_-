@@ -19,7 +19,7 @@ function modifyPost(bid) {
             type: 'post',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             headers: csrf,
-            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMGS=' + temp_images + '&' + 'ORIGINAL_IMGS=' + orginal_images,
+            data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMGS=' + temp_images + '&' + 'IMGS=' + orginal_images,
             dataType: 'text',
             success: function () {
                 location.reload(true);

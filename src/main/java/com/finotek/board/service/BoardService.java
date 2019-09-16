@@ -150,7 +150,7 @@ public class BoardService {
             Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
             
             String temp = Arrays.toString(dto.getTEMP_IMGS());
-            dto.setTEMP_IMGS_LIST(temp.substring(1, temp.length() - 1));
+            dto.setIMGS_LIST(temp.substring(1, temp.length() - 1));
             dto.setWRITER(authentication.getName());
             dto.setWDATE(sDate.format(date));
 
@@ -182,6 +182,7 @@ public class BoardService {
 
         deleteFiles(bid);
         deleteHeader(bid);
+        deleteImgs(bid);
         
         try {
             while(auth.hasNext())
@@ -209,17 +210,25 @@ public class BoardService {
     public String modifyPost_S(int bid, BoardDTO dto, Authentication authentication) {
         String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
-
+        String[] temp = dto.getTEMP_IMGS();
+        String[] original = dto.getIMGS();
+        String[] imgs = new String[temp.length + original.length];
         
         if(!dto.getTEMP_IMGS()[0].equals("null"))
         	moveFile(dto.getTEMP_IMGS());
-
-        System.out.println(dto.getTEMP_IMGS()[0]);
-        System.out.println(dto.getORIGINAL_IMGS()[0]);
         
+        if(temp.length < 0 && original.length > 0)
+        	imgs = dto.getIMGS();
+        else if(temp.length > 0 && original.length < 0)
+        	imgs = dto.getTEMP_IMGS();
+        else {
+        	System.arraycopy(temp, 0, imgs, 0, temp.length);
+        	System.arraycopy(original, 0, imgs, original.length, original.length);
+        }
+        
+        dto.setIMGS_LIST(Arrays.toString(imgs));
         dto.setBID(bid);// 수정할 게시물의 bid를 dto에 담는다
         dto.setWRITER(approach);// 접근 주체의 이름을 dto로 한번에 보내기 위해 WRITER에 저장한다
-
         
         
         Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
@@ -325,12 +334,23 @@ public class BoardService {
     }
 
     public boolean deleteFiles(int bid) {
-        String rootPath = context.getRealPath("/resources/uploadFile/");
-        String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getFILE_LIST();
-        String[] fileList = tempList.substring(1, tempList.length() - 1).split(", ");
-        boolean result = true;
-        
+    	boolean result = true;
         try {
+        	String rootPath = context.getRealPath("/resources/uploadFile/");
+            String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getFILE_LIST();
+            if(tempList == null || tempList.equals("null"))
+            	return false;
+            String temp = tempList.substring(1, tempList.length() - 1);
+            String[] tempArray = temp.split(", ");
+            String[] fileList = null;
+            
+            if(tempArray == null) {
+    	        fileList = new String[1];
+    	        fileList[0] = temp;
+            }
+            else
+            	fileList = tempArray;
+        	
             for (String fileName : fileList) {
             	File deleteFile = new File(rootPath + fileName);
                 if (!deleteFile.delete()) {
@@ -347,11 +367,13 @@ public class BoardService {
     }
 
     public boolean deleteHeader(int bid) {
-        String rootPath = context.getRealPath("/resources/uploadImage/");
-        String temp = sqlSession.getMapper(IDAO.class).getPost_A(bid).getHEADER_IMG();
-
         try {
+        	String rootPath = context.getRealPath("/resources/uploadImage/");
+            String temp = sqlSession.getMapper(IDAO.class).getPost_A(bid).getHEADER_IMG();
+            if(temp == null || temp.equals("null"))
+            	return false;
             File deleteFile = new File(rootPath + temp);
+            
             if (deleteFile.delete())
                 return true;
         } catch (Exception e) {
@@ -363,13 +385,23 @@ public class BoardService {
     }
     
     public boolean deleteImgs(int bid) {
-        String rootPath = context.getRealPath("/resources/uploadImage/");
-        String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getTEMP_IMGS_LIST();
-        String[] fileList = tempList.substring(1, tempList.length() - 1).split(", ");
-        File deleteFile = null;
-        boolean result = true;
-
+    	boolean result = true;
         try {
+        	String rootPath = context.getRealPath("/resources/uploadImage/");
+            String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getIMGS_LIST();
+            if(tempList == null || tempList.equals("null"))
+            	return false;
+            String[] tempArray = tempList.split(", ");
+            String[] fileList = null;
+            File deleteFile = null;
+            
+            if(tempArray == null) {
+    	        fileList = new String[1];
+    	        fileList[0] = tempList;
+            }
+            else
+            	fileList = tempArray;
+        	
             for (String fileName : fileList) {
                 deleteFile = new File(rootPath + fileName);
                 if (!deleteFile.delete()) ;
