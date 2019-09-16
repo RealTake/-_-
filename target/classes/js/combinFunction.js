@@ -13,6 +13,18 @@ function replaceOriginUrl(content) {
     	orginal_images[image] = orginal_images[image].substring(CONTEXT.length + 18, orginal_images[image].length - 1);
     }
     
+    console.log("전" + temp_images);
+    if(temp_images == null){
+    	temp_images = "";
+    	console.log("후" + temp_images);
+    }
+    
+    console.log("전" + orginal_images);
+    if(orginal_images == null){
+    	orginal_images = "";
+    	console.log("후" + orginal_images);
+    }
+    
     console.log('임시파일로 저장된 파일들: ' + temp_images);
     console.log('오리지날로 저장된 파일들: ' + orginal_images);
     
