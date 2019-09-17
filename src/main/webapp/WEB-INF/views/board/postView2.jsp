@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="<c:url value='/resources/css/postView.css'/>">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
@@ -82,8 +81,8 @@
 
     <div class="jumbotron text-center">
         <p><h1>${dto.TITLE}</h1></p>
-        <p>Writer: ${dto.WRITER}</p>
-        <p>Date : ${dto.WDATE}</p>
+        <p id="writer">Writer: ${dto.WRITER}</p>
+        <p id="date">Date : ${dto.WDATE}</p>
     </div>
     <div id="postContainer">
         <div class="upDan">
@@ -118,9 +117,9 @@
 <div id="writeTable">
     <div class="top">
         <p>제목:</p>
-        <p><input class="form-control" id="TITLE" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
+        <p><input class="form-control" id="TITLE" placeholder="100byte 제한(한글 3byte, 영어 1byte)" required autofocus></p>
         <p>내용:</p>
-        <textarea name="editor1" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required autofocus></textarea>
+        <textarea name="editor1" placeholder="4000byte 제한(한글 3byte, 영어 1byte)" required autofocus></textarea>
     </div>
     <br>
     <div class="uploads">
@@ -130,7 +129,7 @@
                     <button type="button" class="input-group-text" id="sendFile" >Clean</button>
                 </div>
                 <div class="custom-file">
-                    <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
+                    <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList" data-maxsize = "10" maxlength="5">
                     <label class="custom-file-label" id="showFiles" for="fileList">Choose file</label>
                 </div>
             </div>
@@ -142,7 +141,7 @@
                     <button type="button" class="input-group-text" id="sendHeader" >Clean</button>
                 </div>
                 <div class="custom-file">
-                    <input class="custom-file-input" type="file" id="headerList" name="upload" accept="image/*">
+                    <input class="custom-file-input" type="file" id="headerList" name="upload" accept="image/*" data-maxsize = "5">
                     <label class="custom-file-label" id="showHeader" for="headerList">Choose header image</label>
                 </div>
             </div>

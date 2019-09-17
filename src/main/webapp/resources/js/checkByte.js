@@ -20,9 +20,20 @@ String.prototype.getBytes = function() {
 function checkByte(caller) {
     var dom = document.getElementById(caller);
     var byte = dom.value.getBytes();
-    if(byte > 30){
-        alert('제한된 크기에 제목을 작성해주세요');
-        dom.value = dom.value.substring(0,10);
-        console.log(dom.value.getBytes());
+    var limit = 100;
+    
+    if(byte > limit){
+    	var lastChar = dom.value[dom.value.length -1];
+    	var range = byte - limit;
+    	var cnt = 0;
+    	
+    	alert('제한된 크기에 제목을 작성해주세요');
+    	while(range > 0){
+    		var lastChar = dom.value[dom.value.length - (1 + cnt)];
+    		range -= lastChar.getBytes();
+    		cnt++;
+    	}
+    	
+        dom.value = dom.value.substring(0, dom.value.length - cnt);
     }
 }

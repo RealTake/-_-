@@ -45,3 +45,102 @@ function cleanInputFile(select) {
     }
 
 }
+
+function checkFileValidate(form) {
+	var files = form[0].files;
+	var fileLength = files.length;
+    var fileSize = 0;// 바이트로 가지고 온다
+    var fileMaxLength = parseInt(10, form.attr('maxlength'));
+    var fileMaxSize =  eval(form.attr('data-maxsize')); // 메가바이트로 가지고온다
+    
+    console.log("fileMaxLength: " + fileMaxLength);
+    console.log("fileMaxSize: " + fileMaxSize);
+    
+    for(var i = 0; i < fileLength; i++){
+    	fileSize += files[i].size * 0.001;// 바이트를 킬로 단위로 계산한다
+    }
+    
+    if(fileSize > fileMaxSize * 1024){// 메가바이트를 킬로 바이트로 전환 하여 계산
+    	alert("총 " + Math.round(fileSize) + "KB 입니다. \n" + fileMaxSize + "MB 이하로 맞춰주세요" );
+    	return false;
+    }
+    
+    if(fileMaxLength != null && fileLength > fileMaxLength){
+    	alert("총" + fileLength + "개 입니다. \n" + fileMaxLength + "이하로 맞춰주세요" );
+    	return false;
+    }
+    
+    return true;
+}
+
+$().ready( function() {
+
+	//파일 업로드시 업로드 파일 이름을 알려줌
+	$("#fileList").change(function () {
+	    var files = $(this)[0].files;
+	    var filelist = '';
+	
+	    if(!checkFileValidate($(this))){
+	    	$("#fileForm").get(0).reset();
+	    	return;
+	    }
+	    
+	    for(var i =0; i < files.length; i++){
+	        if((files.length - 1) == i) {
+	            filelist += files[i].name
+	        } else {
+	            filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+	        }
+	    }
+	    console.log(filelist);
+	    $('.custom-file-label')[0].innerHTML = filelist;
+	});
+	
+	//파일 업로드시 업로드 파일 이름을 알려줌
+	$("#headerList").change(function () {
+	    var files = $(this)[0].files;
+	    var filelist = '';
+	    
+	    if(!checkFileValidate($(this))){
+	    	$("#headerForm").get(0).reset();
+	    	return;
+	    }
+	    
+	    for(var i =0; i < files.length; i++){
+	        var temp = files[i].name.split(".");
+	        var valid;
+	
+	        switch (temp[temp.length-1]) {
+	            case "jpg" :
+	                break;
+	            case "jpeg" :
+	                break;
+	            case "png" :
+	                break;
+	            case "PNG" :
+	                break;
+	            case "gif" :
+	                break;
+	            default :
+	                alert("지원하지 않는 파일 형식입니다.\n\n지원되는 형식(jpg, jpeg, png, gif)");
+	                $("form[name=headerForm]").get(0).reset();
+	                valid = true;
+	                break;
+	        }
+	
+	        if(valid)
+	            break;
+	        else {
+	
+	            if ((files.length - 1) == i) {
+	                filelist += files[i].name
+	            } else {
+	                filelist += files[i].name + ',&nbsp;&nbsp;&nbsp;&nbsp;'
+	            }
+	
+	            console.log(filelist);
+	            $('.custom-file-label')[1].innerHTML = filelist;
+	        }
+	    }
+	});
+});

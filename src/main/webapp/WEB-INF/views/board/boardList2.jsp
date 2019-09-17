@@ -111,9 +111,9 @@
     <div id="writeTable" >
         <div class="top">
             <p>제목:</p>
-            <p><input class="form-control" id="TITLE" placeholder="30byte 제한(한글 2byte, 영어 1byte)" required autofocus></p>
+            <p><input class="form-control" id="TITLE" placeholder="100byte 제한(한글 3byte, 영어 1byte)" required autofocus></p>
             <p>내용:</p>
-            <textarea name="editor1" placeholder="4000byte 제한(한글 2byte, 영어 1byte)" required autofocus></textarea>
+            <textarea name="editor1" placeholder="4000byte 제한(한글 3byte, 영어 1byte)" required autofocus></textarea>
         </div>
         <br>
         <div class="uploads">
@@ -123,7 +123,7 @@
                         <button type="button" class="input-group-text" id="sendFile">Clean</button>
                     </div>
                     <div class="custom-file">
-                        <input multiple="multiple" class="custom-file-input" type="file" id="fileList" name="fileList">
+                        <input class="custom-file-input" id="fileList" name="fileList" type="file" multiple="multiple" maxlength="5" data-maxsize = "10">
                         <label class="custom-file-label" id="showFiles" for="fileList">Choose files</label>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                         <button type="button" class="input-group-text" id="sendHeader">Clean</button>
                     </div>
                     <div class="custom-file">
-                        <input class="custom-file-input" type="file" id="headerList" name="upload" accept="image/*">
+                        <input class="custom-file-input" type="file" id="headerList" name="upload" data-maxsize = "5" accept="image/*">
                         <label class="custom-file-label" id="showHeader" for="headerList">Choose header image</label>
                     </div>
                 </div>

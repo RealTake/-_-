@@ -57,6 +57,7 @@ img {
 }
 
 .container-fluid{
+	
     background-color: white;
     background-size: cover;
     background-position: center;
@@ -65,7 +66,7 @@ img {
 }
 
 .jumbotron > h1 {
-    line-height: 250px;
+    line-height: 200px;
     font-size: 63px;
 }
 
@@ -74,6 +75,7 @@ img {
 }
 
 .jumbotron {
+	word-break: keep-all;
     background-image: url("../../resources/image/jumbotron.jpg");
     background-size: cover;
     background-position: center;
@@ -125,6 +127,7 @@ nav {
         padding: 5px;
     }
     .jumbotron {
+    	word-break: break-word;
         background-image: url("../../resources/image/jumbotron.jpg");
         background-size: cover;
         background-position: center;

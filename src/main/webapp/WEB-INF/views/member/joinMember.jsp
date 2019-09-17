@@ -178,7 +178,7 @@
         <tip id="PASSWORDTip">Password: 8-16</tip>
 
         <input name="PASSWORDV" id="PASSWORDV" class="underline" type="password" placeholder="PASSWORD VALID" required autofocus/>
-        <tip id="PWDTip">팁: 비밀번호를 다시 써주세요.</tip>
+        <tip id="PWDTip">팁: 비밀번호를 한번 더 입력해주세요.</tip>
 
         <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
         <button type="submit" id="joinB" disabled>Join</button>
