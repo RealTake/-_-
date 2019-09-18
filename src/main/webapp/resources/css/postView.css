@@ -8,16 +8,21 @@ body {
     margin-top: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 1px black;
+    padding: 10px 0 10px 0;
 }
 
 #postBody{
-    padding: 0px 10px 0px 10px;
+    padding: 10px 10px 10px 10px;
     word-break: break-word;
     max-width: 1412px;
     height: 100%;
     min-height: 400px;
-    margin: 10px auto 10px auto;
-    box-shadow: 0px 0px 1px white;
+    margin: 0px auto 0px auto;
+    b1ox-shadow: 0px 0px 1px white;
+    
+    border-radius: 10px;
+    background-color: #FAFAFA;
+    box-shadow: 0px 0px 5px grey inset;
 }
 
 #fileBody {
@@ -33,6 +38,8 @@ body {
     margin: 0 auto 0 auto;
     display: flex;
     max-width: 1420px;
+    
+    display: none;
 }
 
 .downDan {
@@ -41,6 +48,8 @@ body {
     margin: 0 auto 0 auto;
     display: flex;
     max-width: 1420px;
+    
+    display: none;
 }
 
 .l {
@@ -152,6 +161,9 @@ nav {
         margin-top: 5px;
         border-radius: 5px;
         box-shadow: 0px 0px 1px black;
+        
+        padding: 5px 0 5px 0;
+        
     }
 
     #postBody{
@@ -161,7 +173,7 @@ nav {
         height: 100%;
         min-height: 300px;
         margin: 10px auto 10px auto;
-        box-shadow: 0px 0px 1px white;
+        b1ox-shadow: 0px 0px 1px white;
     }
 
     #tools {

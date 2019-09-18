@@ -61,12 +61,12 @@ function checkFileValidate(form) {
     }
     
     if(fileSize > fileMaxSize * 1024){// 메가바이트를 킬로 바이트로 전환 하여 계산
-    	alert("총 " + Math.round(fileSize) + "KB 입니다. \n" + fileMaxSize + "MB 이하로 맞춰주세요" );
+    	alert("선택하신 파일의 크기는 " + ( (Math.round(fileSize * 0.001) <= 0) ? "1MB 이하입니다. \n" : Math.round(fileSize * 0.001) + "MB입니다. \n") + fileMaxSize + "MB 이하로 첨부해주세요." );
     	return false;
     }
     
     if(fileMaxLength != null && fileLength > fileMaxLength){
-    	alert("총" + fileLength + "개 입니다. \n" + fileMaxLength + "이하로 맞춰주세요" );
+    	alert("총 " + fileLength + "개 입니다. \n" + fileMaxLength + "이하로 맞춰주세요." );
     	return false;
     }
     
@@ -143,4 +143,14 @@ $().ready( function() {
 	        }
 	    }
 	});
+	
+	CKEDITOR.instances.editor1.on('key', function(e) {
+   	    var self = this;
+
+   	    setTimeout(function() {
+   	        $("#byte")[0].innerText = "[" + self.getData().getBytes() + "/4000bytes]";
+   	    }, 10);
+   	});
+	
+	
 });

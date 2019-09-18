@@ -56,7 +56,7 @@
                 }
                 else if ((result == 1) && (length >= 5 && length <= 16)) {
                     validateId = 1;
-                    node.css("borderColor", "#B8B8B8");
+                    node.css("borderColor", "blue");
                     tip.css("color","blue");
                     tip[0].innerText = "You can use.";
                 }

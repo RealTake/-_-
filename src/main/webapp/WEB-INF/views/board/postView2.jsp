@@ -11,7 +11,7 @@
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
     <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
-    <link rel="stylesheet" href="<c:url value='/resources/css/postView.css'/>">
+    <link rel="stylesheet" href="<c:url value='/resources/css/postView.css?v=123'/>">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -79,11 +79,18 @@
         </div>
     </nav>
 
-    <div class="jumbotron text-center">
+	<c:set var="headerImage" value="../uploadImage/${dto.HEADER_IMG}"/>
+
+	<c:if test="${empty dto.HEADER_IMG}">
+    	<c:set var="headerImage" value="../resources/image/jumbotron.jpg"/>
+	</c:if>
+
+    <div class="jumbotron text-center" style=" background-image: url('../uploadImage/${headerImage}');">
         <p><h1>${dto.TITLE}</h1></p>
         <p id="writer">Writer: ${dto.WRITER}</p>
         <p id="date">Date : ${dto.WDATE}</p>
     </div>
+    
     <div id="postContainer">
         <div class="upDan">
             <div class="l">┏</div>
@@ -120,9 +127,11 @@
         <p><input class="form-control" id="TITLE" placeholder="100byte 제한(한글 3byte, 영어 1byte)" required autofocus></p>
         <p>내용:</p>
         <textarea name="editor1" placeholder="4000byte 제한(한글 3byte, 영어 1byte)" required autofocus></textarea>
+        <p id="byte">[0/4000bytes]</p>
     </div>
-    <br>
+
     <div class="uploads">
+    <p>
         <form id="fileForm">
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -134,7 +143,8 @@
                 </div>
             </div>
         </form>
-        <br>
+        </p>
+       <p>
         <form id="headerForm">
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -146,13 +156,11 @@
                 </div>
             </div>
         </form>
+        </p>
     </div>
-    <br>
     <div class="text-center">
-        <p>
             <a id="send" class="btn btn-primary btn-md" style="color: white">제출</a> &nbsp;&nbsp;&nbsp;
             <a id="cancel" class="btn btn-warning btn-md" style="color: white">취소</a>
-        </p>
     </div>
 </div>
     <form action="<c:url value="/logout"/>" method="POST" id="logout" style="display: none">

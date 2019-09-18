@@ -28,7 +28,9 @@
                    filebrowserImageUploadUrl:'<c:url value="/imageUpload.do/image"/>?${_csrf.parameterName}=${_csrf.token}'
                });
                CKEDITOR.addCss('img{max-width: 100%; height: auto !important;}');
+               
            }
+       
        );
        var name = "${pageContext.request.userPrincipal.name}";
        var auth = "${AccountInfo.AUTHORITY}";
@@ -114,9 +116,11 @@
             <p><input class="form-control" id="TITLE" placeholder="100byte 제한(한글 3byte, 영어 1byte)" required autofocus></p>
             <p>내용:</p>
             <textarea name="editor1" placeholder="4000byte 제한(한글 3byte, 영어 1byte)" required autofocus></textarea>
+            <p id="byte">[0/4000bytes]</p>
         </div>
-        <br>
+
         <div class="uploads">
+        <p>
             <form id="fileForm">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -128,7 +132,8 @@
                     </div>
                 </div>
             </form>
-            <br>
+			</p>
+			<p>
             <form id="headerForm">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -140,13 +145,11 @@
                     </div>
                 </div>
             </form>
+            </p>
         </div>
-        <br>
         <div class="text-center">
-            <p>
                 <a id="send" class="btn btn-primary btn-md" style="color: white">제출</a> &nbsp;&nbsp;&nbsp;
                 <a id="cancel" class="btn btn-warning btn-md" style="color: white">취소</a>
-            </p>
         </div>
     </div>
 

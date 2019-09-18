@@ -77,7 +77,7 @@ function searchProcess(response) {
                 result[i].HEADER_IMG = CONTEXT + "/uploadImage/" + result[i].HEADER_IMG;
             var draggable = (auth == "ROLE_ADMIN") || (name == result[i].WRITER) ? " dragContent" : "";
             var box = $("<div class='contentBox" + draggable + "' bid='" + result[i].BID + "'></div>");
-            var header = $("<img class='header' src='" + result[i].HEADER_IMG + "'/>");
+            var header = $("<div class='header'><img src='" + result[i].HEADER_IMG + "'/></div>");
             var body = $("<div class='body'><p>" + result[i].TITLE + "</p></div>");
             var etc = $("<div class='etc'><p class='date'>" + result[i].WDATE + "</p><p class='writer'>" + result[i].WRITER + "</p></div>");
             box.append(header);
@@ -117,6 +117,7 @@ function writePost() {
             data: 'TITLE=' + title + '&' + 'CONTENT=' + content + '&' + 'FILE_LIST=' + file_return + '&' + 'HEADER_IMG=' + header_return + '&' + 'TEMP_IMGS=' + temp_images,
             dataType: 'text',
             success: function () {
+            	$(".container-fluid").css("filter", "none");
                 writeB(false);
                 getSearchedPost();
             },

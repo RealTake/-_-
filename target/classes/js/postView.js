@@ -126,6 +126,7 @@ function getPost(bid) {
         success : function (response) {
             $("#TITLE").val(response.TITLE);
             CKEDITOR.instances.editor1.setData(response.CONTENT);
+            $("#byte")[0].innerText = "[" + CKEDITOR.instances.editor1.getData().getBytes() + "/4000bytes]"; // 수정모드의 경우 기존 게시물 내용에 대한 바이트도 가져와야하기 때문
             if(response.FILE_LIST != null || response.FILE_LIST != undefined){
                 $("#showFiles")[0].innerHTML = response.FILE_LIST.substring(1 ,response.FILE_LIST.length - 1);
                 file_return = response.FILE_LIST;
@@ -147,8 +148,6 @@ function getPost(bid) {
 }
 
 $().ready( function() {
-
-    //getPost(bid);
 
     //게시글 삭제
     $("button[name=delB]").click(function () {
@@ -179,8 +178,6 @@ $().ready( function() {
     //게시글 전송시 작성화면 숨김
     $("#send").click( function() {
         uploadFile();
-        $("#writeTable").css("display", "none");
-        $(".container-fluid").css("filter", "none");
     });
 
     //글 작성 취소시 에디터 초기화 및 숨김

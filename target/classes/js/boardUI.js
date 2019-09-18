@@ -73,7 +73,6 @@ $().ready( function() {
     //게시글 전송시 작성화면 숨김
     $("#send").click( function() {
         uploadFile();
-        $(".container-fluid").css("filter", "none");
     });
 
     //글 작성 취소시 에디터 초기화 및 숨김
@@ -107,8 +106,9 @@ $().ready( function() {
     $("#dropB").click( function (){
         withdrawal();
     });
-
+    
 });
+
 
 //Dom로드후 만들어진 삭제 버튼 요소에대한 클릭 이벤트를 가능하게한다.
 $(document).on("click","button[name=delB]",function() {
@@ -126,11 +126,13 @@ $(document).on("click",".contentBox",function() {
 $( document ).on("dragstart",".dragContent",function(e){
     $(".deleteBox").css("display", "block");
     temp_bid = $(this).attr("bid");
+    $(this).css("z-index", "999");
 });
 
 //게시글 목록중 드레그 멈추면
 $( document ).on("dragstop",".dragContent",function(){
     $(".deleteBox").css("display", "none");
+    $(this).css("z-index", "500");
 });
 
 //페이지 이동
