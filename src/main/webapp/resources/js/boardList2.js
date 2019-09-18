@@ -81,8 +81,8 @@ function searchProcess(response) {
             var body = $("<div class='body'><p>" + result[i].TITLE + "</p></div>");
             var etc = $("<div class='etc'><p class='date'>" + result[i].WDATE + "</p><p class='writer'>" + result[i].WRITER + "</p></div>");
             box.append(header);
-            body.append(etc);
             box.append(body);
+            box.append(etc);
 
             $(".contentBody").append(box);
             $(".dragContent").draggable({revert:true });

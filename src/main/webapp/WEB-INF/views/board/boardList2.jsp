@@ -102,7 +102,7 @@
         <ul class="pagination justify-content-center"></ul>
 
         <div class="deleteBox">
-            <h1 class="text-center" style="margin-top: 100px;">Delete Here!</h1>
+            <h1 class="text-center">Delete Here!</h1>
         </div>
         <button id="writeB" class="btn btn-dark">글쓰기</button>
         <button id="prev">prev</button>

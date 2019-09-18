@@ -75,12 +75,12 @@ img {
 }
 
 .jumbotron {
-	word-break: keep-all;
+	word-break: break-word;
     background-image: url("../../resources/image/jumbotron.jpg");
     background-size: cover;
     background-position: center;
     font-family: "Helvetica Neue";
-    height: 500px;
+    height: 20%;
     color: white;
     margin-bottom: 0px;
 }
