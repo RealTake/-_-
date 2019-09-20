@@ -227,18 +227,4 @@ function uploadFile() {
         upload_HeaderImg();
 }
 
-function withdrawal() {
-    $.ajax({
-        url : CONTEXT + "/withdrawal",
-        type : "post",
-        headers: csrf,
-        success : function (response) {
-            if(response == 1)
-                $("#logout").submit();
-        },
-        error : function () {
-            alert("탈퇴 오류");
-        }
-    });
-}
 

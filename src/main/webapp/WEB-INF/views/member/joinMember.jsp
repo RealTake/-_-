@@ -15,14 +15,17 @@
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+    <script src="<c:url value="/resources/js/atoh.js"/>"></script>
     <script>
         var validateId = 0;
         var validatePwd = 0;
         var validateName = 0;
         var validatePwdv = 0;
         var validateEmail = 0;
+        var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; // 한글체크
 
         $().ready(function () {
+        	
             function checkID() {
                 var id = encodeURIComponent($("#ID").val(), true);
                 $.ajax({
@@ -42,7 +45,13 @@
                 var tip = $("#IDTip");
                 var length = node.val().length;
 
-                if (length < 5 || length > 16) {
+                if(pattern_kor.test(node.val())){
+                	validateId = 0;
+        			node.css("borderColor", "red");
+        			tip.css("color","red");
+        			tip[0].innerText = "영문, 숫자, 특수기호만 사용 가능합니다.";
+        		}
+                else if (length < 5 || length > 16) {
                     validateId = 0;
                     node.css("borderColor", "red");
                     tip.css("color","red");
@@ -60,6 +69,7 @@
                     tip.css("color","blue");
                     tip[0].innerText = "You can use.";
                 }
+                checkFinalForm
             }
 
             function isPwdMatch() {
@@ -89,7 +99,13 @@
                 var tip = $('#' + check + "Tip");
                 var length = node.val().length;
 
-                if(length < s || length > m){
+                if(pattern_kor.test(node.val()) & check != "NAME"){
+                	validates(check, 0);
+        			node.css("borderColor", "red");
+        			tip[0].innerText = "영문, 숫자, 특수기호만 사용 가능합니다.";
+        			tip.css("color","red");
+        		}
+                else if(length < s || length > m){
                     validates(check, 0);
                     node.css("borderColor", "red");
                     tip.css("color", "red");
@@ -113,17 +129,19 @@
                 switch (check) {
                     case 'PASSWORD' :
                         validatePwd = value;
+                        $("#" + check + "Tip")[0].innerText = "Password: 8-16"
                         break;
                     case 'NAME' :
                         validateName = value;
                         break;
                     case 'EMAIL' :
                         validateEmail = value;
+                        $("#" + check + "Tip")[0].innerText = "Email: 일부 이메일은 지원이 안될수도있습니다."
                         break;
                 }
 
             }
-
+            	
             $("#NAME").keyup(function () {
                 checkValidate(1, 10, $(this).attr("id"));
             });
@@ -168,16 +186,16 @@
         <input name="NAME" id="NAME" class="underline" type="text" placeholder="NAME" required autofocus/>
         <tip id="NAMETip">Name: 1-10</tip>
 
-        <input name="EMAIL" id="EMAIL" class="underline" type="email" placeholder="EMAIL" required autofocus/>
+        <input name="EMAIL" id="EMAIL" class="underline noen" type="email" placeholder="EMAIL" required autofocus/>
         <tip id="EMAILTip">Email: 일부 이메일은 지원이 안될수도있습니다.</tip>
 
-        <input name="ID" id="ID" class="underline" type="text" placeholder="ID" required autofocus/>
+        <input name="ID" id="ID" class="underline noen" type="text" placeholder="ID" required autofocus/>
         <tip id="IDTip">Id: 5-16</tip>
 
-        <input name="PASSWORD" id="PASSWORD" class="underline" type="password" placeholder="PASSWORD" required autofocus/>
+        <input name="PASSWORD" id="PASSWORD" class="underline noen" type="password" placeholder="PASSWORD" required autofocus/>
         <tip id="PASSWORDTip">Password: 8-16</tip>
 
-        <input name="PASSWORDV" id="PASSWORDV" class="underline" type="password" placeholder="PASSWORD VALID" required autofocus/>
+        <input name="PASSWORDV" id="PASSWORDV" class="underline noen" type="password" placeholder="PASSWORD VALID" required autofocus/>
         <tip id="PWDTip">팁: 비밀번호를 한번 더 입력해주세요.</tip>
 
         <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >

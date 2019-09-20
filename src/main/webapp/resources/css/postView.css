@@ -125,6 +125,9 @@ nav {
     margin-bottom: 20px;
 }
 
+.custom-file-label {
+	overflow: hidden;
+}
 
 @media screen and ( max-width: 900px) {
 

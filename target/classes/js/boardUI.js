@@ -101,11 +101,6 @@ $().ready( function() {
     $("#logoutB").click( function (){
         $("#logout").submit();
     });
-
-    //회원 탈퇴
-    $("#dropB").click( function (){
-        withdrawal();
-    });
     
 });
 

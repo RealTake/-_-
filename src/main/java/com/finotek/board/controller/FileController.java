@@ -105,6 +105,9 @@ public class FileController {
 		//전체 경로를 인자로 넣어 파일 객체를 생성
 		File downFile = new File(savePath + Fname);
 
+		if(!downFile.exists())
+			return new ModelAndView("redirect:/");
+		
 		return new ModelAndView("downloadView", "downloadFile", downFile);
 	}
 

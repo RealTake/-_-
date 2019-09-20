@@ -73,8 +73,29 @@ function checkFileValidate(form) {
     return true;
 }
 
+function withdrawal() {
+    $.ajax({
+        url : CONTEXT + "/withdrawal",
+        type : "post",
+        headers: csrf,
+        success : function (response) {
+            if(response == 1)
+                $("#logout").submit();
+        },
+        error : function () {
+            alert("탈퇴 오류");
+        }
+    });
+}
+
 $().ready( function() {
 
+	 //회원 탈퇴
+    $("#dropB").click( function (){
+    	if(confirm('정말로 회원탈퇴를 하시겠습니까?'))
+    		withdrawal();
+    });
+	
 	//파일 업로드시 업로드 파일 이름을 알려줌
 	$("#fileList").change(function () {
 	    var files = $(this)[0].files;

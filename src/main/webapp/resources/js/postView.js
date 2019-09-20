@@ -103,21 +103,6 @@ function deletePost(bid) {
     });
 }
 
-function withdrawal() {
-    $.ajax({
-        url : CONTEXT + "/withdrawal",
-        type : "post",
-        headers: csrf,
-        success : function (response) {
-            if(response == 1)
-                $("#logout").submit();
-        },
-        error : function () {
-            alert("탈퇴 오류");
-        }
-    });
-}
-
 function getPost(bid) {
     $.ajax({
         url : CONTEXT + "/Post/" + bid,
@@ -157,11 +142,6 @@ $().ready( function() {
     //로그아웃 버튼
     $("#logoutB").click(function () {
         $("#logout").submit();
-    });
-
-    //회원 탈퇴
-    $("#dropB").click( function (){
-        withdrawal();
     });
 
     //수정 버튼 클릭시
