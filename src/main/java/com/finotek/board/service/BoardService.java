@@ -162,7 +162,18 @@ public class BoardService {
             dto.setIMGS_LIST(temp.substring(1, temp.length() - 1));
             dto.setWRITER(authentication.getName());
             dto.setWDATE(sDate.format(date));
-
+            String content = dto.getCONTENT();
+            int cnt = 0;
+            System.out.println(content);
+            while((content.contains("</script>") || content.contains("<script>")) && cnt < 8) {
+            	content = content.replaceAll("<script>", "");
+            	content = content.replaceAll("</script>", "");
+            	System.out.println("실행");
+            	cnt++;
+            }
+            
+            dto.setCONTENT(content);
+            
             try {
                 while (auth.hasNext()) {
                     auth_S = auth.next().getAuthority();
