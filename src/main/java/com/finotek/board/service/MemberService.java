@@ -27,13 +27,13 @@ public class MemberService {
         int ID_L = dto.getID().length();
         int PASSWORD_L = dto.getPASSWORD().length();
 
-        if((NAME_L < 1 || NAME_L > 10) || (ID_L < 5 || ID_L > 16) || (PASSWORD_L < 8 || PASSWORD_L > 16))
+        if((NAME_L < 1 || NAME_L > 10) || (ID_L < 5 || ID_L > 16) || (PASSWORD_L < 8 || PASSWORD_L > 16)) // 회원가입이 규격에 맞게 적혔는지 확인한다.
             return "0";
 
         dto.setJOINDATE(sDate.format(date)); // 가입날짜 등록
-        dto.setENABLED(1); //활성화 여부는 기본값으로 활성화 값을 준다.
-        dto.setAUTHORITY("ROLE_USER");
-        dto.setSEX('n');
+        dto.setENABLED(1); 					 // 활성화 여부는 기본값으로 활성화 값을 준다.
+        dto.setAUTHORITY("ROLE_USER");		 // 일반사용자의 권한으로 권한을 설정한다
+        dto.setSEX('n');					 // 성별은 지금 사용하지 않으므로 n으로 설정
 
         try {
             sqlSession.getMapper(IDAO.class).joinMember(dto);

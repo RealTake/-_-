@@ -110,7 +110,7 @@
     }
 
     .jumbotron {
-        background-image: url("../../resources/image/jumbotron.jpg");
+        background-image: url("../../../resources/image/jumbotron.jpg");
         background-size: cover;
         background-position: center;
         font-family: "Helvetica Neue";
@@ -224,7 +224,7 @@
         }
 
         .jumbotron {
-            background-image: url("../../resources/image/jumbotron.jpg");
+            background-image: url("../../../resources/image/jumbotron.jpg");
             background-size: cover;
             background-position: center;
             font-family: "Helvetica Neue";

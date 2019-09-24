@@ -11,11 +11,11 @@
 
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
-    <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
-    <link rel="stylesheet" type="text/css" href="./resources/css/login.css">
+    <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap/bootstrap.css'/>">
+    <link rel="stylesheet" type="text/css" href="./resources/css/page/login.css">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
+    <script src="<c:url value='/resources/js/bootstrap/bootstrap.js'/>"></script>
 
 <s:authorize access="isAuthenticated()">
 	 <c:redirect url="/"/>

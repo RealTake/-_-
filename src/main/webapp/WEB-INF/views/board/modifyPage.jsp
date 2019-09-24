@@ -9,13 +9,13 @@
 			<meta name="viewport" content="width=device-width, user-scalable=no">
 
 			<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
-			<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
+			<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap/bootstrap.css'/>">
 
 			<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 			<script src="http://malsup.github.io/min/jquery.form.min.js"></script>
-			<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
+			<script src="<c:url value='/resources/js/bootstrap/bootstrap.js'/>"></script>
 			<script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
-			<script src="<c:url value='/resources/js/checkByte.js'/>"></script>
+			<script src="<c:url value='/resources/js/lib/checkByte.js'/>"></script>
 			<script type="text/javascript">
 				function modifyPost(bid) {
 					var title = $("#TITLE").val();

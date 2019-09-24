@@ -10,8 +10,8 @@
 
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
-    <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
-    <link rel="stylesheet" href="<c:url value='/resources/css/postView.css?v=123'/>">
+    <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap/bootstrap.css'/>">
+    <link rel="stylesheet" href="<c:url value='/resources/css/page/postView.css?v=123'/>">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -32,11 +32,11 @@
             }
         );
     </script>
-    <script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
+    <script src="<c:url value='/resources/js/bootstrap/bootstrap.min.js'/>"></script>
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
-    <script src="<c:url value='/resources/js/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
-    <script src="<c:url value='/resources/js/postView.js'/>"></script>
-    <script src="<c:url value='/resources/js/combinFunction.js'/>"></script>
+    <script src="<c:url value='/resources/js/lib/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
+    <script src="<c:url value='/resources/js/page/postView.js'/>"></script>
+    <script src="<c:url value='/resources/js/page/combinFunction.js'/>"></script>
 </head>
 <c:if test="${!possibility}">
     <script>
@@ -72,9 +72,11 @@
                     <a class="nav-link" href="<c:url value='/board'/>">Old Page</a>
                 </li>
 
-<%--                <li class="nav-item">--%>
-<%--                    <a class="nav-link disabled" href="#">Disabled</a>--%>
-<%--                </li>--%>
+				<s:authorize access="hasRole('ROLE_ADMIN')">
+	                <li class="nav-item">
+	                   <a class="nav-link" href="#">[Admin activate]</a>
+	                </li>
+                </s:authorize>
             </ul>
         </div>
     </nav>

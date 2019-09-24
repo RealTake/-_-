@@ -10,9 +10,9 @@
 
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
-    <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
-    <link rel="stylesheet" href="<c:url value='/resources/css/main.css'/>">
-    <link rel="stylesheet" href="<c:url value='/resources/css/arrow.css'/>">
+    <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap/bootstrap.css'/>">
+    <link rel="stylesheet" href="<c:url value='/resources/css/page/main.css'/>">
+    <link rel="stylesheet" href="<c:url value='/resources/css/etc/arrow.css'/>">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -36,12 +36,12 @@
        var auth = "${AccountInfo.AUTHORITY}";
        var CONTEXT = "${pageContext.request.contextPath}";
     </script>
-    <script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
+    <script src="<c:url value='/resources/js/bootstrap/bootstrap.min.js'/>"></script>
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script>
-    <script src="<c:url value='/resources/js/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
-    <script src="<c:url value='/resources/js/boardList2.js'/>"></script> <%-- 기능(Ajax) 함수--%>
-    <script src="<c:url value='/resources/js/boardUI.js'/>"></script> <%--유저 인터페이스 컨트롤 함수--%>
-    <script src="<c:url value='/resources/js/combinFunction.js'/>"></script>
+    <script src="<c:url value='/resources/js/lib/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
+    <script src="<c:url value='/resources/js/page/boardList2.js'/>"></script> <%-- 기능(Ajax) 함수--%>
+    <script src="<c:url value='/resources/js/page/boardList2UI.js'/>"></script> <%--유저 인터페이스 컨트롤 함수--%>
+    <script src="<c:url value='/resources/js/page/combinFunction.js'/>"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -79,9 +79,11 @@
 <%--                        <a class="nav-link">Tech QnA</a>--%>
 <%--                    </li>--%>
 
-<%--                    <li class="nav-item">--%>
-<%--                        <a class="nav-link disabled" href="#">Disabled</a>--%>
-<%--                    </li>--%>
+					<s:authorize access="hasRole('ROLE_ADMIN')">
+	                    <li class="nav-item">
+	                       <a class="nav-link" href="#">[Admin activate]</a>
+	                    </li>
+                    </s:authorize>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <input id="searchContent" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

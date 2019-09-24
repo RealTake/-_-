@@ -5,12 +5,12 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.css'/>">
+	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap/bootstrap.css'/>">
 	<link rel="shortcut icon" href="<c:url value="/resources/ui-ux-logo.ico"/>">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="<c:url value='/resources/js/bootstrap.js'/>"></script>
+	<script src="<c:url value='/resources/js/bootstrap/bootstrap.js'/>"></script>
 	<script>
         function deletePost(bid) {
             $.ajax({

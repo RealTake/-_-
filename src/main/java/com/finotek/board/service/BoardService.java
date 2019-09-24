@@ -46,8 +46,8 @@ public class BoardService {
 	    String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
         Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator(); // 로그인된 사용자의 권한목록들을 직렬화함
-
-        Map<String, String> param = new HashMap<String, String>();
+        
+        Map<String, String> param = new HashMap<String, String>();// 검색요소를 전달할 vo
         param.put("ID",authentication.getName());
         param.put("CONTENT", content);
         param.put("start", String.valueOf(start));
@@ -79,7 +79,8 @@ public class BoardService {
 	public void getPost_S(int bid, Model model, Authentication authentication) {
 	    String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
-
+        BoardDTO dto = null;
+        
 		Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
 
         try {
@@ -89,27 +90,27 @@ public class BoardService {
 
                 if(auth_S.equals("ROLE_USER")) {
                     IDAO dao = sqlSession.getMapper(IDAO.class);
-                    BoardDTO dto = dao.getPost_A(bid);
+                    dto = dao.getPost_A(bid);
                     dto.setBID(bid);
                     String list = dto.getFILE_LIST();
                     if(list != null) {
-                        dto.setFILE_ARRAY(list.substring(1, list.length() - 1).split(", "));
+                        dto.setFILE_ARRAY(list.substring(1, list.length() - 1).split(", "));// 파일 목록들을 리스트객체로 변환
                     }
-                    model.addAttribute("dto", dto);
-                    model.addAttribute("possibility", true);
                 }
                 else if(auth_S.equals("ROLE_ADMIN")) {
                     IDAO dao = sqlSession.getMapper(IDAO.class);
-                    BoardDTO dto = dao.getPost_A(bid);
+                    dto = dao.getPost_A(bid);
                     dto.setBID(bid);
                     String list = dto.getFILE_LIST();
                     if(list != null) {
-                        dto.setFILE_ARRAY(list.substring(1, list.length() - 1).split(", "));
+                        dto.setFILE_ARRAY(list.substring(1, list.length() - 1).split(", "));// 파일 목록들을 리스트객체로 변환
                     }
-                    model.addAttribute("dto", dto);
-                    model.addAttribute("possibility", true);
+                    
                 }
             }
+            
+            model.addAttribute("dto", dto);
+            model.addAttribute("possibility", true);
         }
         catch (Exception e) { e.printStackTrace(); model.addAttribute("possibility", false);}
         finally { printInfo(new Object(){}.getClass().getEnclosingMethod(), approach, auth_S); }// 실행중인 메소드 정보 호출
@@ -151,7 +152,7 @@ public class BoardService {
             String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수
 
             
-            if(dto.getTEMP_IMGS() != null)
+            if(dto.getTEMP_IMGS() != null)// 업로드된 파일이 있으면 기본 폴더로 파일들을 옮긴다.
             	moveFile(dto.getTEMP_IMGS());
 
             Date date = new Date();// 글이 작성된 시점을 기록한다
@@ -163,8 +164,11 @@ public class BoardService {
             dto.setWRITER(authentication.getName());
             dto.setWDATE(sDate.format(date));
             String content = dto.getCONTENT();
+            
             int cnt = 0;
             System.out.println(content);
+            
+            //임시 xss 필터
             while((content.contains("</script>") || content.contains("<script>")) && cnt < 8) {
             	content = content.replaceAll("<script>", "");
             	content = content.replaceAll("</script>", "");
@@ -242,14 +246,16 @@ public class BoardService {
 //        System.out.println("size : " + original.length);
 //        System.out.println("data[0] : " + original[0]);
         
-        if(oldImgs != null)// 불필요한 이미지 파일들을 삭제한다.
-        	deleteImgs(oldImgs.split(","), original);
+        if(oldImgs != null) {
+        	deleteImgs(oldImgs.split(","), original);// 불필요한 이미지 파일들을 삭제한다.
+        	
+        	if(!oldFile.equals(dto.getFILE_LIST()))// 업로드한 파일이 기존 내용과 다르면 기존 파일 삭제
+            	deleteFiles(bid);
+            
+            if(!oldHeader.equals(dto.getHEADER_IMG()))// 업로드한 헤더 이미지가 기존 내용과 다르면 기존 헤더이미지 삭제
+            	deleteHeader(bid);
+        }
         
-        if(oldFile != null && !oldFile.equals(dto.getFILE_LIST()))// 업로드한 파일이 기존 내용과 다르면 기존 파일 삭제
-        	deleteFiles(bid);
-        
-        if(oldHeader != null && !oldHeader.equals(dto.getHEADER_IMG()))// 업로드한 헤더 이미지가 기존 내용과 다르면 기존 헤더이미지 삭제
-        	deleteHeader(bid);
         
         if(temp.length > 0)
         	moveFile(dto.getTEMP_IMGS());
@@ -325,7 +331,7 @@ public class BoardService {
             quotient = board_count/10;
             remainder = board_count%10;
 
-            if(remainder > 0)
+            if(remainder > 0)// 나머지가 있을경우 페이지수를 1 추가한다.
                 return quotient+1;
             else
                 return quotient;
@@ -341,24 +347,14 @@ public class BoardService {
 	    return sqlSession.getMapper(IDAO.class).getAccountInfo(authentication.getName());
     }
 
-    // 서비스 메소드 정보 호출
-    public void printInfo(Method nowmethod, String name, String auth)
-    {
-        System.out.println("정보1: " + nowmethod.getName());
-        System.out.println("접근주체 권한: " + auth);
-        System.out.println("접근주체 이름 : " + name);
-        System.out.println();
-    }
-
-
-
+    // 임시폴더에 있던 파일들을 옮긴다.
     public void moveFile(String[] tempImgs){
         String rootPath = context.getRealPath("/resources/");
         if(tempImgs.length > 0) {
             //임시폴더에 저장되어있던 이미지 파일들을 옮긴다
             for (String name : tempImgs) {
                 String beforeFilePath = rootPath + "tempFile" + File.separator; //옮길 대상 경로
-                String afterFilePath = rootPath + "uploadImage" + File.separator;//옮겨질 경로
+                String afterFilePath = rootPath + "uploadImage" + File.separator;//옮겨질 곳의 경로
 
                 beforeFilePath += name;
                 afterFilePath += name;
@@ -366,9 +362,9 @@ public class BoardService {
                 System.out.println("beforeFilePath: " + beforeFilePath);
                 System.out.println("afterFilePath: " + afterFilePath);
 
-                File oldFile = new File(beforeFilePath.toString());
+                File oldFile = new File(beforeFilePath.toString());// 임시폴더에있던 파일
 
-                if (oldFile.renameTo(new File(afterFilePath.toString())))
+                if (oldFile.renameTo(new File(afterFilePath.toString())))// 임시폴더에있던 파일을 게시물 폴더로 이동시킨다.
                     System.out.println("임시파일 이동성공");
                 else
                     System.out.println("임시파일 이동 실패");
@@ -378,6 +374,7 @@ public class BoardService {
         }
     }
 
+    // 게시물 삭제시 저장된 첨부 파일들을 삭제
     public boolean deleteFiles(int bid) {
     	boolean result = true;
         try {
@@ -411,9 +408,10 @@ public class BoardService {
         return result;
     }
 
+    // 헤더이미지 삭제
     public boolean deleteHeader(int bid) {
         try {
-        	String rootPath = context.getRealPath("/resources/uploadImage/");
+        	String rootPath = context.getRealPath("/resources/uploadImage/");// 대상 경로
             String temp = sqlSession.getMapper(IDAO.class).getPost_A(bid).getHEADER_IMG();
             if(temp == null || temp.equals("null"))
             	return false;
@@ -429,10 +427,11 @@ public class BoardService {
         return false;// 삭제가 되지 않으면 false 반환
     }
     
+    // 게시글 삭제시 사용된 모든 이미지를 지움
     public boolean deleteImgs(int bid) {
     	boolean result = true;
         try {
-        	String rootPath = context.getRealPath("/resources/uploadImage/");
+        	String rootPath = context.getRealPath("/resources/uploadImage/");// 대상 경로
             String tempList = sqlSession.getMapper(IDAO.class).getPost_A(bid).getIMGS_LIST();
             if(tempList == null || tempList.equals("null"))
             	return false;
@@ -460,15 +459,16 @@ public class BoardService {
         return result;
     }
     
+    // 게시글 수정시 불필요해진 이미지 삭제 메소드
     public boolean deleteImgs(String[] unchaneIMGS, String[] chaneIMGS) {
-    	String rootPath = context.getRealPath("/resources/uploadImage/");
+    	String rootPath = context.getRealPath("/resources/uploadImage/");// 대상 경로
     	List temp = ListUtils.subtract(Arrays.asList(unchaneIMGS), Arrays.asList(chaneIMGS));
-    	Object[] deletFiles = temp.toArray();
-    	System.out.println("삭제할 목록: " + Arrays.toString(deletFiles));
+    	Object[] deleteFiles = temp.toArray();
+    	System.out.println("삭제할 목록: " + Arrays.toString(deleteFiles));
     	File deleteFile = null;
     	boolean result = true;
 
-    	for(Object fileName : deletFiles) {
+    	for(Object fileName : deleteFiles) {
     		deleteFile = new File(rootPath + (String)fileName);
             if (!deleteFile.delete()) {
             	System.out.println(fileName + " 삭제 실패");
@@ -478,4 +478,15 @@ public class BoardService {
     	
     	return result;
     }
+    
+    
+    // 서비스 메소드 정보 호출
+    public void printInfo(Method nowmethod, String name, String auth)
+    {
+        System.out.println("정보1: " + nowmethod.getName());
+        System.out.println("접근주체 권한: " + auth);
+        System.out.println("접근주체 이름 : " + name);
+        System.out.println();
+    }
+    
 }
