@@ -15,11 +15,11 @@ public class MemberController {
     public MemberService service; 	// MemberService 객체 바인딩
 
     //가입 페이지
-    @RequestMapping("/joinMember")
+    @GetMapping("/joinMember")
     public String joinPage() { return "member/joinMember"; }
 
     //가입 서비스
-    @RequestMapping(value = "/join", method = RequestMethod.POST)
+    @PostMapping("/join")
     public String joinMember(MemberDTO dto) { service.joinMember_S(dto); return "redirect:/Login"; }
 
     //중복검사
@@ -35,6 +35,7 @@ public class MemberController {
         return service.deleteAccount_S(authentication);
     }
 
+    //로그인 페이지
     @RequestMapping("/Login")
     public String loginPage() {
         return "member/loginForm";

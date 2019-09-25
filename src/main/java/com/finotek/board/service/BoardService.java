@@ -75,12 +75,12 @@ public class BoardService {
         return "{\"error\":\"noAuthority}";// 권한없이 접근할경우 오류 메세지 전달
 	}
 
-    // 작성글을 보여주는 메서드
 	public void getPost_S(int bid, Model model, Authentication authentication) {
+	
 	    String auth_S = null;// 사용자의 권한이 저장될 변수
         String approach = authentication.getName();// 접근 주체의 이름을 가지는 변수;
         BoardDTO dto = null;
-        
+        IDAO dao = sqlSession.getMapper(IDAO.class);
 		Iterator<? extends GrantedAuthority> auth = authentication.getAuthorities().iterator();// 로그인된 사용자의 권한목록들을 직렬화함
 
         try {
@@ -88,29 +88,20 @@ public class BoardService {
             {
                 auth_S = auth.next().getAuthority();
 
-                if(auth_S.equals("ROLE_USER")) {
-                    IDAO dao = sqlSession.getMapper(IDAO.class);
+                if(auth_S.equals("ROLE_USER"))
                     dto = dao.getPost_A(bid);
-                    dto.setBID(bid);
-                    String list = dto.getFILE_LIST();
-                    if(list != null) {
-                        dto.setFILE_ARRAY(list.substring(1, list.length() - 1).split(", "));// 파일 목록들을 리스트객체로 변환
-                    }
-                }
-                else if(auth_S.equals("ROLE_ADMIN")) {
-                    IDAO dao = sqlSession.getMapper(IDAO.class);
+                else if(auth_S.equals("ROLE_ADMIN"))
                     dto = dao.getPost_A(bid);
-                    dto.setBID(bid);
-                    String list = dto.getFILE_LIST();
-                    if(list != null) {
-                        dto.setFILE_ARRAY(list.substring(1, list.length() - 1).split(", "));// 파일 목록들을 리스트객체로 변환
-                    }
-                    
-                }
             }
             
+            dto.setBID(bid);
+            String list = dto.getFILE_LIST();
+            
+            if(list != null)
+                dto.setFILE_ARRAY(list.substring(1, list.length() - 1).split(", "));// 파일 목록들을 리스트객체로 변환
+            
             model.addAttribute("dto", dto);
-            model.addAttribute("possibility", true);
+            
         }
         catch (Exception e) { e.printStackTrace(); model.addAttribute("possibility", false);}
         finally { printInfo(new Object(){}.getClass().getEnclosingMethod(), approach, auth_S); }// 실행중인 메소드 정보 호출
@@ -343,8 +334,8 @@ public class BoardService {
     }
 
     // 사용자 정보 가져오기
-    public MemberDTO getAccountInfo_S(Authentication authentication){
-	    return sqlSession.getMapper(IDAO.class).getAccountInfo(authentication.getName());
+    public MemberDTO getAccountInfo_S(String name){
+	    return sqlSession.getMapper(IDAO.class).getAccountInfo(name);
     }
 
     // 임시폴더에 있던 파일들을 옮긴다.
@@ -488,5 +479,25 @@ public class BoardService {
         System.out.println("접근주체 이름 : " + name);
         System.out.println();
     }
+    
+ // 글을 작성하는 메서드
+ 	public void writeTest(int count) {
+ 		int cnt = 0;
+ 		BoardDTO dto = new BoardDTO();
+ 		dto.setCONTENT("test");
+ 		dto.setTITLE("test1234");
+ 		dto.setWRITER("adminTest");
+ 		dto.setWDATE("2019.09.24");
+ 		dto.setFILE_LIST("asd.jps");
+ 		dto.setHEADER_IMG("asfd.jps");
+ 		
+		while (cnt < count) {
+			sqlSession.getMapper(IDAO.class).writePost(dto);
+			cnt++;
+		}
+ 	}
+             
+    
+    
     
 }

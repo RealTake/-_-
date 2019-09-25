@@ -95,7 +95,7 @@ public class FileController {
 		return jsonData.toString();
 	}
 
-	@GetMapping(value = "/fileDownload/{Fname:.+}")
+	@GetMapping("/fileDownload/{Fname:.+}")
 	public ModelAndView reDocumentDown(@PathVariable("Fname") String Fname, HttpSession session) {
 		String rootPath = session.getServletContext().getRealPath("/");
 		String savePath = rootPath + "resources" + File.separator + "uploadFile" + File.separator;

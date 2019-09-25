@@ -38,7 +38,7 @@
     <script src="<c:url value='/resources/js/page/postView.js'/>"></script>
     <script src="<c:url value='/resources/js/page/combinFunction.js'/>"></script>
 </head>
-<c:if test="${!possibility}">
+<c:if test="${dto == null}">
     <script>
         location.href="<c:url value='/board2'/>";
     </script>
