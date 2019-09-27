@@ -1,56 +1,122 @@
-input.underline { 
-    border-left-width: 0; 
-    border-right-width: 0; 
-    border-top-width: 0;
-    border-color: grey;
-    /* border-radius: 12px;
-    border-bottom-width: 1;
-    box-shadow: 5px 5px 3px dimgray; */
-} 
+html, body {
+	height: 100%;
+}
+
+
+.body {
+	display: flex;
+	height: 100%;
+}
+
+.jumbotron {
+	 border-radius: 0px;
+	
+	display: block;
+	height: 100%;
+	width: 25%;
+	background: linear-gradient(135deg, red, yellow 100%);
+	color: white;
+}
+
+.sideContent {
+	font-size: 30px;
+}
+
+.footer {
+	font-size: 15px;
+    font-weight: 500;
+    line-height: 18px;
+    
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	
+	background-color: rgba(255, 140, 0, 0.8);
+	color: white;
+	
+	padding: 20px;
+	width: 25%;
+}
+
+.footer > * {
+	text-align: center;
+	line-height: 30px;
+}
+
 
 .center{
     width: 500px;
-    height: auto;
+    height: fit-content;
+    
     padding-left: 50px;
     padding-right: 50px;
     padding-top: 30px;
     padding-bottom: 50px;
+    
     margin-left: auto;
     margin-right: auto;
     margin-top: 10%;
-    box-shadow: 0px 0px 5px black;
+    
     border-radius: 10px;
+    
+    text-align: center;
 }
 
-.center>input {
+.center > input {    
+    width: 70%;
+    
+    transition: width 0.5s;
+	border-radius: 5em;
+	
     outline: none;
+    
     margin-bottom: 30px;
+    padding: 0 1em 0 1em;
+}
+
+.center > input:focus { 
     width: 100%;
-    font-size: 20px;
-	padding-top: 30px;
-    padding-bottom: 30px;
+} 
+
+.ls_line {
+	height: 1px;
+    background-color: #ccc;
+}
+
+#msg {
+	margin-bottom: 20px;
+	
+    width: 160px;
+    
+    font-size: 15px;
+    line-height: 17px;
+    
+    color: black;
+    background-color: #fff;
+    
+    display: inline-block;
+    position: relative;
+    top: -49px;
 }
 
 #loginB {
-    border-left-width: 0; 
-    border-right-width: 0; 
-    border-top-width: 0;
-    border-bottom-width: 2px;
-    border-color: #B8B8B8;
     background-color: white;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 5em;
 
     margin-top: 20px;
-    width: 100%;
+    
+    width: 70%;
     height: 50px;
 
     outline: none;
-    color: dimgray;
+    color: black;
     font-size: 20px; 
+    
+    transition: width 0.5s;
 }
 
 #loginB:hover {
-    box-shadow: 0px 0px 5px black;
+	width: 100%; 
 }
 
 #joinB {
@@ -62,9 +128,6 @@ a:link { color: dimgrey; text-decoration: none;}
 a:visited { color: dimgrey; text-decoration: none;}
 a:hover { color: dimgrey; text-decoration: underline;}
 
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px white inset;
-}
 
 @media screen and ( max-width: 750px) {
 
@@ -73,8 +136,15 @@ input:-webkit-autofill {
         height: auto;
         padding: 10px 20px 20px 20px;
         margin: 10% auto auto auto;
-        box-shadow: 0px 0px 5px black;
         border-radius: 10px;
     }
+    
+    .jumbotron {
+    	display: none;
+    }
+    
+    .body {
+		
+	}
 
 }

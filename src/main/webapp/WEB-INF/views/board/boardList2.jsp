@@ -71,14 +71,6 @@
                         <a class="nav-link" href="<c:url value='/board'/>">Old Page</a>
                     </li>
 
-<%--                    <li class="nav-item" id="Community">--%>
-<%--                        <a class="nav-link">Community</a>--%>
-<%--                    </li>--%>
-
-<%--                    <li class="nav-item" id="Tech">--%>
-<%--                        <a class="nav-link">Tech QnA</a>--%>
-<%--                    </li>--%>
-
 					<s:authorize access="hasRole('ROLE_ADMIN')">
 	                    <li class="nav-item">
 	                       <a class="nav-link" href="#">[Admin activate]</a>
@@ -154,7 +146,9 @@
                 <a id="cancel" class="btn btn-warning btn-md" style="color: white">취소</a>
         </div>
     </div>
-
+	<div id="sidebar" >
+		
+	</div>
 <%--                    보이지 않는 기능                     --%>
     <div style="display: none">
         <form action="<c:url value="/logout"/>" method="POST" id="logout">
