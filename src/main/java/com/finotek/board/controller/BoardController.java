@@ -48,12 +48,12 @@ public class BoardController {
 //	{ service.getPost_S(bid, model, authentication);	return "board/postView"; }
 
 	//  포스팅된 글을 불러올 메소드
-	@GetMapping(value="/viewPost2/{bid}")
-	public String boardList2(@PathVariable int bid, Authentication authentication, Model model)
+	@GetMapping(value="/viewPost2/{category}/{bid}")
+	public String boardList2(@PathVariable int bid, @PathVariable String category, Authentication authentication, Model model)
 	{
 		String name = authentication.getName();
 		model.addAttribute("AccountInfo", service.getAccountInfo_S(name));
-		service.getPost_S(bid, model, authentication);
+		service.getPost_S(bid, category, model, authentication);
 		
 		return "board/postView2";
 	}
@@ -66,15 +66,15 @@ public class BoardController {
 
 	// 작성글을 삭제하는 메소드
 	@ResponseBody
-	@GetMapping(value="/deletePost/{bid}")
-	public String deletePost(@PathVariable(value = "bid") int bid, Authentication authentication)
-	{ return service.deletePost_S(bid, authentication); }
+	@GetMapping(value="/deletePost/{category}/{bid}")
+	public String deletePost(@PathVariable int bid, @PathVariable String category, Authentication authentication)
+	{ return service.deletePost_S(bid, category, authentication); }
 
 	// 작성글들을 찾아주는 메소드
 	@ResponseBody
-	@GetMapping(value="/searchPost.json/{pageNum}", produces = "application/json; charset=UTF-8")
-	public String searchPost(@RequestParam String content, @PathVariable(value = "pageNum") int pageNum, Authentication authentication)
-	{ return service.getSearchPostList_S(content, pageNum, authentication); }
+	@GetMapping(value="/searchPost.json/{category}/{pageNum}", produces = "application/json; charset=UTF-8")
+	public String searchPost(@RequestParam String content, @PathVariable String category, @PathVariable int pageNum, Authentication authentication)
+	{ return service.getSearchPostList_S(content, category, pageNum, authentication); }
 
 //	// 글 수정 페이지를 반환
 //	@GetMapping(value="/modifyPage/{bid}")
@@ -86,10 +86,10 @@ public class BoardController {
 
 	// 새로운 수정기능을 위해 글 내용을 JSON으로 반환
 	@ResponseBody
-	@GetMapping(value="/Post/{bid}", produces = "application/json; charset=UTF-8")
-	public Object modifyP(@ModelAttribute @PathVariable(value = "bid") int bid, Authentication authentication)
+	@GetMapping(value="/Post/{category}/{bid}", produces = "application/json; charset=UTF-8")
+	public BoardDTO modifyP(@PathVariable int bid, @PathVariable String category, Authentication authentication)
 	{
-		return service.getPostA_S(bid, authentication);
+		return service.getPostA_S(bid, category, authentication);
 	}
 
 	// 글 수정 메소드
@@ -102,14 +102,14 @@ public class BoardController {
 
     // 게시글의 개수를 알려주는 메소드
     @ResponseBody
-    @GetMapping(value="/count")
-    public int getCount(@RequestParam String content, Authentication authentication){
-        return service.getCount_S(content, authentication);
+    @GetMapping(value="/{category}/count")
+    public int getCount(@RequestParam String content, @PathVariable String category, Authentication authentication){
+        return service.getCount_S(content, category, authentication);
     }
     
-    @GetMapping(value="/write/{count}")
-    public void getCount(@PathVariable int count){
-        service.writeTest(count);
+    @GetMapping(value="/write/{category}/{count}")
+    public void getCount(@PathVariable int count, @PathVariable String category){
+        service.writeTest(count, category);
         
     }
 

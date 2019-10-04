@@ -1,0 +1,55 @@
+#sidebar {
+	width: 60px;
+	height: 100%;
+	background: linear-gradient(rgba(0, 0, 0, 0.5), darkmagenta);
+	    
+	position: fixed;
+	left: 0;
+	top: 0;
+	    
+	box-sizing: border-box;
+	padding: 10px 0px 10px 0;
+}
+
+#sidebar * {
+	margin-left: auto;
+	margin-right: auto;
+		
+}
+
+#home:visited {
+ 	color: white;
+}
+ 	
+#home {
+ 	font-size: 30px;
+}
+
+.dropdown-menu {
+	z-index: 999;
+}
+
+.dropdown-toggle, btn {
+	outline: none !important;
+    border: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    
+    background-color: transparent;
+    border: none;
+}
+
+#sidebar .btn:hover, .show > .btn-secondary.dropdown-toggle {
+    background-color: transparent;
+}
+
+.porfile-image {
+	width: 50px; 
+	height: 50px; 
+	
+	margin: 30px 0 30px 0;
+	
+	background-color: white;
+	
+	border-radius: 25px;
+}

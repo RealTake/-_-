@@ -26,20 +26,23 @@ function writeB(mode) {
 
 $().ready( function() {
     //페이지 로드후 리스트를 출력하기 위함.
-    getSearchedPost();
+	//카테고리는 무조건 소문자로 작성
+	getSearchedPost("boards");
+	getSearchedPost("free_boards");
 
-    //삭제 드레그시
+    //드랍 할 요소 설정
     $(".deleteBox").droppable({
         over : function(){
             $(this).css("background-color", "red");
         },
         out : function(){
-            $(this).css("background-color", "black");
+            $(this).css("background-color", "transparent");
         },
         drop : function(){
             deletePost(temp_bid);
             $(".deleteBox").css("display", "none");
-            $(this).css("background-color", "black");
+            $(".category-list").css("display", "block");
+            $(this).css("background-color", "transparent");
         }
     });
 
@@ -81,21 +84,15 @@ $().ready( function() {
         writeB(false);
     });
 
-    //글쓰기 창을 활성화
-    $("#writeB").click( function() {
-        $(".container-fluid").css("filter", "blur(5px)");
-        writeB(true);
-    });
-
-    //페이지 이전으로 전환
-    $("#prev").click( function() {
-        movePage($(this).attr("id"));
-    });
-
-    //다음 페이지로 전환
-    $("#next").click( function() {
-        movePage($(this).attr("id"));
-    });
+//    //페이지 이전으로 전환
+//    $("#prev").click( function() {
+//        movePage($(this).attr("id"));
+//    });
+//
+//    //다음 페이지로 전환
+//    $("#next").click( function() {
+//        movePage($(this).attr("id"));
+//    });
 
     //로그아웃 버튼
     $("#logoutB").click( function (){
@@ -120,6 +117,7 @@ $(document).on("click",".contentBox",function() {
 //게시글 목록중 드레그 시
 $( document ).on("dragstart",".dragContent",function(e){
     $(".deleteBox").css("display", "block");
+    $(".category-list").css("display", "none");
     temp_bid = $(this).attr("bid");
     $(this).css("z-index", "999");
 });
@@ -127,6 +125,7 @@ $( document ).on("dragstart",".dragContent",function(e){
 //게시글 목록중 드레그 멈추면
 $( document ).on("dragstop",".dragContent",function(){
     $(".deleteBox").css("display", "none");
+    $(".category-list").css("display", "block");
     $(this).css("z-index", "500");
 });
 
@@ -140,4 +139,10 @@ $( document ).on("click",".page-link", function () {
 
 $( document ).on(function () {
     $(".dragContent").draggable({revert:true });
+});
+
+//글쓰기 창을 활성화
+$( document ).on("click","#writeB", function() {
+    $(".container-fluid").css("filter", "blur(5px)");
+    writeB(true);
 });

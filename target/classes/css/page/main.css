@@ -1,48 +1,134 @@
-    #sidebar {
-	    width: 50px;
+	html, body {
+ 		height: 100%;
+ 	}
+ 	
+ 	h1{
+		position: relative;
+	}
+	
+ 	.background {
+		background: linear-gradient(135deg, purple, aqua 100%);
 	    height: 100%;
-	    background-color: orange;
+	    width: 100%;
+	    position: fixed;
+	    z-index: 0;
+	}
+ 	
+ 	.container-fluid {
+        width: calc( 100% - 60px );
+        height: 100%;
+        margin-left: 60px;
+    }
+	
+ 	/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+	/*헤더 공간*/
+    .main-header {
+        background:rgba(0, 0, 0, 0.5);
+        font-family: "Helvetica Neue";
+        height: 280px;
+        color: white;
+        margin-bottom: 20px;
+        padding: 20px;
+        position: sticky;
+    }
+ 	
+ 	/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
+ 	
+ 	#category {
+		color: #fff;
+		
+		overflow: hidden;
+	    box-sizing: border-box;
+	    background-color: rgba(0, 0, 0, 0.4);
+	    border-radius: 5px;
+	    
+	    width: 250px;
+	    height: 500px;
 	    
 	    position: fixed;
-	    left: 0;
-	    top: 0;
-	    
-	    box-sizing: border-box;
-    	border-right: 2px solid #ffc800;
+	    top: 300px;
+	    left: 100px;
+	}
 
-    }
-    
-    .contentBody {
-        display: flex;
-        height: auto;
-        border-radius: 10px;
-        flex-flow: wrap;
-        justify-content: center;
-    }
-
-    .deleteBox {
+	/*삭제 공간*/
+ 	#category .deleteBox {
         width: 100%;
-        height: 20%;
+        height: 100%;
 
-        left: 0;
-        right: 0;
-
-        border-radius: 0px 0px 2000px 2000px ;
-        box-shadow: 0px 0px 10px black;
-        background-color: black;
+        background-color: transparent;
         opacity: 0.5;
         z-index: 900;
 
-        top:0;
-        position: fixed;
         display: none;
 
         color: white;
     }
+
+	/*삭제 이미지*/
+    #category .svg-inline--fa.fa-w-14 {
+    	width: 100px;
+    	font-size: 40px;
+	    position: relative;
+	    top: calc(50% - 20px);
+	    left: calc(50% - 50px);
+    }
+ 	
+ 	/* 카테고리 목록들*/
+    #category .list-group-item {
+    	color: white;
+    	border-bottom-color: ;
+    	background-color: transparent;
+    }
     
-    .deleteBox > h1 { 
-		margin-top: 3%;
-		
+    #category .list-group-item:hover {
+    	color: white;
+    	border-bottom-color: white;
+    	background-color: transparent;
+    }
+ 	
+ 	/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
+ 	
+ 	/*카테고리별 리스트 구역*/
+ 	.board-container {
+    	margin-left: 10%;
+		margin-bottom: 100px;    
+    
+    	width: 1200px;
+    	float: right;
+    	
+    	color: white;
+    }
+ 	
+ 	/* 게시물이 담길곳  */	
+ 	.contentBody {
+        display: flex;
+        height: auto;
+        width: 1200px;
+        border-radius: 10px;
+        flex-flow: wrap;
+        
+		justify-content: left;
+	    float: right;
+    }
+ 
+ 	/* 게시물 형태 */
+    .contentBox {
+        z-index: 500;
+        position: relative;
+        background-color: rgba(0,0,0, 0.5);
+        box-shadow: 0px 0px 5px dimgrey;
+        border-radius: 10px;
+        margin: 20px;
+        width: 200px;
+        height: 320px;
+        text-align: center;
+        transform: scale(1);
+        transition: transform 0.3s;
+        font-family: "맑은 고딕";
+        font-size: 17px;
+        font-weight: bold;
+        color: white;
     }
     
     .contentBox .header {
@@ -50,7 +136,7 @@
         width: 100%;
         height: 40%;
         border-radius: 10px 10px 0px 0px;
-        background-color: #FAFAFA;
+        background-color: transparent;
     }
     
     .header > img{
@@ -60,7 +146,6 @@
     .contentBox .body {
     	overflow: hidden;
         padding: 10px;
-        color: #454545;
         word-break: break-word;
         font-size: 20px;
     }
@@ -85,58 +170,60 @@
         display: flex;
     }
 
-    .contentBox {
-        z-index: 500;
-        position: relative;
-        background-color: white;
-        box-shadow: 0px 0px 5px dimgrey;
-        border-radius: 10px;
-        margin: 20px;
-        width: 280px;
-        height: 400px;
-        text-align: center;
-        transform: scale(1);
-        transition: transform 0.3s;
-        font-family: "맑은 고딕";
-        font-size: 17px;
-        font-weight: bold;
-    }
-
     .contentBox:hover {
         transform: scale(1.1);
     }
 
-    .container-fluid{
+	/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+	/* 글쓰기 버튼 */
+    .writeBox {
+    	z-index: 500;
+        position: relative;
+        background-color: rgba(0,0,0, 0.5);
+        box-shadow: 0px 0px 5px dimgrey;
+        border-radius: 10px;
+        margin: 20px;
+        width: 200px;
+        height: 320px;
+    }
+    
+    /*글쓰기 버튼 이미지*/
+    .writeBox .svg-inline--fa.fa-w-14 {
+    	width: 100px;
+    	font-size: 40px;
+	    position: absolute;
+	    top: calc(50% - 20px);
+	    left: calc(50% - 50px);
+    }
+
+	#writeTable {
+        display: none;
+
+        max-width: 1472px;
+        width: 100%;
+        height: 950px;
+
+        margin: auto;
+        padding: 20px;
+
+        z-index: 990;
+        box-shadow: 0px 0px 10px black;
+        border-radius: 10px;
         background-color: white;
-        background-size: cover;
-        background-position: center;
-        width: calc( 100% - 50px );
-        padding: 0px;
-        margin-left: 50px;
-    }
 
-    .jumbotron > h1 {
-        line-height: 250px;
-        font-size: 63px;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
     }
+    
+    .custom-file-label {
+		overflow: hidden;
+	}
 
-    .jumbotron > p {
-        font-weight: 200;
-    }
-
-    .jumbotron {
-        background-image: url("../../../resources/image/jumbotron.jpg");
-        background-size: cover;
-        background-position: center;
-        font-family: "Helvetica Neue";
-        height: 500px;
-        color: white;
-        margin-bottom: 0px;
-    }
-
-    nav {
-        margin-bottom: 20px;
-    }
+    /*////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
     #prev {
         font-size: 25px;
@@ -182,35 +269,156 @@
         opacity: 0.8;
     }
 
-    #writeTable {
+	/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    
+	#category {
+		color: #fff;
+		
+		overflow: hidden;
+	    box-sizing: border-box;
+	    background-color: rgba(0, 0, 0, 0.4);
+	    border-radius: 5px;
+	    
+	    width: 250px;
+	    height: 500px;
+	    
+	    position: fixed;
+	    top: 300px;
+	    left: 100px;
+	}
+
+	/*삭제 공간*/
+ 	#category .deleteBox {
+        width: 100%;
+        height: 100%;
+
+        background-color: transparent;
+        opacity: 0.5;
+        z-index: 900;
+
         display: none;
 
-        max-width: 1472px;
-        width: 100%;
-        height: 950px;
-
-        margin: auto;
-        padding: 20px;
-
-        z-index: 990;
-        box-shadow: 0px 0px 10px black;
-        border-radius: 10px;
-        background-color: white;
-
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
+        color: white;
     }
 
-    #writeB {
-        z-index: 999;
-        position: fixed;
-        right: 20px;
-        bottom: 10%;
+	/*삭제 이미지*/
+    #category .svg-inline--fa.fa-w-14 {
+    	width: 100px;
+    	font-size: 40px;
+	    position: relative;
+	    top: calc(50% - 20px);
+	    left: calc(50% - 50px);
     }
+ 	
+ 	/* 카테고리 목록들*/
+    #category .list-group-item {
+    	color: white;
+    	border-bottom-color: ;
+    	background-color: transparent;
+    }
+    
+    #category .list-group-item:hover {
+    	color: white;
+    	border-bottom-color: white;
+    	background-color: transparent;
+    }
+ 	
+ 	/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    
+    /* 슬라이드 라인 */
+    .custom-slider {
+    	position: relative;
+    	top: 30px;
+    	
+    	float: right;
+    	
+    	height: 5px;
+    	width: 1200px;
+    	
+	    border: none;
+    }
+    
+    /* 슬라이드 손잡이 */
+    .ui-slider .ui-slider-handle {
+    	border-radius: 50%;
+	    position: absolute;
+	    top: -8px;
+    }
+    
+    /* 마커 선택 됐을때 */
+    .ui-slider-pips [class*=ui-slider-pip-selected] {
+    	font-weight: bold;
+    	color: white;
+    }
+    
+    /* 마커 선택 되지 않은 상태 */
+    .ui-slider-pips .ui-slider-pip {
+    	color: white;
+    }
+	 
+	.ui-slider-label {
+	 	position: absolute;
+	 	
+	 	top: 20px;
+	 }
+	 
+	/* 마커위로 마우스가 이동했을때 */
+	.ui-slider-pips:not(.ui-slider-disabled) .ui-slider-pip:hover .ui-slider-label {
+		color: white;
+		font-weight: bold;
+	}
 
+	.ui-slider-pips [class*=ui-slider-pip-selected] .ui-slider-line, .ui-slider-pips .ui-slider-pip-inrange .ui-slider-line {
+		background-color: white;
+	}
+	
+	.ui-slider-pips .ui-slider-line  {
+		height: 1em;
+		background-color: white;
+	}
+	
+	.ui-slider-pips .ui-slider-label {
+		top: 20px;
+	}
+
+	/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+	#searchContent {
+		border-left-width: 0;
+	    border-right-width: 0;
+	    border-top-width: 0;
+	    background: transparent;
+	    border-color: white;
+	    color: white;
+	}
+	}
+	
+	#searchContent::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	  color: white;
+	  opacity: 1; /* Firefox */
+	}
+	
+	#searchContent:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	  color: white;
+	}
+	
+	#searchContent::-ms-input-placeholder { /* Microsoft Edge */
+	  color: white;
+	}
+		
+	.form-inline {
+		float: right;
+		position: relative;
+		top: -30px;
+	}
+	
+	/*////////////////////////////////////////////////////////////////////////////////////////////////////*/
+	
+	/*
+	.pagination {
+		margin-bottom: 0px
+	}
+	
     #pageN {
         margin-left: auto;
         margin-right: auto;
@@ -221,15 +429,28 @@
         opacity: 0.5;
         color: white;
         font-size: 15pt;
-
-    }
-    
-    .custom-file-label {
-		overflow: hidden;
-	}
+    }*/	
 
     @media screen and ( max-width: 900px) {
-
+		
+		.container-fluid {
+	        width: 100%;
+	        height: 100%;
+	        margin: 0px;
+	        padding: 0px;
+	    }
+		
+		 .main-header {
+	        width: 100%;
+	        height: 280px;
+	       
+    	}
+		
+		#category, #sidebar {
+			display: none;
+		}
+		
+		/*
         .container-fluid{
             background-color: white;
             background-size: cover;
@@ -353,5 +574,5 @@
             background-color: white;
             position: relative;
         }
-
+	*/
     }
