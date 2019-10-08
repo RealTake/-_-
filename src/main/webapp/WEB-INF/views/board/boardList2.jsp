@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jQuery-ui-Slider-Pips/1.11.4/jquery-ui-slider-pips.css">
     <link rel="stylesheet" href="<c:url value='/resources/css/etc/sideBar.css'/>">
+    <link rel="stylesheet" href="<c:url value='/resources/css/etc/mainTemplate.css'/>">
     <link rel="stylesheet" href="<c:url value='/resources/css/page/main.css'/>">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script><%--제이쿼리--%>
@@ -42,9 +43,9 @@
     	
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
     <script src="<c:url value='/resources/js/bootstrap/bootstrap.min.js'/>"></script><%--부트스트랩--%>
+
     <script src="<c:url value='/resources/ckeditor/ckeditor.js'/>"></script><%--웹 에디터--%>
     <script src="<c:url value='/resources/js/lib/checkByte.js'/>"></script> <%--바이트 체크 함수--%>
     <script src="<c:url value='/resources/js/page/boardList2.js'/>"></script> <%-- 기능(Ajax) 함수--%>
@@ -106,85 +107,11 @@
 	        
 		</section>
         
+        <br>
     </div> <%--컨테이너--%>
     
-    <div id="writeTable" >
-    
-        <div class="top">
-        
-	        <select id="selectCategory">
-			    <option value="boards">일반 게시판</option>
-			    <option value="free_boards">자유 게시판</option>
-			</select>
-			
-            <p>제목:</p>
-            <p><input class="form-control" id="TITLE" placeholder="100byte 제한(한글 3byte, 영어 1byte)" required autofocus></p>
-            <p>내용:</p>
-            <textarea name="editor1" placeholder="4000byte 제한(한글 3byte, 영어 1byte)" required autofocus></textarea>
-            <p id="byte">[0/4000bytes]</p>
-        </div>
-
-        <div class="uploads">
-        <p>
-            <form id="fileForm">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button type="button" class="input-group-text" id="sendFile">Clean</button>
-                    </div>
-                    <div class="custom-file">
-                        <input class="custom-file-input" id="fileList" name="fileList" type="file" multiple="multiple" maxlength="5" data-maxsize = "10">
-                        <label class="custom-file-label" id="showFiles" for="fileList">Choose files</label>
-                    </div>
-                </div>
-            </form>
-			</p>
-			<p>
-            <form id="headerForm">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button type="button" class="input-group-text" id="sendHeader">Clean</button>
-                    </div>
-                    <div class="custom-file">
-                        <input class="custom-file-input" type="file" id="headerList" name="upload" data-maxsize = "5" accept="image/*">
-                        <label class="custom-file-label" id="showHeader" for="headerList">Choose header image</label>
-                    </div>
-                </div>
-            </form>
-            </p>
-        </div>
-        <div class="text-center">
-                <a id="send" class="btn btn-primary btn-md" style="color: white">제출</a> &nbsp;&nbsp;&nbsp;
-                <a id="cancel" class="btn btn-warning btn-md" style="color: white">취소</a>
-        </div>
-    </div>
-	
-	<div id="sidebar" >
-		
-			<a id="home" href="<c:url value='/board2'/>"><i class="fas fa-home" style="width: 100%;"></i></a>
-		
-			<div class="porfile-image" ></div>
-		
-			<!-- Default dropright button -->
-            <div class="btn-group dropright">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    	<i class="fas fa-user"></i>
-                    </button>
-           		<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                	<a class="dropdown-item" href="#">Id : ${AccountInfo.ID}</a>
-               		<a class="dropdown-item" href="#">Name : ${AccountInfo.NAME}</a>
-                	<a class="dropdown-item" href="#">Email : ${AccountInfo.EMAIL}</a>
-             		<div class="dropdown-divider"></div>
-                	<button class="dropdown-item" id="dropB">Withdrawal(회원 탈퇴)</button>
-            	</div>
-            </div>
-
-            <div class="btn-group dropright">
-				<button type="button" id="logoutB" class="btn btn-secondary dropdown-toggle" >
-					<i class="fas fa-sign-out-alt"></i>
-            	</button>
-            </div>
-		
-	</div>
+    <%@ include file="../etc/writeTable.jspf" %>
+	<%@ include file="../etc/sidebar.jspf" %>
 	
 	<!-- <button id="writeB" class="btn btn-dark">글쓰기</button> -->
     <button id="prev">prev</button>

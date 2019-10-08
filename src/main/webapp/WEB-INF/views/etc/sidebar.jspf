@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<nav id="sidebar" >
+		
+			<a id="home" href="<c:url value='/board2'/>"><i class="fas fa-home" style="width: 100%;"></i></a>
+		
+			<div class="profile-image" onClick="location.href='<c:url value="/myAccount"/>'" ></div>
+		
+			<!-- Default dropright button -->
+            <div class="btn-group dropright">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    	<i class="fas fa-user"></i>
+                    </button>
+           		<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                	<a class="dropdown-item" href="#">Id : ${AccountInfo.ID}</a>
+               		<a class="dropdown-item" href="#">Name : ${AccountInfo.NAME}</a>
+                	<a class="dropdown-item" href="#">Email : ${AccountInfo.EMAIL}</a>
+             		<div class="dropdown-divider"></div>
+                	<button class="dropdown-item" id="dropB">Withdrawal(회원 탈퇴)</button>
+            	</div>
+            </div>
+
+            <div class="btn-group dropright">
+				<button type="button" id="logoutB" class="btn btn-secondary dropdown-toggle" >
+					<i class="fas fa-sign-out-alt"></i>
+            	</button>
+            </div>
+		
+	</nav>

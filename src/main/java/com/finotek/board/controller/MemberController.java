@@ -5,6 +5,7 @@ import com.finotek.board.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,7 +16,7 @@ public class MemberController {
     public MemberService service; 	// MemberService 객체 바인딩
 
     //가입 페이지
-    @GetMapping("/joinMember")
+    @RequestMapping("/joinMember")
     public String joinPage() { return "member/joinMember"; }
 
     //가입 서비스
@@ -24,7 +25,7 @@ public class MemberController {
 
     //중복검사
     @ResponseBody
-    @GetMapping("/checkOverlap/{value}")
+    @RequestMapping("/checkOverlap/{value}")
     public String checkOverlap(@PathVariable("value") String value){
         return service.checkOverlap_S(value);}
 
@@ -39,5 +40,12 @@ public class MemberController {
     @RequestMapping("/Login")
     public String loginPage() {
         return "member/loginForm";
+    }
+    
+    // 마이 페이지로 이동
+    @RequestMapping("/myAccount")
+    public String myAccount(Authentication authentication, Model model) {
+    	model.addAttribute("AccountInfo", service.getAccountInfo_S(authentication.getName()));
+    	return "member/myPage";
     }
 }

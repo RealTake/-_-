@@ -1,0 +1,37 @@
+	body {
+    	font-family: "맑은 고딕", 굴림, 바탕, sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	}
+	
+	#postBody {
+		background: rgba(0, 0, 0, 0.5);
+	    color: white;
+	    min-height: 700px;
+	    position: relative;
+	    padding: 30px;
+	    
+	    border-radius: 10px;
+	}
+	
+	#fileBody {
+		position: relative;
+	    background: rgba(0,0,0, 0.5);
+	    border-radius: 10px;
+	    padding: 10px;
+	    margin: 10px 0 10px 0;
+	}
+	
+	#fileBody a:visited, #fileBody a, i {
+		color: white;
+	}
+	
+	#fileBody p {
+		margin-bottom: 0px;
+	}
+	
+	#etcButton {
+		margin: 10px 0 10px 0;
+		float: right;
+		border: none;
+	}
+	
+	

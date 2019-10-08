@@ -64,5 +64,10 @@ public class MemberService {
         }
 
     }
+    
+    // 사용자 정보 가져오기
+    public MemberDTO getAccountInfo_S(String name){
+	    return sqlSession.getMapper(IDAO.class).getAccountInfo(name);
+    }
 
 }

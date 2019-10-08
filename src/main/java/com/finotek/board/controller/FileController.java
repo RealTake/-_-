@@ -131,10 +131,6 @@ public class FileController {
 		}
 	}
 
-//	@RequestMapping("/uploadP")
-//	public String page(){
-//		return "page";
-//	}
 
 	public String getDate(){
 		Date date = new Date();// 글이 작성된 시점을 기록한다

@@ -1,0 +1,52 @@
+	.myProfile {
+		background:rgba(0, 0, 0, 0.5);
+        font-family: "Helvetica Neue";
+        height: fit-content;
+        width: 600px;
+        color: white;
+        margin: 0 auto 0 auto;
+        padding: 20px;
+        position: sticky;
+        
+        border-radius: 10px; 	
+	}
+	
+	#myProfile-update{
+		display: none;
+		text-align: left;
+	}
+	
+	#myProfile-image {
+		width: 250px;
+	    height: 250px;
+	    margin: 0 auto 0 auto;
+	    background-color: white;
+	    border-radius: 125px;
+	}
+	
+	.intro {
+		text-align: center;
+	}
+	
+	.board-container {
+		margin: 0 auto 100px auto;    
+    
+    	width: 1200px;
+    	float: none;
+    	
+    	color: white;
+	}
+	
+	#searchContent::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	  color: white;
+	  opacity: 1; /* Firefox */
+	}
+	
+	#searchContent:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	  color: white;
+	}
+	
+	#searchContent::-ms-input-placeholder { /* Microsoft Edge */
+	  color: white;
+	}
+	

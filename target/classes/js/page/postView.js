@@ -6,6 +6,7 @@ jQuery.ajaxSettings.traditional = true;
 function modifyPost(bid) {
     var title = $("#TITLE").val();
     var content = replaceOriginUrl(CKEDITOR.instances.editor1.getData());
+    var path = window.location.pathname.substring(CONTEXT.length + 11);
 
     if(content.getBytes() > 4000){
         alert('제한된 크기에 내용을 작성해주세요');
@@ -15,7 +16,7 @@ function modifyPost(bid) {
     }
     else{
         $.ajax({
-            url: CONTEXT + '/modifyPost/' + bid,
+            url: CONTEXT + '/modifyPost/' + path,
             type: 'post',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             headers: csrf,
@@ -90,12 +91,14 @@ function uploadFile(){
 
 
 function deletePost(bid) {
+	var path = window.location.pathname.substring(CONTEXT.length + 11);
+	
     $.ajax({
-        url: CONTEXT + '/deletePost/' + bid,
+        url: CONTEXT + '/deletePost/' + path,
         type: 'get',
         dataType: 'json',
         success: function () {
-            location.href = "../board2"
+            location.href = "../../board2"
         },
         fail: function () {
             alert('삭제 실패하였습니다.');
@@ -104,8 +107,10 @@ function deletePost(bid) {
 }
 
 function getPost(bid) {
+	var path = window.location.pathname.substring(CONTEXT.length + 11);
+	
     $.ajax({
-        url : CONTEXT + "/Post/" + bid,
+        url : CONTEXT + "/Post/" + path,
         type : "get",
         dataType : "json",
         success : function (response) {
@@ -135,7 +140,7 @@ function getPost(bid) {
 $().ready( function() {
 
     //게시글 삭제
-    $("button[name=delB]").click(function () {
+    $("#delB").click(function () {
         deletePost(bid);
     });
 

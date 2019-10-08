@@ -49,13 +49,24 @@ public class BoardController {
 
 	//  포스팅된 글을 불러올 메소드
 	@GetMapping(value="/viewPost2/{category}/{bid}")
-	public String boardList2(@PathVariable int bid, @PathVariable String category, Authentication authentication, Model model)
+	public String viewPost2(@PathVariable int bid, @PathVariable String category, Authentication authentication, Model model)
 	{
 		String name = authentication.getName();
 		model.addAttribute("AccountInfo", service.getAccountInfo_S(name));
 		service.getPost_S(bid, category, model, authentication);
 		
 		return "board/postView2";
+	}
+	
+//  포스팅된 글을 불러올 메소드
+	@GetMapping(value="/viewPost3/{category}/{bid}")
+	public String viewPost3(@PathVariable int bid, @PathVariable String category, Authentication authentication, Model model)
+	{
+		String name = authentication.getName();
+		model.addAttribute("AccountInfo", service.getAccountInfo_S(name));
+		service.getPost_S(bid, category, model, authentication);
+		
+		return "board/postView3";
 	}
 
 	// 작성된 글을 저장하는 메소드
@@ -110,7 +121,6 @@ public class BoardController {
     @GetMapping(value="/write/{category}/{count}")
     public void getCount(@PathVariable int count, @PathVariable String category){
         service.writeTest(count, category);
-        
     }
 
 }

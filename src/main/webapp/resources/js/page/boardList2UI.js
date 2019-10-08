@@ -111,7 +111,7 @@ $(document).on("click","button[name=delB]",function() {
 //클릭시 게시글 보기
 $(document).on("click",".contentBox",function() {
     var bid	= $(this).attr("bid");
-    location.href = "./viewPost2/" + bid;
+    location.href = "./viewPost3/" + bid;
 });
 
 //게시글 목록중 드레그 시
