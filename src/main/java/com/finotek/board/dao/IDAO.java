@@ -3,9 +3,12 @@ package com.finotek.board.dao;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.mybatis.spring.annotation.MapperScan;
+
 import com.finotek.board.dto.BoardDTO;
 import com.finotek.board.dto.MemberDTO;
 
+@MapperScan("com.finotek.board.dto")
 public interface IDAO {
 	public String checkOverlap(String value);
 	public MemberDTO getAccountInfo(String value);

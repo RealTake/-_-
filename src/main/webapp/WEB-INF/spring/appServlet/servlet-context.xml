@@ -38,6 +38,6 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.finotek.board.**" />
+	<context:component-scan base-package="com.finotek.board.*" />
 	
 </beans:beans>
